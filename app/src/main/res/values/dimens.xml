@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fragment_title_size">25sp</dimen>
+    <dimen name="card_corner_radius">25dp</dimen>
+    <dimen name="card_elevation">20dp</dimen>
+    <dimen name="image_width_size">200dp</dimen>
+    <dimen name="image_height_size">200dp</dimen>
+    <dimen name="card_title_text_size">20sp</dimen>
+    <dimen name="card_text_size">20sp</dimen>
+    <dimen name="card_overview_text_size">16sp</dimen>
+</resources>
