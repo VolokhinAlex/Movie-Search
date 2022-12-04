@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.search.SearchFragment">
+    tools:context=".view.search.SearchFragment"
+    android:orientation="vertical">
+
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:queryHint="Enter movie to find"
+        android:iconifiedByDefault="false"
+        android:background="@drawable/search_view_border"
+        android:layout_margin="20dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -12,4 +22,4 @@
         android:textSize="@dimen/fragment_title_size"
         android:gravity="center"/>
 
-</FrameLayout>
+</LinearLayout>

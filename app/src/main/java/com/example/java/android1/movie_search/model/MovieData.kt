@@ -1,6 +1,5 @@
 package com.example.java.android1.movie_search.model
 
-
 /**
  * The class is responsible for storing information about the movie.
  * @param id -               ID of the movie in the database
@@ -12,7 +11,7 @@ package com.example.java.android1.movie_search.model
  * @param genres -           Genres of movie
  * @param country -          The country where the movie was shot
  * @param releaseDate -      Premiere date of the movie
- * @param rationOfMovie -    Popularity ball (0-10) according to IMDB
+ * @param ratingOfMovie -    Popularity ball (0-10) according to IMDB
  * @param voteCount -        Number of users who voted
  * @param age -              Acceptable age for watch the movie
  * @param adult -            Adult movie
@@ -29,9 +28,124 @@ data class MovieData(
     val genres: List<String>,
     val country: String,
     val releaseDate: String,
-    val rationOfMovie: Double,
+    val ratingOfMovie: Double,
     val voteCount: Int,
     val age: Int,
     val adult: Boolean = false,
     val originalLanguage: String,
+)
+
+fun getListOfMoviesFromLocalStorage() : List<MovieData> = listOf(
+    MovieData(
+        id = 1,
+        imdbId = "tt0137523",
+        title = "Эмма",
+        overview = "Англия, XIX век. " +
+                "21-летняя провинциалка Эмма Вудхаус красива, богата, остроумна и считает, что прекрасно разбирается в людях. " +
+                "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
+                "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
+        backdropPath = "2131165395",
+        actors = listOf("Аня Тейлор-Джой\n" +
+                "Джонни Флинн\n" +
+                "Миа Гот\n" +
+                "Джош О’Коннор\n" +
+                "Билл Найи\n" +
+                "Каллум Тернер\n" +
+                "Миранда Харт\n" +
+                "Эмбер Андерсон\n" +
+                "Руперт Грейвз\n" +
+                "Джемма Уилан"),
+        genres = listOf("комедия", "мелодрама"),
+        country = "Великобритания",
+        releaseDate = "2020",
+        ratingOfMovie = 6.9,
+        voteCount = 20000,
+        age = 12,
+        adult = true,
+        originalLanguage = "en"
+    ),
+    MovieData(
+        id = 1,
+        imdbId = "tt0137523",
+        title = "Эмма",
+        overview = "Англия, XIX век. " +
+                "21-летняя провинциалка Эмма Вудхаус красива, богата, остроумна и считает, что прекрасно разбирается в людях. " +
+                "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
+                "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
+        backdropPath = "2131165395",
+        actors = listOf("Аня Тейлор-Джой\n" +
+                "Джонни Флинн\n" +
+                "Миа Гот\n" +
+                "Джош О’Коннор\n" +
+                "Билл Найи\n" +
+                "Каллум Тернер\n" +
+                "Миранда Харт\n" +
+                "Эмбер Андерсон\n" +
+                "Руперт Грейвз\n" +
+                "Джемма Уилан"),
+        genres = listOf("комедия", "мелодрама"),
+        country = "Великобритания",
+        releaseDate = "2020",
+        ratingOfMovie = 6.9,
+        voteCount = 20000,
+        age = 12,
+        adult = true,
+        originalLanguage = "en"
+    ),
+    MovieData(
+        id = 1,
+        imdbId = "tt0137523",
+        title = "Эмма",
+        overview = "Англия, XIX век. " +
+                "21-летняя провинциалка Эмма Вудхаус красива, богата, остроумна и считает, что прекрасно разбирается в людях. " +
+                "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
+                "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
+        backdropPath = "2131165395",
+        actors = listOf("Аня Тейлор-Джой\n" +
+                "Джонни Флинн\n" +
+                "Миа Гот\n" +
+                "Джош О’Коннор\n" +
+                "Билл Найи\n" +
+                "Каллум Тернер\n" +
+                "Миранда Харт\n" +
+                "Эмбер Андерсон\n" +
+                "Руперт Грейвз\n" +
+                "Джемма Уилан"),
+        genres = listOf("комедия", "мелодрама"),
+        country = "Великобритания",
+        releaseDate = "2020",
+        ratingOfMovie = 6.9,
+        voteCount = 20000,
+        age = 12,
+        adult = true,
+        originalLanguage = "en"
+    ),
+    MovieData(
+        id = 1,
+        imdbId = "tt0137523",
+        title = "Эмма",
+        overview = "Англия, XIX век. " +
+                "21-летняя провинциалка Эмма Вудхаус красива, богата, остроумна и считает, что прекрасно разбирается в людях. " +
+                "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
+                "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
+        backdropPath = "2131165395",
+        actors = listOf("Аня Тейлор-Джой\n" +
+                "Джонни Флинн\n" +
+                "Миа Гот\n" +
+                "Джош О’Коннор\n" +
+                "Билл Найи\n" +
+                "Каллум Тернер\n" +
+                "Миранда Харт\n" +
+                "Эмбер Андерсон\n" +
+                "Руперт Грейвз\n" +
+                "Джемма Уилан"),
+        genres = listOf("комедия", "мелодрама"),
+        country = "Великобритания",
+        releaseDate = "2020",
+        ratingOfMovie = 6.9,
+        voteCount = 20000,
+        age = 12,
+        adult = true,
+        originalLanguage = "en"
+    )
 )

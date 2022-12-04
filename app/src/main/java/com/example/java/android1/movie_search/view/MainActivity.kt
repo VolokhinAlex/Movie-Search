@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.ActivityMainBinding
 import com.example.java.android1.movie_search.view.catalog.CatalogFragment
+import com.example.java.android1.movie_search.view.home.MainFragment
 import com.example.java.android1.movie_search.view.profile.ProfileFragment
 import com.example.java.android1.movie_search.view.search.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView

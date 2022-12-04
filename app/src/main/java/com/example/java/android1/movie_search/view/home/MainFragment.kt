@@ -1,4 +1,4 @@
-package com.example.java.android1.movie_search.view
+package com.example.java.android1.movie_search.view.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.java.android1.movie_search.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.databinding.FragmentMainBinding
 import com.example.java.android1.movie_search.model.MovieData
 import com.example.java.android1.movie_search.viewmodel.AppState
@@ -52,14 +53,18 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setData(data: MovieData) {
-        mBinding.itemMovieCardTitle.text = data.title
-        mBinding.itemMovieCardOverview.text = data.overview
-        mBinding.itemMovieCardImage.setImageResource(R.drawable.movie_image)
-        mBinding.itemMovieCardAge.text = data.age.toString()
-        mBinding.itemMovieCardDate.text = data.releaseDate
-        mBinding.itemMovieCardGenres.text = data.genres.toString()
-        mBinding.itemMovieCardRating.text = data.rationOfMovie.toString()
+    private fun setData(data: List<MovieData>) {
+        val listOfTrendyMovies: RecyclerView = mBinding.containerForTrendyMovies
+        val listOfNewMovies: RecyclerView = mBinding.containerForNewMovies
+        val movieAdapter = MoviesHomePageAdapter(data)
+        listOfTrendyMovies.adapter = movieAdapter
+        listOfNewMovies.adapter = movieAdapter
+        val trendyMoviesLayoutManager = LinearLayoutManager(requireActivity(),
+            LinearLayoutManager.HORIZONTAL, false)
+        val newMoviesLayoutManager = LinearLayoutManager(requireActivity(),
+            LinearLayoutManager.HORIZONTAL, false)
+        listOfTrendyMovies.layoutManager = trendyMoviesLayoutManager
+        listOfNewMovies.layoutManager = newMoviesLayoutManager
     }
 
     override fun onDestroyView() {

@@ -9,4 +9,6 @@
     <string name="hello_from_profile_fragment">Hello From Profile Fragment</string>
     <string name="hello_from_search_fragment">Hello from Search Fragment</string>
     <string name="hello_from_catalog_fragment">Hello from Catalog Fragment</string>
+    <string name="category_trending_now">Trending Now</string>
+    <string name="category_new_products">New products</string>
 </resources>
