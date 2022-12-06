@@ -1,5 +1,8 @@
 package com.example.java.android1.movie_search.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * The class is responsible for storing information about the movie.
  * @param id -               ID of the movie in the database
@@ -18,13 +21,14 @@ package com.example.java.android1.movie_search.model
  * @param originalLanguage - The original language of the movie
  */
 
+@Parcelize
 data class MovieData(
     val id: Int,
     val imdbId: String,
     val title: String,
     val overview: String,
     val backdropPath: String,
-    val actors: List<String>,
+    val actors: List<ActorData>,
     val genres: List<String>,
     val country: String,
     val releaseDate: String,
@@ -33,9 +37,9 @@ data class MovieData(
     val age: Int,
     val adult: Boolean = false,
     val originalLanguage: String,
-)
+) : Parcelable
 
-fun getListOfMoviesFromLocalStorage() : List<MovieData> = listOf(
+fun getListOfMoviesFromLocalStorage(): List<MovieData> = listOf(
     MovieData(
         id = 1,
         imdbId = "tt0137523",
@@ -45,16 +49,17 @@ fun getListOfMoviesFromLocalStorage() : List<MovieData> = listOf(
                 "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
                 "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
         backdropPath = "2131165395",
-        actors = listOf("Аня Тейлор-Джой\n" +
-                "Джонни Флинн\n" +
-                "Миа Гот\n" +
-                "Джош О’Коннор\n" +
-                "Билл Найи\n" +
-                "Каллум Тернер\n" +
-                "Миранда Харт\n" +
-                "Эмбер Андерсон\n" +
-                "Руперт Грейвз\n" +
-                "Джемма Уилан"),
+        actors = listOf(
+            ActorData("Аня \nТейлор-Джой", ""),
+            ActorData("Джонни \nФлинн", ""),
+            ActorData("Миа \nГот", ""),
+            ActorData("Билл \nНайи", ""),
+            ActorData("Каллум \nТернер", ""),
+            ActorData("Миранда \nХарт", ""),
+            ActorData("Эмбер \nАндерсон", ""),
+            ActorData("Руперт \nГрейвз", ""),
+            ActorData("Джемма \nУилан", ""),
+        ),
         genres = listOf("комедия", "мелодрама"),
         country = "Великобритания",
         releaseDate = "2020",
@@ -73,16 +78,17 @@ fun getListOfMoviesFromLocalStorage() : List<MovieData> = listOf(
                 "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
                 "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
         backdropPath = "2131165395",
-        actors = listOf("Аня Тейлор-Джой\n" +
-                "Джонни Флинн\n" +
-                "Миа Гот\n" +
-                "Джош О’Коннор\n" +
-                "Билл Найи\n" +
-                "Каллум Тернер\n" +
-                "Миранда Харт\n" +
-                "Эмбер Андерсон\n" +
-                "Руперт Грейвз\n" +
-                "Джемма Уилан"),
+        actors = listOf(
+            ActorData("Аня \nТейлор-Джой", ""),
+            ActorData("Джонни \nФлинн", ""),
+            ActorData("Миа \nГот", ""),
+            ActorData("Билл \nНайи", ""),
+            ActorData("Каллум \nТернер", ""),
+            ActorData("Миранда \nХарт", ""),
+            ActorData("Эмбер \nАндерсон", ""),
+            ActorData("Руперт \nГрейвз", ""),
+            ActorData("Джемма \nУилан", ""),
+        ),
         genres = listOf("комедия", "мелодрама"),
         country = "Великобритания",
         releaseDate = "2020",
@@ -101,16 +107,17 @@ fun getListOfMoviesFromLocalStorage() : List<MovieData> = listOf(
                 "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
                 "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
         backdropPath = "2131165395",
-        actors = listOf("Аня Тейлор-Джой\n" +
-                "Джонни Флинн\n" +
-                "Миа Гот\n" +
-                "Джош О’Коннор\n" +
-                "Билл Найи\n" +
-                "Каллум Тернер\n" +
-                "Миранда Харт\n" +
-                "Эмбер Андерсон\n" +
-                "Руперт Грейвз\n" +
-                "Джемма Уилан"),
+        actors = listOf(
+            ActorData("Аня \nТейлор-Джой", ""),
+            ActorData("Джонни \nФлинн", ""),
+            ActorData("Миа \nГот", ""),
+            ActorData("Билл \nНайи", ""),
+            ActorData("Каллум \nТернер", ""),
+            ActorData("Миранда \nХарт", ""),
+            ActorData("Эмбер \nАндерсон", ""),
+            ActorData("Руперт \nГрейвз", ""),
+            ActorData("Джемма \nУилан", ""),
+        ),
         genres = listOf("комедия", "мелодрама"),
         country = "Великобритания",
         releaseDate = "2020",
@@ -129,16 +136,17 @@ fun getListOfMoviesFromLocalStorage() : List<MovieData> = listOf(
                 "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
                 "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
         backdropPath = "2131165395",
-        actors = listOf("Аня Тейлор-Джой\n" +
-                "Джонни Флинн\n" +
-                "Миа Гот\n" +
-                "Джош О’Коннор\n" +
-                "Билл Найи\n" +
-                "Каллум Тернер\n" +
-                "Миранда Харт\n" +
-                "Эмбер Андерсон\n" +
-                "Руперт Грейвз\n" +
-                "Джемма Уилан"),
+        actors = listOf(
+            ActorData("Аня \nТейлор-Джой", ""),
+            ActorData("Джонни \nФлинн", ""),
+            ActorData("Миа \nГот", ""),
+            ActorData("Билл \nНайи", ""),
+            ActorData("Каллум \nТернер", ""),
+            ActorData("Миранда \nХарт", ""),
+            ActorData("Эмбер \nАндерсон", ""),
+            ActorData("Руперт \nГрейвз", ""),
+            ActorData("Джемма \nУилан", ""),
+        ),
         genres = listOf("комедия", "мелодрама"),
         country = "Великобритания",
         releaseDate = "2020",

@@ -21,11 +21,12 @@ class MoviesHomePageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
         ratingOfMovie = itemView.findViewById(R.id.item_movie_card_rating)
     }
 
-    fun fillCard(movieData: MovieData) {
+    fun bind(movieData: MovieData, onItemClickListener: OnItemClickListener) {
         image.setImageResource(R.drawable.movie_image)
         title.text = movieData.title
         releaseDate.text = movieData.releaseDate
         ratingOfMovie.text = movieData.ratingOfMovie.toString()
+        itemView.setOnClickListener { onItemClickListener.onItemClickListener(movieData) }
     }
 
 }

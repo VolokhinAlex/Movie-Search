@@ -1,6 +1,7 @@
 package com.example.java.android1.movie_search.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.java.android1.movie_search.R
@@ -59,5 +60,6 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
         val bottomNavigationView: BottomNavigationView = mBinding.bottomNavigation
         bottomNavigationView.selectedItemId = mBinding.bottomNavigation.menu.findItem(R.id.action_home).itemId
+        bottomNavigationView.visibility = View.VISIBLE
     }
 }

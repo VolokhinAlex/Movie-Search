@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentMainBinding
 import com.example.java.android1.movie_search.model.MovieData
+import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
 import com.example.java.android1.movie_search.viewmodel.AppState
 import com.example.java.android1.movie_search.viewmodel.MainViewModel
 
@@ -34,10 +36,6 @@ class MainFragment : Fragment() {
         return mBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
@@ -46,6 +44,7 @@ class MainFragment : Fragment() {
             }
             is AppState.Error -> {
                 val error = appState.error
+                android.util.Log.e("APP_STATE_ERROR", error.message ?: "Error get data")
             }
             AppState.Loading -> {
 
@@ -56,15 +55,48 @@ class MainFragment : Fragment() {
     private fun setData(data: List<MovieData>) {
         val listOfTrendyMovies: RecyclerView = mBinding.containerForTrendyMovies
         val listOfNewMovies: RecyclerView = mBinding.containerForNewMovies
-        val movieAdapter = MoviesHomePageAdapter(data)
+        val listOfTheBestMovies: RecyclerView = mBinding.containerForTheBestMovies
+        val listOfComingSoonInCinemas: RecyclerView = mBinding.containerForComingSoonInCinemas
+        val listOfHolidayMovies: RecyclerView = mBinding.containerForHolidayMovies
+        val listOfFamilyMovies: RecyclerView = mBinding.containerForFamilyMovies
+        val movieAdapter = MoviesHomePageAdapter(data, object : OnItemClickListener {
+            override fun onItemClickListener(movieData: MovieData) {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, MovieDetailsFragment.newInstance(movieData))
+                    .addToBackStack(null).commit()
+            }
+        })
         listOfTrendyMovies.adapter = movieAdapter
         listOfNewMovies.adapter = movieAdapter
-        val trendyMoviesLayoutManager = LinearLayoutManager(requireActivity(),
-            LinearLayoutManager.HORIZONTAL, false)
-        val newMoviesLayoutManager = LinearLayoutManager(requireActivity(),
-            LinearLayoutManager.HORIZONTAL, false)
-        listOfTrendyMovies.layoutManager = trendyMoviesLayoutManager
-        listOfNewMovies.layoutManager = newMoviesLayoutManager
+        listOfTheBestMovies.adapter = movieAdapter
+        listOfComingSoonInCinemas.adapter = movieAdapter
+        listOfHolidayMovies.adapter = movieAdapter
+        listOfFamilyMovies.adapter = movieAdapter
+
+        listOfTrendyMovies.layoutManager = LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.HORIZONTAL, false
+        )
+        listOfNewMovies.layoutManager = LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.HORIZONTAL, false
+        )
+        listOfTheBestMovies.layoutManager = LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.HORIZONTAL, false
+        )
+        listOfComingSoonInCinemas.layoutManager = LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.HORIZONTAL, false
+        )
+        listOfHolidayMovies.layoutManager = LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.HORIZONTAL, false
+        )
+        listOfFamilyMovies.layoutManager = LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.HORIZONTAL, false
+        )
     }
 
     override fun onDestroyView() {
