@@ -1,5 +1,6 @@
 package com.example.java.android1.movie_search.view.home
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,14 +9,26 @@ import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieData
 
 class MoviesHomePageAdapter(
-    private val movieData: List<MovieData>,
-    private val onItemClickListener: OnItemClickListener
+    private var onItemClickListener: ((MovieData) -> Unit)?
 ) : RecyclerView.Adapter<MoviesHomePageViewHolder>() {
 
+    private var movieData: List<MovieData> = listOf()
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setMovieData(data: List<MovieData>) {
+        movieData = data
+        notifyDataSetChanged()
+    }
+
+    fun removeListener() {
+        onItemClickListener = null
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesHomePageViewHolder {
-        val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.movie_card_item, parent, false)
-        return MoviesHomePageViewHolder(view)
+        return MoviesHomePageViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.movie_card_item, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: MoviesHomePageViewHolder, position: Int) {
@@ -24,8 +37,4 @@ class MoviesHomePageAdapter(
 
     override fun getItemCount(): Int = movieData.size
 
-}
-
-interface OnItemClickListener {
-    fun onItemClickListener(movieData: MovieData)
 }

@@ -1,9 +1,12 @@
 package com.example.java.android1.movie_search.view
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.ActivityMainBinding
 import com.example.java.android1.movie_search.view.catalog.CatalogFragment
@@ -52,14 +55,21 @@ class MainActivity : AppCompatActivity() {
     private fun addFragment(fragment: Fragment) {
         supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment).addToBackStack(null)
+            .replace(mBinding.container.id, fragment).addToBackStack(null).setTransition(
+                FragmentTransaction.TRANSIT_FRAGMENT_FADE
+            )
             .commit()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         val bottomNavigationView: BottomNavigationView = mBinding.bottomNavigation
-        bottomNavigationView.selectedItemId = mBinding.bottomNavigation.menu.findItem(R.id.action_home).itemId
-        bottomNavigationView.visibility = View.VISIBLE
+        bottomNavigationView.selectedItemId =
+            mBinding.bottomNavigation.menu.findItem(R.id.action_home).itemId
+        bottomNavigationView.visible()
     }
+}
+
+fun View.visible() {
+    this.visibility = View.VISIBLE
 }
