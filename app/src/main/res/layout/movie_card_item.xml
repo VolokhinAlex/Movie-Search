@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/item_movie_card_image"
+                android:layout_width="@dimen/image_width_size"
+                android:layout_height="140dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/movie_image" />
+
+            <TextView
+                android:id="@+id/item_movie_card_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/box_border_rating"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="11sp"
+                tools:text="8.5" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/item_movie_card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/primary_text_color"
+            android:textSize="@dimen/card_title_text_size"
+            tools:text="Movie Title" />
+
+        <TextView
+            android:id="@+id/item_movie_card_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/primary_text_color"
+            android:textSize="@dimen/card_text_size"
+            tools:text="2020" />
+
+    </LinearLayout>
+
+</FrameLayout>
