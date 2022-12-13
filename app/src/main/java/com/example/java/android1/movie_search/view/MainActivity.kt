@@ -1,5 +1,7 @@
 package com.example.java.android1.movie_search.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View

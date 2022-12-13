@@ -11,6 +11,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ActorData(
-    val actorName: String,
-    val actorPhoto: String
+    val actorName: String?,
+    val actorPhoto: String?
 ) : Parcelable

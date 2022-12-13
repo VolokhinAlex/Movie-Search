@@ -2,11 +2,11 @@ package com.example.java.android1.movie_search.view.home
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieData
+import com.example.java.android1.movie_search.model.MovieDataTMDB
 
 class MoviesHomePageAdapter(
     private var onItemClickListener: ((MovieData) -> Unit)?

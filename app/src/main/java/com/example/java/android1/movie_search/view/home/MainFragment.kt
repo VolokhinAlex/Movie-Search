@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentMainBinding
-import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
+import com.example.java.android1.movie_search.model.MovieChildListData
 import com.example.java.android1.movie_search.viewmodel.AppState
 import com.example.java.android1.movie_search.viewmodel.MainViewModel
 
@@ -20,12 +20,11 @@ class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val mBinding get() = _binding!!
-
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this)[MainViewModel::class.java]
     }
 
-    private lateinit var mAdapter: MoviesHomePageAdapter
+    private lateinit var mAdapter: MoviesHomeBasicAdapter
 
     companion object {
         fun newInstance() = MainFragment()
@@ -46,7 +45,19 @@ class MainFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 val movieData = appState.data
-                mAdapter.setMovieData(movieData)
+                mAdapter.setChildListData(
+                    listOf(
+                        MovieChildListData(getString(R.string.category_trending_now), movieData),
+                        MovieChildListData(getString(R.string.category_new_products), movieData),
+                        MovieChildListData(getString(R.string.category_the_best_movies), movieData),
+                        MovieChildListData(
+                            getString(R.string.category_coming_soon_in_cinemas),
+                            movieData
+                        ),
+                        MovieChildListData(getString(R.string.category_holiday_movies), movieData),
+                        MovieChildListData(getString(R.string.category_family_movies), movieData)
+                    )
+                )
             }
             is AppState.Error -> {
                 val error = appState.error
@@ -59,41 +70,16 @@ class MainFragment : Fragment() {
     }
 
     private fun initRecyclerViews() {
-        val listOfTrendyMovies: RecyclerView = mBinding.containerForTrendyMovies
-        val listOfNewMovies: RecyclerView = mBinding.containerForNewMovies
-        val listOfTheBestMovies: RecyclerView = mBinding.containerForTheBestMovies
-        val listOfComingSoonInCinemas: RecyclerView = mBinding.containerForComingSoonInCinemas
-        val listOfHolidayMovies: RecyclerView = mBinding.containerForHolidayMovies
-        val listOfFamilyMovies: RecyclerView = mBinding.containerForFamilyMovies
-
-        mAdapter = MoviesHomePageAdapter { movieData ->
-            val bundle = Bundle()
-            bundle.putParcelable(MovieDetailsFragment.ARG_MOVIE_DATA_KEY, movieData)
-            requireActivity().supportFragmentManager.replace(
-                R.id.container,
-                MovieDetailsFragment.newInstance(bundle)
-            )
-        }
-
-        listOfTrendyMovies.adapter = mAdapter
-        listOfNewMovies.adapter = mAdapter
-        listOfTheBestMovies.adapter = mAdapter
-        listOfComingSoonInCinemas.adapter = mAdapter
-        listOfHolidayMovies.adapter = mAdapter
-        listOfFamilyMovies.adapter = mAdapter
-
-        listOfTrendyMovies.createLinearLayout()
-        listOfNewMovies.createLinearLayout()
-        listOfTheBestMovies.createLinearLayout()
-        listOfComingSoonInCinemas.createLinearLayout()
-        listOfHolidayMovies.createLinearLayout()
-        listOfFamilyMovies.createLinearLayout()
+        val basicList = mBinding.containerBasicList
+        mAdapter = MoviesHomeBasicAdapter()
+        basicList.adapter = mAdapter
+        basicList.layoutManager = LinearLayoutManager(requireActivity())
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        mAdapter.removeListener()
+        //mAdapter.removeListener()
     }
 
     private fun RecyclerView.createLinearLayout() {
@@ -110,4 +96,11 @@ fun FragmentManager.replace(container: Int, fragment: Fragment) {
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .addToBackStack(null).commit()
     }
+}
+
+fun RecyclerView.createLinearLayout() {
+    this.layoutManager = LinearLayoutManager(
+        this.context,
+        LinearLayoutManager.HORIZONTAL, false
+    )
 }

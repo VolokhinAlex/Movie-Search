@@ -5,14 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.java.android1.movie_search.model.Repository
 import com.example.java.android1.movie_search.model.RepositoryImpl
-import java.util.concurrent.Executors
 
 class MainViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
     private val repository: Repository = RepositoryImpl()
 ) : ViewModel() {
 
-    fun getLiveData() : LiveData<AppState> {
+    fun getLiveData(): LiveData<AppState> {
         return liveData
     }
 
@@ -21,10 +20,10 @@ class MainViewModel(
 
     private fun getDataFromLocalSource() {
         liveData.value = AppState.Loading
-        Executors.newFixedThreadPool(5).submit {
+        Thread {
             Thread.sleep(1000)
-            liveData.postValue(AppState.Success(repository.getMovieFromLocalStorage()))
-        }
+            liveData.postValue(AppState.Success(repository.getMovieFromServer()))
+        }.start()
     }
 
 }

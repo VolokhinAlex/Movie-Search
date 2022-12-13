@@ -41,7 +41,7 @@ data class MovieData(
 
 fun getListOfMoviesFromLocalStorage() = listOf(
     MovieData(
-        id = 1,
+        id = 556678,
         imdbId = "tt0137523",
         title = "Эмма",
         overview = "Англия, XIX век. " +
@@ -70,90 +70,52 @@ fun getListOfMoviesFromLocalStorage() = listOf(
         originalLanguage = "en"
     ),
     MovieData(
-        id = 1,
-        imdbId = "tt0137523",
-        title = "Эмма",
-        overview = "Англия, XIX век. " +
-                "21-летняя провинциалка Эмма Вудхаус красива, богата, остроумна и считает, что прекрасно разбирается в людях. " +
-                "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
-                "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
-        backdropPath = "2131165395",
-        actors = listOf(
-            ActorData("Аня \nТейлор-Джой", ""),
-            ActorData("Джонни \nФлинн", ""),
-            ActorData("Миа \nГот", ""),
-            ActorData("Билл \nНайи", ""),
-            ActorData("Каллум \nТернер", ""),
-            ActorData("Миранда \nХарт", ""),
-            ActorData("Эмбер \nАндерсон", ""),
-            ActorData("Руперт \nГрейвз", ""),
-            ActorData("Джемма \nУилан", ""),
-        ),
-        genres = listOf("комедия", "мелодрама"),
-        country = "Великобритания",
+        id = 872177,
+        imdbId = "0",
+        title = "Тюрьма суперзлодеев",
+        overview = "",
+        backdropPath = "",
+        actors = listOf(),
+        genres = listOf(),
+        country = "",
         releaseDate = "2020",
-        ratingOfMovie = 6.9,
-        voteCount = 20000,
-        age = 12,
+        ratingOfMovie = 5.2,
+        voteCount = 0,
+        age = 16,
         adult = true,
         originalLanguage = "en"
     ),
     MovieData(
-        id = 1,
-        imdbId = "tt0137523",
-        title = "Эмма",
-        overview = "Англия, XIX век. " +
-                "21-летняя провинциалка Эмма Вудхаус красива, богата, остроумна и считает, что прекрасно разбирается в людях. " +
-                "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
-                "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
-        backdropPath = "2131165395",
-        actors = listOf(
-            ActorData("Аня \nТейлор-Джой", ""),
-            ActorData("Джонни \nФлинн", ""),
-            ActorData("Миа \nГот", ""),
-            ActorData("Билл \nНайи", ""),
-            ActorData("Каллум \nТернер", ""),
-            ActorData("Миранда \nХарт", ""),
-            ActorData("Эмбер \nАндерсон", ""),
-            ActorData("Руперт \nГрейвз", ""),
-            ActorData("Джемма \nУилан", ""),
-        ),
-        genres = listOf("комедия", "мелодрама"),
-        country = "Великобритания",
-        releaseDate = "2020",
-        ratingOfMovie = 6.9,
-        voteCount = 20000,
-        age = 12,
+        id = 284054,
+        imdbId = "0",
+        title = "Чёрная Пантера",
+        overview = "",
+        backdropPath = "",
+        actors = listOf(),
+        genres = listOf(),
+        country = "",
+        releaseDate = "2018",
+        ratingOfMovie = 7.4,
+        voteCount = 0,
+        age = 16,
         adult = true,
         originalLanguage = "en"
     ),
     MovieData(
-        id = 1,
-        imdbId = "tt0137523",
-        title = "Эмма",
-        overview = "Англия, XIX век. " +
-                "21-летняя провинциалка Эмма Вудхаус красива, богата, остроумна и считает, что прекрасно разбирается в людях. " +
-                "Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, " +
-                "Эмма находит себе новую компаньонку — сироту Гарриет Смит — и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
-        backdropPath = "2131165395",
-        actors = listOf(
-            ActorData("Аня \nТейлор-Джой", ""),
-            ActorData("Джонни \nФлинн", ""),
-            ActorData("Миа \nГот", ""),
-            ActorData("Билл \nНайи", ""),
-            ActorData("Каллум \nТернер", ""),
-            ActorData("Миранда \nХарт", ""),
-            ActorData("Эмбер \nАндерсон", ""),
-            ActorData("Руперт \nГрейвз", ""),
-            ActorData("Джемма \nУилан", ""),
-        ),
-        genres = listOf("комедия", "мелодрама"),
-        country = "Великобритания",
-        releaseDate = "2020",
+        id = 928123,
+        imdbId = "0",
+        title = "Битва на озере 2",
+        overview = "",
+        backdropPath = "",
+        actors = listOf(),
+        genres = listOf(),
+        country = "",
+        releaseDate = "2022",
         ratingOfMovie = 6.9,
-        voteCount = 20000,
-        age = 12,
+        voteCount = 0,
+        age = 16,
         adult = true,
         originalLanguage = "en"
     )
+
 )
