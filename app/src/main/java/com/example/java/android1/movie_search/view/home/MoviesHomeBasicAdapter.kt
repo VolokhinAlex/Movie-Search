@@ -12,7 +12,7 @@ class MoviesHomeBasicAdapter : RecyclerView.Adapter<MovieHomeBasicViewHolder>() 
     private var list: List<MovieChildListData> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setChildListData(data: List<MovieChildListData>) {
+    fun setParentListData(data: List<MovieChildListData>) {
         list = data
         notifyDataSetChanged()
     }

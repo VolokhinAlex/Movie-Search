@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentMainBinding
 import com.example.java.android1.movie_search.model.MovieChildListData
@@ -36,7 +35,7 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         viewModel.getLiveData().observe(viewLifecycleOwner) { state -> renderData(state) }
-        viewModel.getMovieFromLocalSource()
+        viewModel.getMovieFromRemoteSource()
         initRecyclerViews()
         return mBinding.root
     }
@@ -45,7 +44,7 @@ class MainFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 val movieData = appState.data
-                mAdapter.setChildListData(
+                mAdapter.setParentListData(
                     listOf(
                         MovieChildListData(getString(R.string.category_trending_now), movieData),
                         MovieChildListData(getString(R.string.category_new_products), movieData),
@@ -81,13 +80,6 @@ class MainFragment : Fragment() {
         _binding = null
         //mAdapter.removeListener()
     }
-
-    private fun RecyclerView.createLinearLayout() {
-        this.layoutManager = LinearLayoutManager(
-            requireActivity(),
-            LinearLayoutManager.HORIZONTAL, false
-        )
-    }
 }
 
 fun FragmentManager.replace(container: Int, fragment: Fragment) {
@@ -96,11 +88,4 @@ fun FragmentManager.replace(container: Int, fragment: Fragment) {
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .addToBackStack(null).commit()
     }
-}
-
-fun RecyclerView.createLinearLayout() {
-    this.layoutManager = LinearLayoutManager(
-        this.context,
-        LinearLayoutManager.HORIZONTAL, false
-    )
 }

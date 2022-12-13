@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 /**
+ * No longer used
  * The class is responsible for storing information about the movie.
  * @param id -               ID of the movie in the database
  * @param imdbId -           ID of the movie in the imdb database

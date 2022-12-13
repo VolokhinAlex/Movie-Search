@@ -20,6 +20,7 @@ class MainViewModel(
 
     private fun getDataFromLocalSource() {
         liveData.value = AppState.Loading
+        repository.loadData()
         Thread {
             Thread.sleep(1000)
             liveData.postValue(AppState.Success(repository.getMovieFromServer()))

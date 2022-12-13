@@ -8,5 +8,5 @@ package com.example.java.android1.movie_search.model
 
 data class MovieChildListData(
     val title: String,
-    val listData: List<MovieData>
+    val listData: List<MovieDataTMDB>
 )

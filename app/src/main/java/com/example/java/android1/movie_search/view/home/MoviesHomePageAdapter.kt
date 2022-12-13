@@ -5,17 +5,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.model.MovieData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 
 class MoviesHomePageAdapter(
-    private var onItemClickListener: ((MovieData) -> Unit)?
+    private var onItemClickListener: ((MovieDataTMDB) -> Unit)?
 ) : RecyclerView.Adapter<MoviesHomePageViewHolder>() {
 
-    private var movieData: List<MovieData> = listOf()
+    private var movieData: List<MovieDataTMDB> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setMovieData(data: List<MovieData>) {
+    fun setMovieData(data: List<MovieDataTMDB>) {
         movieData = data
         notifyDataSetChanged()
     }
@@ -32,7 +31,7 @@ class MoviesHomePageAdapter(
     }
 
     override fun onBindViewHolder(holder: MoviesHomePageViewHolder, position: Int) {
-        holder.bind(movieData = movieData[position], onItemClickListener)
+        holder.bind(movieData[position], onItemClickListener)
     }
 
     override fun getItemCount(): Int = movieData.size

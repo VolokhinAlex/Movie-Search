@@ -16,7 +16,6 @@ import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentMovieDetailsBinding
 import com.example.java.android1.movie_search.model.ActorData
-import com.example.java.android1.movie_search.model.MovieData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.view.DialogFragmentMessage
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,7 +28,7 @@ class MovieDetailsFragment : Fragment() {
     private val mBinding get() = _binding!!
     private val ratingFormat = DecimalFormat("#.#")
 
-    private var mMovieData: MovieData? = null
+    private var mMovieData: MovieDataTMDB? = null
     private val actorsAdapter = MovieActorsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,10 +95,10 @@ class MovieDetailsFragment : Fragment() {
             }
             detailMovieOverview.text = movieDataDTO.overview
             detailMovieRating.text = ratingFormat.format(movieDataDTO.vote_average)
-            detailMovieGenres.text = genres.deleteCharAt(genres.length - 2)
+            detailMovieGenres.text = if (genres.length > 2) genres.deleteCharAt(genres.lastIndexOf(", ")) else genres
             detailMovieTime.text = movieDataDTO.runtime?.let { timeToFormatHoursAndMinutes(it) }
-            detailMovieAge.text = String.format("%s+", mMovieData?.age)
-            detailMovieCountry.text = countries.deleteCharAt(countries.length - 2)
+            detailMovieAge.text = String.format("%s+", 16)
+            detailMovieCountry.text = if (countries.length > 2) countries.deleteCharAt(countries.lastIndexOf(", ")) else countries
         }
         setBlurForBackground()
     }
