@@ -84,5 +84,3 @@ data class CastDTO(
     val profile_path: String?,
     val character: String?
 ) : Parcelable
-
-//data class CategoriesTMDB(val List<>)

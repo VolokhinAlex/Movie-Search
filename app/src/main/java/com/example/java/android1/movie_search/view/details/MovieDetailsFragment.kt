@@ -18,6 +18,7 @@ import com.example.java.android1.movie_search.databinding.FragmentMovieDetailsBi
 import com.example.java.android1.movie_search.model.ActorData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.view.DialogFragmentMessage
+import com.example.java.android1.movie_search.view.MovieDataLoadListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import jp.wasabeef.glide.transformations.BlurTransformation
 import java.text.DecimalFormat

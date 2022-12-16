@@ -19,6 +19,11 @@ class ParseMoviesFromTMDB(
     private val category: String
 ) {
 
+    /**
+     *  The method to get a data from TMDB API.
+     *  The method uses HttpsUrlConnection to connect the server and receive a data
+     */
+
     fun parseData() {
         try {
             val uri =
@@ -31,7 +36,6 @@ class ParseMoviesFromTMDB(
                     urlConnection = uri.openConnection() as HttpsURLConnection
                     urlConnection.readTimeout = 10000
                     urlConnection.requestMethod = "GET"
-
                     val result = BufferedReader(InputStreamReader(urlConnection.inputStream))
                     val movieDataDTO: CategoryMoviesTMDB =
                         Gson().fromJson(getLines(result), CategoryMoviesTMDB::class.java)
@@ -39,7 +43,6 @@ class ParseMoviesFromTMDB(
                         listener.onLoaded(movieDataDTO.results)
                     }
                 } catch (e: Exception) {
-                    Log.e("TAG_CHECKER", e.toString())
                     listener.onFailed(e)
                 } finally {
                     urlConnection?.disconnect()
@@ -47,7 +50,6 @@ class ParseMoviesFromTMDB(
             }.start()
 
         } catch (e: MalformedURLException) {
-            Log.e("TAG_CHECKER", e.toString())
             listener.onFailed(e)
         }
     }
@@ -59,6 +61,10 @@ class ParseMoviesFromTMDB(
             ""
         }
     }
+
+    /**
+     * Listener to transfer the data from ParseMoviesFromTMDB.class
+     */
 
     interface MovieDataLoadListener {
         fun onLoaded(movieData: List<MovieDataTMDB>)

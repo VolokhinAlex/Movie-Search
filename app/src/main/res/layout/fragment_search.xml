@@ -6,7 +6,8 @@
     tools:context=".view.search.SearchFragment"
     android:orientation="vertical">
 
-    <SearchView
+    <android.widget.SearchView
+        android:id="@+id/search_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -15,11 +16,10 @@
         android:background="@drawable/search_view_border"
         android:layout_margin="20dp"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_from_search_fragment"
-        android:textSize="@dimen/fragment_title_size"
-        android:gravity="center"/>
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/search_container"
+       android:layout_margin="20dp"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"/>
 
 </LinearLayout>

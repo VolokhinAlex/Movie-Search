@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.java.android1.movie_search.BuildConfig
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.view.MovieDataLoadListener
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -57,9 +58,4 @@ class MovieDataLoad(private val listener: MovieDataLoadListener, val lang: Strin
         return reader.lines().collect(Collectors.joining("\n"))
     }
 
-}
-
-interface MovieDataLoadListener {
-    fun onLoaded(movieData: MovieDataTMDB)
-    fun onFailed(e: Throwable)
 }

@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.ActorData
 
+/**
+ * The class adapter for Actors Recycler View .
+ *  This class should set the actors' data
+ */
 
 class MovieActorsAdapter : RecyclerView.Adapter<MovieActorsViewHolder>() {
 
