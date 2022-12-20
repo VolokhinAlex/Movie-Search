@@ -27,6 +27,7 @@ import kotlinx.parcelize.Parcelize
 data class MovieDataTMDB(
     val adult: Boolean?,
     val backdrop_path: String?,
+    val poster_path: String?,
     val budget: Int?,
     val id: Int?,
     val imdb_id: String?,

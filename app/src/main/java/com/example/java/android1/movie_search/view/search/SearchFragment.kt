@@ -1,27 +1,30 @@
 package com.example.java.android1.movie_search.view.search
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentSearchBinding
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
-import com.example.java.android1.movie_search.view.home.replace
+import com.example.java.android1.movie_search.viewmodel.AppState
+import com.example.java.android1.movie_search.viewmodel.SearchViewModel
 
 class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
     private val mBinding get() = _binding!!
+
+    private val viewModel: SearchViewModel by lazy {
+        ViewModelProvider(this)[SearchViewModel::class.java]
+    }
+
     private val searchAdapter = SearchAdapter { movieData ->
         val bundle = Bundle()
         bundle.putParcelable(MovieDetailsFragment.ARG_MOVIE_DATA_KEY, movieData)
@@ -30,32 +33,13 @@ class SearchFragment : Fragment() {
             MovieDetailsFragment.newInstance(bundle)
         )
     }
-    private val loadData: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.getStringExtra(LOAD_RESULT_EXTRA)) {
-                RESPONSE_SUCCESS_EXTRA -> {
-                    val data: List<MovieDataTMDB> =
-                        intent.getParcelableArrayListExtra<MovieDataTMDB>(DATA_EXTRA) as List<MovieDataTMDB>
-                    searchAdapter.setMovieData(data)
-                }
-            }
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
-            loadData, IntentFilter(
-                INTENT_FILTER
-            )
-        )
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        viewModel.searchLiveData.observe(viewLifecycleOwner) { renderData(it) }
         val searchRecyclerView = mBinding.searchContainer
         searchRecyclerView.adapter = searchAdapter
         searchRecyclerView.layoutManager = GridLayoutManager(requireActivity(), 2)
@@ -65,8 +49,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(text: String?): Boolean {
-                requireContext().startService(Intent(requireContext(), SearchDataLoad::class.java).putExtra(
-                    TITLE_EXTRA, text))
+                text?.let { viewModel.getMoviesFromRemoteSource("ru-RU", 1, it) }
                 return true
             }
 
@@ -74,12 +57,23 @@ class SearchFragment : Fragment() {
         return mBinding.root
     }
 
-
+    private fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Error -> {
+                val error = appState.error
+                Log.e("APP_STATE_ERROR", error.message ?: "Error get data")
+            }
+            AppState.Loading -> {}
+            is AppState.Success -> {
+                val movieList = appState.data
+                searchAdapter.setMovieData(movieList)
+            }
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(loadData)
     }
 
 

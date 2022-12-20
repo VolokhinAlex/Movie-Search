@@ -4,6 +4,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.bumptech.glide.Glide
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import java.text.DecimalFormat
@@ -27,6 +29,9 @@ class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         title.text = movieData.title
         year.text = movieData.release_date
         rating.text = ratingFormat.format(movieData.vote_average)
+//        Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w500${movieData.poster_path}")
+//            .into(image)
+        image.load("https://image.tmdb.org/t/p/w500${movieData.poster_path}")
         itemView.setOnClickListener {
             listener?.invoke(movieData)
         }

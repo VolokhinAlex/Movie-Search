@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.ActivityMainBinding
+import com.example.java.android1.movie_search.utils.MyNetworkCallback
+import com.example.java.android1.movie_search.utils.visible
 import com.example.java.android1.movie_search.view.catalog.CatalogFragment
 import com.example.java.android1.movie_search.view.home.MainFragment
 import com.example.java.android1.movie_search.view.profile.ProfileFragment
@@ -75,8 +77,4 @@ class MainActivity : AppCompatActivity() {
             mBinding.bottomNavigation.menu.findItem(R.id.action_home).itemId
         bottomNavigationView.visible()
     }
-}
-
-fun View.visible() {
-    this.visibility = View.VISIBLE
 }

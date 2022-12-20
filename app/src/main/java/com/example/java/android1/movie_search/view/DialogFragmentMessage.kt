@@ -12,7 +12,7 @@ class DialogFragmentMessage(private val message: String) : DialogFragment() {
             .setCancelable(false)
             .setPositiveButton(
                 "Ok"
-            ) { dialogInterface, i -> dialogInterface.dismiss() }.create()
+            ) { dialogInterface, _ -> dialogInterface.dismiss() }.create()
     }
 
 }

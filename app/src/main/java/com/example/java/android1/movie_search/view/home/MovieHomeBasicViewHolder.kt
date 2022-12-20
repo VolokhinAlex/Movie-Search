@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieChildListData
+import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.MainActivity
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
 
@@ -36,7 +37,7 @@ class MovieHomeBasicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
 
     fun bind(movieListData: MovieChildListData) {
         listTitle.text = movieListData.title
-        adapter.setMovieData(movieListData.listData)
+        movieListData.listData?.let { adapter.setMovieData(it) }
     }
 
 }

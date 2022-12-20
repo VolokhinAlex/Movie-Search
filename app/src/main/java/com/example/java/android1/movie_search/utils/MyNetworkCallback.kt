@@ -1,4 +1,4 @@
-package com.example.java.android1.movie_search.view
+package com.example.java.android1.movie_search.utils
 
 import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
