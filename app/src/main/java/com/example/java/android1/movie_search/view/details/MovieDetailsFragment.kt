@@ -95,6 +95,7 @@ class MovieDetailsFragment : Fragment() {
             RoomAppState.Loading -> {}
             is RoomAppState.Success -> {
                 val movieDataRoom = roomAppState.data
+                mBinding.itemMovieFavorite.isChecked = movieDataRoom.movieFavorite ?: false
                 openMovieNote(movieDataRoom, viewModel)
             }
         }
@@ -128,6 +129,7 @@ class MovieDetailsFragment : Fragment() {
                 if (countries.length > 2) countries.deleteCharAt(countries.lastIndexOf(", ")) else countries
         }
         setBlurForBackground(movieDataDTO)
+        movieDataDTO.id?.let { setFavoriteTrueOrFalse(it) }
     }
 
     /**
@@ -148,6 +150,12 @@ class MovieDetailsFragment : Fragment() {
                 .load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
                 .apply(bitmapTransform(BlurTransformation(80)))
                 .into(mBinding.detailMovieImage)
+        }
+    }
+
+    private fun setFavoriteTrueOrFalse(movieId: Int) {
+        mBinding.itemMovieFavorite.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateMovieFavorite(movieId = movieId, favorite = isChecked)
         }
     }
 

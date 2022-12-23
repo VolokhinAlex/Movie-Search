@@ -5,6 +5,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.java.android1.movie_search.app.App.Companion.movieDao
+import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
 import com.example.java.android1.movie_search.room.MovieEntity
@@ -80,6 +81,10 @@ class DetailsViewModel(
 
     fun updateMovieNote(movieId: Int, note: String) = viewModelScope.launch {
         movieLocalRepository.updateMovieNoteInLocalDataBase(movieId, note)
+    }
+
+    fun updateMovieFavorite(movieId: Int, favorite: Boolean) = viewModelScope.launch {
+        movieLocalRepository.updateMovieFavoriteInLocalDataBase(movieId, favorite)
     }
 
 }

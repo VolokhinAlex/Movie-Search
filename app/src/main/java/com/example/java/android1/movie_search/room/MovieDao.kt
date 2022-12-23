@@ -1,18 +1,18 @@
 package com.example.java.android1.movie_search.room
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
 
     @Query("SELECT * FROM movies_table")
-    fun all(): LiveData<List<MovieEntity>>
+    fun all(): Flow<List<MovieEntity>>
 
-    @Query("SELECT * FROM movies_table WHERE movie_id = :movieId")
+    @Query("SELECT * FROM movies_table WHERE movie_id LIKE :movieId")
     fun getMovieByMovieId(movieId: Int) : MovieEntity
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

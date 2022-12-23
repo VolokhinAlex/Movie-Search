@@ -1,8 +1,6 @@
 package com.example.java.android1.movie_search.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.java.android1.movie_search.app.App.Companion.historySearchDao
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.repository.*
@@ -18,7 +16,8 @@ private const val CORRUPTED_DATA = "Неполные данные"
 class SearchViewModel(
     val searchLiveData: MutableLiveData<AppState> = MutableLiveData(),
     private val repository: SearchRepository = SearchRepositoryImpl(RemoteDataSource()),
-    private val localSearchRepository: LocalSearchRepository = LocalSearchRepositoryImpl(historySearchDao)
+    private val localSearchRepository: LocalSearchRepository = LocalSearchRepositoryImpl(historySearchDao),
+    val liveDataHistory: LiveData<List<String>> = localSearchRepository.getHistorySearch().asLiveData()
 ) : ViewModel() {
 
     private val callback = object : Callback<CategoryMoviesTMDB> {

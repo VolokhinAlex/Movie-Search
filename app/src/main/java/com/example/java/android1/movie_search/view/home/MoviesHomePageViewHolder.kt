@@ -1,5 +1,6 @@
 package com.example.java.android1.movie_search.view.home
 
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
@@ -8,6 +9,7 @@ import coil.load
 import com.bumptech.glide.Glide
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.google.android.material.checkbox.MaterialCheckBox
 
 class MoviesHomePageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -28,8 +30,6 @@ class MoviesHomePageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
         movieData.release_date?.apply {
             releaseDate.text = this.substring(0, this.indexOf("-"))
         }
-//        Glide.with(itemView.context).load("https://image.tmdb.org/t/p/w500${movieData.poster_path}")
-//            .into(image)
         image.load("https://image.tmdb.org/t/p/w500${movieData.poster_path}")
         ratingOfMovie.text = movieData.vote_average.toString()
         itemView.setOnClickListener { onItemClickListener?.invoke(movieData) }

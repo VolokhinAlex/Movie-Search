@@ -48,6 +48,7 @@ class SearchFragment : Fragment() {
         searchRecyclerView.layoutManager = GridLayoutManager(requireActivity(), 2)
         val sharedPreferences =
             requireActivity().getSharedPreferences(MOVIE_SEARCH_PREFERENCES, Context.MODE_PRIVATE)
+        viewModel.liveDataHistory.observe(viewLifecycleOwner) { getSearchHistory(it) }
         mBinding.actionAdult.isChecked = sharedPreferences.getBoolean(IS_ADULT_KEY, false)
         mBinding.actionAdult.setOnCheckedChangeListener { _, isChecked ->
             readPreferences(sharedPreferences, isChecked)
@@ -109,4 +110,6 @@ class SearchFragment : Fragment() {
     private fun readPreferences(sharedPreferences: SharedPreferences, adult: Boolean) {
         sharedPreferences.edit().putBoolean(IS_ADULT_KEY, adult).apply()
     }
+
+    private fun getSearchHistory(historySearchList: List<String>): List<String> = historySearchList
 }
