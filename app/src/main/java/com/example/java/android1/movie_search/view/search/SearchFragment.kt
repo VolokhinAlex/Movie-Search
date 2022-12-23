@@ -1,10 +1,14 @@
 package com.example.java.android1.movie_search.view.search
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.RadioGroup.OnCheckedChangeListener
 import android.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +21,6 @@ import com.example.java.android1.movie_search.viewmodel.AppState
 import com.example.java.android1.movie_search.viewmodel.SearchViewModel
 
 class SearchFragment : Fragment() {
-
     private var _binding: FragmentSearchBinding? = null
     private val mBinding get() = _binding!!
 
@@ -43,13 +46,30 @@ class SearchFragment : Fragment() {
         val searchRecyclerView = mBinding.searchContainer
         searchRecyclerView.adapter = searchAdapter
         searchRecyclerView.layoutManager = GridLayoutManager(requireActivity(), 2)
+        val sharedPreferences =
+            requireActivity().getSharedPreferences(MOVIE_SEARCH_PREFERENCES, Context.MODE_PRIVATE)
+        mBinding.actionAdult.isChecked = sharedPreferences.getBoolean(IS_ADULT_KEY, false)
+        mBinding.actionAdult.setOnCheckedChangeListener { _, isChecked ->
+            readPreferences(sharedPreferences, isChecked)
+        }
         mBinding.searchField.setOnQueryTextListener(object : OnQueryTextListener {
-            override fun onQueryTextSubmit(text: String?): Boolean {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { viewModel.saveSearchRequest(it, System.currentTimeMillis() / 1000L) }
                 return true
             }
 
             override fun onQueryTextChange(text: String?): Boolean {
-                text?.let { viewModel.getMoviesFromRemoteSource("ru-RU", 1, it) }
+                text?.let {
+                    viewModel.getMoviesFromRemoteSource(
+                        "ru-RU",
+                        1,
+                        sharedPreferences.getBoolean(IS_ADULT_KEY, false),
+                        it
+                    )
+                }
+                if (text == "") {
+                    searchAdapter.clearMovieData()
+                }
                 return true
             }
 
@@ -76,11 +96,17 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-
     companion object {
+        private const val MOVIE_SEARCH_PREFERENCES = "MOVIE_SEARCH_PREFERENCES"
+        private const val IS_ADULT_KEY = "ADULT_MOVIES"
+
         @JvmStatic
         fun newInstance() =
             SearchFragment().apply {
             }
+    }
+
+    private fun readPreferences(sharedPreferences: SharedPreferences, adult: Boolean) {
+        sharedPreferences.edit().putBoolean(IS_ADULT_KEY, adult).apply()
     }
 }

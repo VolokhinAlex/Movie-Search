@@ -2,10 +2,11 @@ package com.example.java.android1.movie_search.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.java.android1.movie_search.app.App.Companion.historySearchDao
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
-import com.example.java.android1.movie_search.repository.RemoteDataSource
-import com.example.java.android1.movie_search.repository.SearchRepository
-import com.example.java.android1.movie_search.repository.SearchRepositoryImpl
+import com.example.java.android1.movie_search.repository.*
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,7 +17,8 @@ private const val CORRUPTED_DATA = "Неполные данные"
 
 class SearchViewModel(
     val searchLiveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val repository: SearchRepository = SearchRepositoryImpl(RemoteDataSource())
+    private val repository: SearchRepository = SearchRepositoryImpl(RemoteDataSource()),
+    private val localSearchRepository: LocalSearchRepository = LocalSearchRepositoryImpl(historySearchDao)
 ) : ViewModel() {
 
     private val callback = object : Callback<CategoryMoviesTMDB> {
@@ -39,15 +41,19 @@ class SearchViewModel(
 
     }
 
-    fun getMoviesFromRemoteSource(language: String, page: Int, query: String) {
+    fun getMoviesFromRemoteSource(language: String, page: Int, adult: Boolean, query: String) {
         searchLiveData.value = AppState.Loading
         repository.getMoviesFromServer(
             language = language,
             page = page,
+            adult = adult,
             query = query,
             callback = callback
         )
     }
 
+    fun saveSearchRequest(query: String, date: Long) = viewModelScope.launch {
+        localSearchRepository.saveEntity(query, date)
+    }
 
 }

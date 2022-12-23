@@ -9,11 +9,17 @@ import com.example.java.android1.movie_search.model.MovieDataTMDB
 
 class SearchAdapter(private val listener: ((MovieDataTMDB) -> Unit)?) : RecyclerView.Adapter<SearchViewHolder>() {
 
-    private var movieData: List<MovieDataTMDB> = listOf()
+    private var movieData: MutableList<MovieDataTMDB> = mutableListOf()
 
     @SuppressLint("NotifyDataSetChanged")
     fun setMovieData(dataTMDB: List<MovieDataTMDB>) {
-        movieData = dataTMDB
+        movieData = dataTMDB.toMutableList()
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun clearMovieData() {
+        movieData.clear()
         notifyDataSetChanged()
     }
 

@@ -8,6 +8,7 @@ interface SearchRepository {
     fun getMoviesFromServer(
         language: String,
         page: Int,
+        adult: Boolean,
         query: String,
         callback: Callback<CategoryMoviesTMDB>
     )

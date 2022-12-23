@@ -16,6 +16,13 @@
         android:background="@drawable/search_view_border"
         android:layout_margin="20dp"/>
 
+    <CheckBox
+        android:id="@+id/action_adult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/with_adult_movie"/>
+
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/search_container"
        android:layout_margin="20dp"

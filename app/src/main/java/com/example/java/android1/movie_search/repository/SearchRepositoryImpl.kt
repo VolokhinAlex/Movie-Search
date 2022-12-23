@@ -10,10 +10,11 @@ class SearchRepositoryImpl(
     override fun getMoviesFromServer(
         language: String,
         page: Int,
+        adult: Boolean,
         query: String,
         callback: Callback<CategoryMoviesTMDB>
     ) {
-        remoteDataSource.getMoviesFromSearch(language, page, query, callback)
+        remoteDataSource.getMoviesFromSearch(language, page, adult, query, callback)
     }
 
 }
