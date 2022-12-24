@@ -4,13 +4,12 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
 
     @Query("SELECT * FROM movies_table")
-    fun all(): Flow<List<MovieEntity>>
+    fun all(): List<MovieEntity>
 
     @Query("SELECT * FROM movies_table WHERE movie_id LIKE :movieId")
     fun getMovieByMovieId(movieId: Int) : MovieEntity

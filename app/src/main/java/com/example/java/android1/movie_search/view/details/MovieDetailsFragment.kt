@@ -22,6 +22,7 @@ import com.example.java.android1.movie_search.model.ActorData
 import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.DialogFragmentNote
+import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
 import com.example.java.android1.movie_search.viewmodel.AppState
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
 import com.example.java.android1.movie_search.viewmodel.RoomAppState
@@ -95,8 +96,8 @@ class MovieDetailsFragment : Fragment() {
             RoomAppState.Loading -> {}
             is RoomAppState.Success -> {
                 val movieDataRoom = roomAppState.data
-                mBinding.itemMovieFavorite.isChecked = movieDataRoom.movieFavorite ?: false
-                openMovieNote(movieDataRoom, viewModel)
+                mBinding.itemMovieFavorite.isChecked = movieDataRoom[0].movieFavorite ?: false
+                openMovieNote(movieDataRoom[0], viewModel)
             }
         }
 
@@ -117,9 +118,7 @@ class MovieDetailsFragment : Fragment() {
         with(mBinding) {
             detailMovieFrontImage.load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
             detailMovieTitle.text = movieDataDTO.title
-            movieDataDTO.release_date?.apply {
-                detailMovieReleaseDate.text = this.substring(0, this.indexOf("-"))
-            }
+            detailMovieReleaseDate.text = movieDataDTO.release_date?.let { "".getYearFromStringFullDate(it) }
             detailMovieOverview.text = movieDataDTO.overview
             detailMovieRating.text = ratingFormat.format(movieDataDTO.vote_average)
             detailMovieGenres.text =

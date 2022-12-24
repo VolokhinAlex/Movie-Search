@@ -8,5 +8,8 @@ data class MovieDataRoom(
     val movieId: Int?,
     val movieTitle: String?,
     val movieNote: String?,
-    val movieFavorite: Boolean?
+    val movieFavorite: Boolean?,
+    val moviePoster: String?,
+    val movieReleaseDate: String?,
+    val movieRating: Double?
 )

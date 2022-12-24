@@ -10,8 +10,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 private const val SERVER_ERROR = "Ошибка сервера"
-private const val REQUEST_ERROR = "Ошибка запроса на сервер"
-private const val CORRUPTED_DATA = "Неполные данные"
 
 class SearchViewModel(
     val searchLiveData: MutableLiveData<AppState> = MutableLiveData(),

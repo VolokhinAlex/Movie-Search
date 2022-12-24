@@ -2,21 +2,18 @@ package com.example.java.android1.movie_search.viewmodel
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.java.android1.movie_search.app.App.Companion.movieDao
-import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
-import com.example.java.android1.movie_search.room.MovieEntity
-import com.example.java.android1.movie_search.utils.converterMovieEntityToMovieDataRoom
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val SERVER_ERROR = "Ошибка сервера"
 private const val REQUEST_ERROR = "Ошибка запроса на сервер"
 private const val CORRUPTED_DATA = "Неполные данные"
 
@@ -73,7 +70,7 @@ class DetailsViewModel(
             viewModelScope.launch(Dispatchers.IO) {
                 val result = movieLocalRepository.getMovieFromLocalDataBase(movieData.id)
                 handler.post {
-                    movieLocalLiveData.value = RoomAppState.Success(result)
+                    movieLocalLiveData.value = RoomAppState.Success(listOf(result))
                 }
             }
         }

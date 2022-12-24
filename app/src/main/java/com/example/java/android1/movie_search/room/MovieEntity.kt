@@ -14,5 +14,11 @@ data class MovieEntity(
     @ColumnInfo(name = "movie_note")
     val movieNote: String?,
     @ColumnInfo(name = "movie_favorite")
-    val movieFavorite: Boolean?
+    val movieFavorite: Boolean?,
+    @ColumnInfo(name = "movie_poster")
+    val moviePoster: String?,
+    @ColumnInfo(name = "movie_release_date")
+    val movieReleaseDate: String?,
+    @ColumnInfo(name = "movie_rating")
+    val movieRating: Double?
 )

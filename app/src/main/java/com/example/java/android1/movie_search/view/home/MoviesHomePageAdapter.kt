@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.view.BaseMovieCardViewHolder
 
 class MoviesHomePageAdapter(
     private var onItemClickListener: ((MovieDataTMDB) -> Unit)?
-) : RecyclerView.Adapter<MoviesHomePageViewHolder>() {
+) : RecyclerView.Adapter<BaseMovieCardViewHolder>() {
 
     private var movieData: List<MovieDataTMDB> = listOf()
 
@@ -19,18 +20,14 @@ class MoviesHomePageAdapter(
         notifyDataSetChanged()
     }
 
-    fun removeListener() {
-        onItemClickListener = null
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesHomePageViewHolder {
-        return MoviesHomePageViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseMovieCardViewHolder {
+        return BaseMovieCardViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.movie_card_item, parent, false)
+                .inflate(R.layout.base_movie_card_item, parent, false)
         )
     }
 
-    override fun onBindViewHolder(holder: MoviesHomePageViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseMovieCardViewHolder, position: Int) {
         holder.bind(movieData[position], onItemClickListener)
     }
 
