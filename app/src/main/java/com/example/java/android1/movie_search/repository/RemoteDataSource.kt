@@ -89,6 +89,16 @@ class RemoteDataSource {
         request.enqueue(callback)
     }
 
+    fun getMoviesCategoryForCompose(category: String, language: String, page: Int, callback: Callback<CategoryMoviesTMDB>) {
+        val request = movieApi.getMoviesCategoryForCompose(
+            category = category,
+            token = BuildConfig.MOVIE_API_KEY,
+            language = language,
+            page = page
+        )
+        request.enqueue(callback)
+    }
+
     private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
         val client = OkHttpClient.Builder()
         client.addInterceptor(interceptor)

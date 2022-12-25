@@ -163,7 +163,7 @@ class MovieDetailsFragment : Fragment() {
      * @sample min = 96 -> 1h 36min
      */
 
-    private fun timeToFormatHoursAndMinutes(min: Int): String {
+    fun timeToFormatHoursAndMinutes(min: Int): String {
         val hour = min / 60
         val minutes = min % 60
         return String.format("%02dh %02dmin", hour, minutes)
