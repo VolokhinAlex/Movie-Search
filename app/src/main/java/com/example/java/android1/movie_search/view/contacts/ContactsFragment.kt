@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,9 +33,7 @@ import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.view.compose.search.SearchBar
 import com.example.java.android1.movie_search.view.compose.search.SearchState
 import com.example.java.android1.movie_search.view.compose.search.rememberSearchState
-import com.example.java.android1.movie_search.view.compose.widgets.Loader
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.delay
 import java.util.*
 
 class ContactsFragment : Fragment() {
@@ -55,7 +52,6 @@ class ContactsFragment : Fragment() {
             viewModel.contactsLiveData.observeAsState()
             val searchState: SearchState = rememberSearchState()
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
                 SearchBar(
                     query = searchState.query,
                     onQueryChange = { searchState.query = it },

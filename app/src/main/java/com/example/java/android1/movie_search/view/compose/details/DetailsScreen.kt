@@ -1,36 +1,38 @@
 package com.example.java.android1.movie_search.view.compose.details
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.model.CastDTO
-import com.example.java.android1.movie_search.model.CreditsDTO
-import com.example.java.android1.movie_search.model.GenresDTO
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
+import com.example.java.android1.movie_search.view.compose.theme.TransparentColor
 import com.example.java.android1.movie_search.view.compose.widgets.Loader
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
+
 
 @Composable
 fun DetailsScreen(movieDataTMDB: MovieDataTMDB) {
@@ -41,7 +43,6 @@ fun DetailsScreen(movieDataTMDB: MovieDataTMDB) {
             .verticalScroll(rememberScrollState())
     ) {
         TopOfScreen(movieDataTMDB)
-
         Column(
             modifier = Modifier.padding(
                 start = 15.dp,
@@ -52,11 +53,11 @@ fun DetailsScreen(movieDataTMDB: MovieDataTMDB) {
         ) {
             DetailOfMovie(movieDataTMDB)
             Casts(movieDataTMDB)
+            Trailer(movieDataTMDB)
         }
     }
 
 }
-
 
 @Composable
 private fun TopOfScreen(movieDataTMDB: MovieDataTMDB) {
@@ -86,17 +87,17 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB) {
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
-
-        Image(
-            painter = painterResource(id = R.drawable.ic_baseline_favorite_border_24),
-            contentDescription = ""
-        )
+        Favorite()
     }
 
     LazyRow(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp), content = {
-        itemsIndexed(listOf("Fantasy", "Action")) { _, item ->
-            Text(text = item, fontSize = 16.sp, color = Color.White)
-            Text(text = ", ", fontSize = 16.sp, color = Color.White)
+        movieDataTMDB.genres?.let {
+            itemsIndexed(it) { index, item ->
+                item.name?.let { it1 -> Text(text = it1, fontSize = 16.sp, color = Color.White) }
+                if (index < it.size - 1) {
+                    Text(text = ", ", fontSize = 16.sp, color = Color.White)
+                }
+            }
         }
     })
 
@@ -106,6 +107,7 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB) {
     ) {
         Text(
             text = "IMDB ${movieDataTMDB.vote_average}",
+            modifier = Modifier.padding(end = 5.dp),
             color = Color.White, fontSize = 16.sp
         )
         Image(
@@ -186,4 +188,74 @@ private fun Casts(movieDataTMDB: MovieDataTMDB) {
             }
         }
     })
+}
+
+@Composable
+private fun Trailer(movieDataTMDB: MovieDataTMDB) {
+    val context = LocalContext.current
+    Text(
+        text = "Trailer",
+        color = Color.White,
+        modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
+        fontSize = 22.sp,
+        fontWeight = FontWeight.Bold
+    )
+    Box(modifier = Modifier.size(width = 250.dp, height = 150.dp)) {
+        SubcomposeAsyncImage(
+            model = "https://image.tmdb.org/t/p/w500${movieDataTMDB.backdrop_path}",
+            loading = {
+                Loader()
+            },
+            contentDescription = "movie_poster",
+            modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+        Box(
+            modifier = Modifier
+                .background(TransparentColor)
+                .clip(RoundedCornerShape(8.dp))
+                .fillMaxSize()
+                .clickable {
+                    val openTrailer = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("http://www.youtube.com/watch?v=${movieDataTMDB.videos?.results?.key})")
+                    )
+                    startActivity(context, openTrailer, null)
+                }) {
+            Image(
+                painter = painterResource(id = R.drawable.play_video),
+                contentDescription = "Play Video",
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(64.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun Favorite() {
+    val isCheck = remember { mutableStateOf(false) }
+    Box(
+        modifier = Modifier
+            .size(25.dp)
+            .clickable {
+                isCheck.value = !isCheck.value
+            },
+        contentAlignment = Center
+    ) {
+        if (isCheck.value) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_baseline_favorite_24),
+                contentDescription = ""
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.ic_baseline_favorite_border_24),
+                contentDescription = ""
+            )
+        }
+    }
 }

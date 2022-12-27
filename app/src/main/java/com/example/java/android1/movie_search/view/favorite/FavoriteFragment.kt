@@ -41,6 +41,7 @@ class FavoriteFragment : Fragment() {
                 null,
                 null,
                 CreditsDTO(listOf()),
+                videos = null
             )
             bundle.putParcelable(MovieDetailsFragment.ARG_MOVIE_DATA_KEY, movieDataTMDB)
             requireActivity().supportFragmentManager.replace(

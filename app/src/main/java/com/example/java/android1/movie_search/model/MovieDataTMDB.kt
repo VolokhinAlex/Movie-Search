@@ -40,7 +40,8 @@ data class MovieDataTMDB(
     val release_date: String?,
     val production_countries: List<CountriesDTO>?,
     val runtime: Int?,
-    val credits: CreditsDTO
+    val credits: CreditsDTO,
+    val videos: Videos?
 ) : Parcelable
 
 @Parcelize
@@ -84,4 +85,17 @@ data class CastDTO(
     val name: String?,
     val profile_path: String?,
     val character: String?
+) : Parcelable
+
+@Parcelize
+data class Videos(
+    val results: Trailer
+) : Parcelable
+
+@Parcelize
+data class Trailer(
+    val name: String?,
+    val key: String?,
+    val type: String?,
+    val id: String?
 ) : Parcelable

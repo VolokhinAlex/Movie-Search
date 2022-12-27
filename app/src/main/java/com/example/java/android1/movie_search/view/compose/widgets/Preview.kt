@@ -2,10 +2,7 @@ package com.example.java.android1.movie_search.view.compose.widgets
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.java.android1.movie_search.model.CastDTO
-import com.example.java.android1.movie_search.model.CreditsDTO
-import com.example.java.android1.movie_search.model.GenresDTO
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.*
 import com.example.java.android1.movie_search.view.compose.details.DetailsScreen
 import com.example.java.android1.movie_search.view.compose.home.HomeScreen
 import com.example.java.android1.movie_search.view.compose.home.MainViewModelCompose
@@ -21,7 +18,7 @@ fun Preview() {
 //            poster_path = "/uHpHzbHLSsVmAuuGuQSpyVDZmDc.jpg",
 //            budget = null,
 //            id = 556678,
-//            imdb_id = null,
+//            imdb_id = "tt9214832",
 //            genres = listOf(GenresDTO(0, "Comedy"), GenresDTO(0, "Fantasy")),
 //            original_language = null,
 //            overview = "Англия, XIX век. 21-летняя провинциалка Эмма Вудхаус красива, богата, остроумна и считает, что прекрасно разбирается в людях. Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, Эмма находит себе новую компаньонку - сироту Гарриет Смит - и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.",
@@ -49,7 +46,8 @@ fun Preview() {
 //                        "Don Vito Corleone"
 //                    )
 //                )
-//            )
+//            ),
+//            videos = Videos(Trailer(null, "_E1IfP4PN5Y", null, null))
 //        )
 //    )
     //SearchScreen()
