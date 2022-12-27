@@ -27,7 +27,8 @@ import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
 fun MovieCard(movieDataTMDB: MovieDataTMDB) {
     Card(
         modifier = Modifier
-            .size(width = 160.dp, height = 310.dp),
+            .size(width = 160.dp, height = 310.dp)
+            .padding(end = 10.dp),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = PrimaryColor80,

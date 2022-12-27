@@ -3,6 +3,8 @@ package com.example.java.android1.movie_search.view
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,6 +14,7 @@ import com.example.java.android1.movie_search.databinding.ActivityMainBinding
 import com.example.java.android1.movie_search.utils.MyNetworkCallback
 import com.example.java.android1.movie_search.utils.visible
 import com.example.java.android1.movie_search.view.catalog.CatalogFragment
+import com.example.java.android1.movie_search.view.contacts.ContactsFragment
 import com.example.java.android1.movie_search.view.favorite.FavoriteFragment
 import com.example.java.android1.movie_search.view.home.MainFragment
 import com.example.java.android1.movie_search.view.search.SearchFragment
@@ -67,6 +70,26 @@ class MainActivity : AppCompatActivity() {
                 FragmentTransaction.TRANSIT_FRAGMENT_FADE
             )
             .commit()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuInflater = menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.menu_content_provider -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .replace(R.id.container, ContactsFragment.newInstance())
+                        .addToBackStack("")
+                        .commit()
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onBackPressed() {
