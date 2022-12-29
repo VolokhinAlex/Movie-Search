@@ -25,12 +25,13 @@ import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor70
 import java.text.DecimalFormat
 
 @Composable
-fun MovieCard(movieDataTMDB: MovieDataTMDB) {
+fun MovieCard(
+    modifier: Modifier = Modifier,
+    movieDataTMDB: MovieDataTMDB
+) {
     val ratingFormat = DecimalFormat("#.#")
     Card(
-        modifier = Modifier
-            .size(width = 160.dp, height = 300.dp)
-            .padding(end = 10.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = PrimaryColor70,

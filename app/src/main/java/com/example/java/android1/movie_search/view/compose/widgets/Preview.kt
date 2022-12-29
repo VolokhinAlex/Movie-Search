@@ -4,13 +4,71 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.java.android1.movie_search.model.*
 import com.example.java.android1.movie_search.view.compose.details.DetailsScreen
+import com.example.java.android1.movie_search.view.compose.favorite.FavoriteScreen
 import com.example.java.android1.movie_search.view.compose.home.HomeScreen
 import com.example.java.android1.movie_search.view.compose.home.MainViewModelCompose
 
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    HomeScreen()
+//    FavoriteScreen(
+//        listOf(
+//            MovieDataRoom(
+//                2121,
+//                "Эмма",
+//                null,
+//                true,
+//                "/uHpHzbHLSsVmAuuGuQSpyVDZmDc.jpg",
+//                "2022-12-12",
+//                8.5
+//            ),
+//            MovieDataRoom(
+//                2121,
+//                "Эмма",
+//                null,
+//                true,
+//                "/uHpHzbHLSsVmAuuGuQSpyVDZmDc.jpg",
+//                "2022-12-12",
+//                8.5
+//            ),
+//            MovieDataRoom(
+//                2121,
+//                "Эмма",
+//                null,
+//                true,
+//                "/uHpHzbHLSsVmAuuGuQSpyVDZmDc.jpg",
+//                "2022-12-12",
+//                8.5
+//            ),
+//            MovieDataRoom(
+//                2121,
+//                "Эмма",
+//                null,
+//                true,
+//                "/uHpHzbHLSsVmAuuGuQSpyVDZmDc.jpg",
+//                "2022-12-12",
+//                8.5
+//            ),
+//            MovieDataRoom(
+//                2121,
+//                "Эмма",
+//                null,
+//                true,
+//                "/uHpHzbHLSsVmAuuGuQSpyVDZmDc.jpg",
+//                "2022-12-12",
+//                8.5
+//            ), MovieDataRoom(
+//                2121,
+//                "Эмма",
+//                null,
+//                true,
+//                "/uHpHzbHLSsVmAuuGuQSpyVDZmDc.jpg",
+//                "2022-12-12",
+//                8.5
+//            )
+//        )
+//    )
+    //HomeScreen()
 //    DetailsScreen(
 //        movieDataTMDB = MovieDataTMDB(
 //            adult = false,

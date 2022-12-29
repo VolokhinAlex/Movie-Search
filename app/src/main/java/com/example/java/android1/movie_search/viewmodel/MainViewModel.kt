@@ -6,14 +6,17 @@ import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.repository.HomeRepository
 import com.example.java.android1.movie_search.repository.HomeRepositoryImpl
 import com.example.java.android1.movie_search.repository.RemoteDataSource
+import com.example.java.android1.movie_search.view.compose.home.Category
+import com.example.java.android1.movie_search.view.compose.home.CategoryAppState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 private const val SERVER_ERROR = "Ошибка сервера"
 
+
 class MainViewModel(
-    val homeLiveData: MutableLiveData<AppState> = MutableLiveData(),
+    val homeLiveData: MutableLiveData<CategoryAppState> = MutableLiveData(),
     private val repository: HomeRepository = HomeRepositoryImpl(RemoteDataSource()),
 ) : ViewModel() {
 
@@ -25,43 +28,28 @@ class MainViewModel(
         ) {
             val serverResponse = response.body()
             homeLiveData.value = if (response.isSuccessful && serverResponse != null) {
-                AppState.Success(serverResponse.results)
+                val request = call.request().url.toString()
+                val queryName = request.substring(request.indexOf("movie/"), request.indexOf("?"))
+                CategoryAppState.Success(
+                    Category(
+                        queryName.substring(queryName.indexOf("/") + 1),
+                        serverResponse.results
+                    )
+                )
             } else {
-                AppState.Error(Throwable(SERVER_ERROR))
+                CategoryAppState.Error(Throwable(SERVER_ERROR))
             }
         }
 
         override fun onFailure(call: Call<CategoryMoviesTMDB>, error: Throwable) {
-            AppState.Error(error)
+            homeLiveData.value = CategoryAppState.Error(error)
         }
 
     }
 
-    private fun getPopularMoviesFromRemoteSource(language: String, page: Int) {
-        homeLiveData.value = AppState.Loading
-        repository.getPopularMoviesFromServer(language, page, callback)
-    }
-
-    private fun getNowPlayingMoviesFromRemoteSource(language: String, page: Int) {
-        homeLiveData.value = AppState.Loading
-        repository.getNowPlayingMoviesFromServer(language, page, callback)
-    }
-
-    private fun getTopRatedMoviesFromRemoteSource(language: String, page: Int) {
-        homeLiveData.value = AppState.Loading
-        repository.getTopRatedMoviesFromServer(language, page, callback)
-    }
-
-    private fun getUpcomingMoviesFromRemoteSource(language: String, page: Int) {
-        homeLiveData.value = AppState.Loading
-        repository.getUpcomingMoviesFromServer(language, page, callback)
-    }
-
-    fun getCategoriesMovies(language: String, page: Int) {
-        getUpcomingMoviesFromRemoteSource(language, page)
-        getPopularMoviesFromRemoteSource(language, page)
-        getNowPlayingMoviesFromRemoteSource(language, page)
-        getTopRatedMoviesFromRemoteSource(language, page)
+    fun getCategoryMovies(category: String, language: String, page: Int) {
+        homeLiveData.value = CategoryAppState.Loading
+        repository.getMoviesCategoryForCompose(category, language, page, callback)
     }
 
 }

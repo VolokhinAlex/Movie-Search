@@ -11,7 +11,7 @@ class ContactsViewModel(
     init {
         contactsLiveData.value = ContactsState.Loading
     }
-    
+
     fun filter(query: String, contactsList: List<Contacts>) {
         val filterList = LinkedList<Contacts>()
         contactsList.forEach {

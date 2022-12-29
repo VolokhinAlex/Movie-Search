@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.java.android1.movie_search.R
+import com.example.java.android1.movie_search.view.compose.home.CategoriesData
 import com.example.java.android1.movie_search.view.compose.search.SearchBar
 import com.example.java.android1.movie_search.view.compose.search.SearchState
 import com.example.java.android1.movie_search.view.compose.search.rememberSearchState

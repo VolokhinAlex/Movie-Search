@@ -25,18 +25,15 @@ import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.compose.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.compose.widgets.Loader
 import com.example.java.android1.movie_search.view.compose.widgets.MovieCard
-import com.example.java.android1.movie_search.viewmodel.AppState
 
 
 @Composable
 fun HomeScreen() {
-
+    val movieCategories = remember { mutableStateOf(mutableListOf<Category>()) }
     val viewModel by remember {
         mutableStateOf(MainViewModelCompose())
     }
-
     val moviesViewModel = viewModel.homeLiveData.observeAsState()
-
     val categoriesList: List<CategoriesData> =
         listOf(
             CategoriesData("Popular", "popular"),
@@ -46,7 +43,7 @@ fun HomeScreen() {
         )
     categoriesList.forEach {
         LaunchedEffect(Unit) {
-            viewModel.getMovieCategory(
+            viewModel.getCategoryMovies(
                 it.queryName,
                 "ru-RU",
                 1
@@ -54,6 +51,32 @@ fun HomeScreen() {
         }
     }
 
+    when (val value = moviesViewModel.value) {
+        is CategoryAppState.Error -> ErrorMessage(message = "${value.error.message}")
+        CategoryAppState.Loading -> Loader()
+        is CategoryAppState.Success -> {
+            movieCategories.value.add(value.data)
+            MovieList(movieCategories.value)
+            if (movieCategories.value.size >= 2) {
+                MovieList(movieCategories.value)
+            } else if (movieCategories.value.size >= 3) {
+                MovieList(movieCategories.value)
+            } else if (movieCategories.value.size >= 4) {
+                MovieList(movieCategories.value)
+            }
+            Log.e("TAG_CHECKER", movieCategories.value.size.toString())
+        }
+        else -> {}
+    }
+}
+
+data class CategoriesData(
+    val title: String?,
+    val queryName: String
+)
+
+@Composable
+fun MovieList(categoriesList: List<Category>) {
     LazyColumn(modifier = Modifier
         .fillMaxSize()
         .background(PrimaryColor80), content = {
@@ -70,7 +93,6 @@ fun HomeScreen() {
             )
         }
         itemsIndexed(categoriesList) { _, categories ->
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,46 +100,56 @@ fun HomeScreen() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = categories.title ?: "Not Found",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
+                when (categories.queryName) {
+                    MovieCategory.NowPlaying.queryName -> Text(
+                        text = MovieCategory.NowPlaying.title,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    MovieCategory.TopRated.queryName -> Text(
+                        text = MovieCategory.TopRated.title,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    MovieCategory.Upcoming.queryName -> Text(
+                        text = MovieCategory.Upcoming.title,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    MovieCategory.Popular.queryName -> Text(
+                        text = MovieCategory.Popular.title,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
                 Image(
                     painter = painterResource(id = R.drawable.compose_arrow_right),
                     contentDescription = "more movies",
                     modifier = Modifier
                         .size(28.dp)
                         .clickable {
-                            Log.d("", categories.queryName.toString())
+                            Log.d("", categories.queryName)
                         }
                 )
             }
-
-            // Some kind of request to remote server to receive a data
-            when (val value = moviesViewModel.value) {
-                is AppState.Error -> ErrorMessage(message = "${value.error.message}")
-                AppState.Loading -> Loader()
-                is AppState.Success -> {
-                    NestedMovieList(value.data)
-                }
-                else -> {}
-            }
+            NestedMovieList(categories.data)
         }
     })
 }
-
-data class CategoriesData(
-    val title: String?,
-    val queryName: String
-)
 
 @Composable
 fun NestedMovieList(category: List<MovieDataTMDB>) {
     LazyRow(modifier = Modifier.padding(start = 20.dp, top = 10.dp), content = {
         itemsIndexed(category) { _, movieCategory ->
-            MovieCard(movieDataTMDB = movieCategory)
+            MovieCard(
+                modifier = Modifier
+                    .size(width = 160.dp, height = 300.dp)
+                    .padding(end = 10.dp), movieDataTMDB = movieCategory
+            )
         }
     })
 }
