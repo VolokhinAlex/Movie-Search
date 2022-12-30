@@ -1,6 +1,7 @@
 package com.example.java.android1.movie_search.view.theaters
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
@@ -11,10 +12,8 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -23,10 +22,12 @@ import com.example.java.android1.movie_search.app.App
 import com.example.java.android1.movie_search.databinding.FragmentMapBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.osmdroid.api.IMapController
+import org.osmdroid.bonuspack.location.NominatimPOIProvider
+import org.osmdroid.bonuspack.location.POI
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
 
@@ -136,6 +137,7 @@ class MapFragment : Fragment() {
                             100.0f,
                         ) {
                             setCurrentPosition(mapController, it, marker)
+                            showCinemas(it)
                         }
                     }
                 } else {
@@ -143,6 +145,7 @@ class MapFragment : Fragment() {
                         locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                     if (location != null) {
                         setCurrentPosition(mapController, location, marker)
+                        showCinemas(location)
                     } else {
                         AlertDialog.Builder(context).setTitle("Геолокация выключена")
                             .setMessage(
@@ -196,6 +199,26 @@ class MapFragment : Fragment() {
         polygon.fillPaint.pathEffect = CornerPathEffect(5000.0f)
         mapView.overlays.add(polygon)
         mapView.invalidate()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun showCinemas(location: Location) {
+        Thread {
+            val startPoint = GeoPoint(location.latitude, location.longitude)
+            val poiProvider = NominatimPOIProvider("OSMBonusPackTutoUserAgent")
+            val pois: ArrayList<POI> = poiProvider.getPOICloseTo(startPoint, "cinema", 50, 0.1)
+            val poiMarkers = FolderOverlay(requireContext());
+            mapView.overlays.add(poiMarkers)
+            val poiIcon = resources.getDrawable(R.drawable.ic_baseline_movie_24)
+            for (poi in pois) {
+                val poiMarker = Marker(mapView)
+                poiMarker.title = poi.mType
+                poiMarker.snippet = poi.mDescription
+                poiMarker.position = poi.mLocation
+                poiMarker.icon = poiIcon
+                poiMarkers.add(poiMarker)
+            }
+        }.start()
     }
 
 }
