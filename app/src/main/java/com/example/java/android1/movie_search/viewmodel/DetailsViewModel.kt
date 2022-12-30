@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.java.android1.movie_search.app.App.Companion.movieDao
+import com.example.java.android1.movie_search.app.AppState
+import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
 import kotlinx.coroutines.Dispatchers

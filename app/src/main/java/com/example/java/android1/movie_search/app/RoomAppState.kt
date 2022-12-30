@@ -1,4 +1,4 @@
-package com.example.java.android1.movie_search.viewmodel
+package com.example.java.android1.movie_search.app
 
 import com.example.java.android1.movie_search.model.MovieDataRoom
 

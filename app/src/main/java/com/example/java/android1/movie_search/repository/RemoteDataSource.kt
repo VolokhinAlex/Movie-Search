@@ -1,6 +1,7 @@
 package com.example.java.android1.movie_search.repository
 
 import com.example.java.android1.movie_search.BuildConfig
+import com.example.java.android1.movie_search.model.ActorDTO
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.google.gson.GsonBuilder
@@ -89,12 +90,26 @@ class RemoteDataSource {
         request.enqueue(callback)
     }
 
-    fun getMoviesCategoryForCompose(category: String, language: String, page: Int, callback: Callback<CategoryMoviesTMDB>) {
+    fun getMoviesCategoryForCompose(
+        category: String,
+        language: String,
+        page: Int,
+        callback: Callback<CategoryMoviesTMDB>
+    ) {
         val request = movieApi.getMoviesCategoryForCompose(
             category = category,
             token = BuildConfig.MOVIE_API_KEY,
             language = language,
             page = page
+        )
+        request.enqueue(callback)
+    }
+
+    fun getActorData(personId: Long, language: String, callback: Callback<ActorDTO>) {
+        val request = movieApi.getActorData(
+            personId = personId,
+            token = BuildConfig.MOVIE_API_KEY,
+            language = language
         )
         request.enqueue(callback)
     }

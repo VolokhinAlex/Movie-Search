@@ -82,6 +82,7 @@ data class CreditsDTO(val cast: List<CastDTO>) : Parcelable
 
 @Parcelize
 data class CastDTO(
+    val id: Long?,
     val name: String?,
     val profile_path: String?,
     val character: String?
@@ -99,3 +100,15 @@ data class Trailer(
     val type: String?,
     val id: String?
 ) : Parcelable
+
+@Parcelize
+data class ActorDTO(
+    val biography: String?,
+    val birthday: String?,
+    val id: Long?,
+    val imdb_id: String?,
+    val name: String?,
+    val place_of_birth: String?,
+    val popularity: Double?,
+    val profile_path: String?
+) :Parcelable

@@ -14,7 +14,7 @@ class App : Application() {
 
     companion object {
 
-        private var appInstance: App? = null
+        var appInstance: App? = null
         private const val DB_NAME = "MovieSearch.db"
 
         val movieDao by lazy {
