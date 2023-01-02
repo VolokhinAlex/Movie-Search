@@ -33,6 +33,9 @@ import com.example.java.android1.movie_search.view.compose.theme.TransparentColo
 import com.example.java.android1.movie_search.view.compose.widgets.Loader
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
 
+/**
+ * The main method [DetailsScreen] that combines all the necessary methods for this screen
+ */
 
 @Composable
 fun DetailsScreen(movieDataTMDB: MovieDataTMDB) {
@@ -42,7 +45,7 @@ fun DetailsScreen(movieDataTMDB: MovieDataTMDB) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        TopOfScreen(movieDataTMDB)
+        ScreenHeader(movieDataTMDB)
         Column(
             modifier = Modifier.padding(
                 start = 15.dp,
@@ -52,15 +55,18 @@ fun DetailsScreen(movieDataTMDB: MovieDataTMDB) {
             )
         ) {
             DetailOfMovie(movieDataTMDB)
-            Casts(movieDataTMDB)
-            Trailer(movieDataTMDB)
+            CastsOfMovie(movieDataTMDB)
+            TrailerOfMovie(movieDataTMDB)
         }
     }
-
 }
 
+/**
+ * The method of adding a movie picture in the header of screen
+ */
+
 @Composable
-private fun TopOfScreen(movieDataTMDB: MovieDataTMDB) {
+private fun ScreenHeader(movieDataTMDB: MovieDataTMDB) {
     SubcomposeAsyncImage(
         model = "https://image.tmdb.org/t/p/w500${movieDataTMDB.poster_path}",
         loading = {
@@ -73,6 +79,10 @@ private fun TopOfScreen(movieDataTMDB: MovieDataTMDB) {
         contentScale = ContentScale.Crop
     )
 }
+
+/**
+ * The method adds detailed information about the movie
+ */
 
 @Composable
 private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB) {
@@ -87,7 +97,7 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB) {
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
-        Favorite()
+        FavoriteOfMovie()
     }
 
     LazyRow(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp), content = {
@@ -100,7 +110,6 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB) {
             }
         }
     })
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -135,7 +144,6 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB) {
             fontSize = 16.sp
         )
     }
-
     Text(
         text = "Overview",
         modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
@@ -158,8 +166,12 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB) {
     )
 }
 
+/**
+ * The method adds information about the actors of this movie to the screen
+ */
+
 @Composable
-private fun Casts(movieDataTMDB: MovieDataTMDB) {
+private fun CastsOfMovie(movieDataTMDB: MovieDataTMDB) {
     LazyRow(content = {
         itemsIndexed(movieDataTMDB.credits.cast) { _, item ->
             Column(
@@ -190,8 +202,12 @@ private fun Casts(movieDataTMDB: MovieDataTMDB) {
     })
 }
 
+/**
+ * The method adds details about the movie trailer of this movie to the screen
+ */
+
 @Composable
-private fun Trailer(movieDataTMDB: MovieDataTMDB) {
+private fun TrailerOfMovie(movieDataTMDB: MovieDataTMDB) {
     val context = LocalContext.current
     Text(
         text = "Trailer",
@@ -220,7 +236,7 @@ private fun Trailer(movieDataTMDB: MovieDataTMDB) {
                 .clickable {
                     val openTrailer = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("http://www.youtube.com/watch?v=${movieDataTMDB.videos?.results?.key})")
+                        Uri.parse("http://www.youtube.com/watch?v=${movieDataTMDB.videos?.results?.get(0)?.key})")
                     )
                     startActivity(context, openTrailer, null)
                 }) {
@@ -235,8 +251,12 @@ private fun Trailer(movieDataTMDB: MovieDataTMDB) {
     }
 }
 
+/**
+ * The method adds a button to add movies to the favorites list.
+ */
+
 @Composable
-private fun Favorite() {
+private fun FavoriteOfMovie() {
     val isCheck = remember { mutableStateOf(false) }
     Box(
         modifier = Modifier

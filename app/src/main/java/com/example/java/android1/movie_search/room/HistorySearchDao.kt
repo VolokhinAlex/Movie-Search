@@ -3,6 +3,10 @@ package com.example.java.android1.movie_search.room
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * The Interface for interacting with local search table
+ */
+
 @Dao
 interface HistorySearchDao {
 

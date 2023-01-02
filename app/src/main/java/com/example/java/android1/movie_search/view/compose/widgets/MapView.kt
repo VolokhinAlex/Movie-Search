@@ -7,6 +7,10 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 
+/**
+ * The Widget is for show Map in the screen.
+ */
+
 @Composable
 fun MapView(
     modifier: Modifier = Modifier,

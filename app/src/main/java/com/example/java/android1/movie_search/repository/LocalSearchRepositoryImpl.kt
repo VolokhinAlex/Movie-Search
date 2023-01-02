@@ -6,6 +6,10 @@ import com.example.java.android1.movie_search.room.HistorySearchEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Implementation of the interface for getting and reading data to Local Database
+ */
+
 class LocalSearchRepositoryImpl(
     private var localDataSource: HistorySearchDao
 ) : LocalSearchRepository {

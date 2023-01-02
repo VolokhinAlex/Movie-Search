@@ -1,6 +1,5 @@
 package com.example.java.android1.movie_search.utils
 
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -22,11 +21,13 @@ fun View.visible() {
 
 fun String.getYearFromStringFullDate(stringDate: String): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-//    Log.e("Extension.GetYear", "Pattern: yyyy-MM-dd - result $stringDate")
-    val date = formatter.parse(stringDate)
-    val calendar: Calendar = Calendar.getInstance();
-    if (date != null) {
-        calendar.time = date
+    if (stringDate != "") {
+        val date = formatter.parse(stringDate)
+        val calendar: Calendar = Calendar.getInstance();
+        if (date != null) {
+            calendar.time = date
+        }
+        return calendar.get(Calendar.YEAR).toString()
     }
-    return calendar.get(Calendar.YEAR).toString()
+    return ""
 }

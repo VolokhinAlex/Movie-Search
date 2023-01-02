@@ -24,6 +24,10 @@ import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor70
 import java.text.DecimalFormat
 
+/**
+ * The method is designed to create a list of movies using ready-made movie cards
+ */
+
 @Composable
 fun MovieCard(
     modifier: Modifier = Modifier,

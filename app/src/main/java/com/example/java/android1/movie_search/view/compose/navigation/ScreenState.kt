@@ -1,5 +1,9 @@
 package com.example.java.android1.movie_search.view.compose.navigation
 
+/**
+ * The class is needed for easy navigation between screens
+ */
+
 sealed class ScreenState(val route: String) {
 
     object HomeScreen : ScreenState(route = "home_screen")

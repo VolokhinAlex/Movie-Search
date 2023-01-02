@@ -18,8 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.utils.converterMovieRoomToMovieDto
+import com.example.java.android1.movie_search.view.compose.details.DetailsScreen
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.compose.widgets.MovieCard
+
+/**
+ * The main method [FavoriteScreen] that combines all the necessary methods for this screen
+ */
 
 @Composable
 fun FavoriteScreen(movieDataRoom: List<MovieDataRoom>) {
@@ -45,6 +50,10 @@ fun FavoriteScreen(movieDataRoom: List<MovieDataRoom>) {
             })
     }
 }
+
+/**
+ * The method of adding a title in the header of screen
+ */
 
 @Composable
 fun HeaderFavoriteScreen() {

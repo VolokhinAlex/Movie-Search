@@ -4,6 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * The model of local movie table
+ */
+
 @Entity(tableName = "movies_table")
 data class MovieEntity(
     @PrimaryKey

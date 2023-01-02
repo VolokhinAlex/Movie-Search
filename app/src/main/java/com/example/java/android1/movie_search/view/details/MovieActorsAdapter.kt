@@ -16,11 +16,11 @@ class MovieActorsAdapter(
     private var onItemClickListener: ((CastDTO) -> Unit)?
 ) : RecyclerView.Adapter<MovieActorsViewHolder>() {
 
-    private var actorsData: List<CastDTO> = listOf()
+    private var listActorsData: List<CastDTO> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setActorData(data: List<CastDTO>) {
-        actorsData = data
+    fun setActorsListData(actorsList: List<CastDTO>) {
+        listActorsData = actorsList
         notifyDataSetChanged()
     }
 
@@ -32,8 +32,8 @@ class MovieActorsAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieActorsViewHolder, position: Int) {
-        holder.bind(actorsData[position], onItemClickListener)
+        holder.bind(listActorsData[position], onItemClickListener)
     }
 
-    override fun getItemCount(): Int = actorsData.size
+    override fun getItemCount(): Int = listActorsData.size
 }

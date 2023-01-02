@@ -108,7 +108,7 @@ class MapFragment : Fragment() {
                             requestPermission()
                         }.setNegativeButton("Не давать доступ") { dialog, _ ->
                             dialog.dismiss()
-                        }.create()
+                        }.create().show()
                 }
                 else -> {
                     requestPermission()
@@ -118,7 +118,7 @@ class MapFragment : Fragment() {
     }
 
     private fun getCurrentLocation() {
-        App.appInstance?.let { context ->
+        context?.let { context ->
             if (ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -147,10 +147,10 @@ class MapFragment : Fragment() {
                         setCurrentPosition(mapController, location, marker)
                         showCinemas(location)
                     } else {
-                        AlertDialog.Builder(context).setTitle("Геолокация выключена")
+                        AlertDialog.Builder(this.requireContext()).setTitle("Геолокация выключена")
                             .setMessage(
-                                "Для отображения вашей геолокации на карте, необходима включить GPS"
-                            ).create()
+                                "Для отображения вашей геолокации на карте, необходимо включить GPS"
+                            ).create().show()
                     }
                 }
             } else {

@@ -1,7 +1,6 @@
 package com.example.java.android1.movie_search.view.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +18,12 @@ class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private var categories: MutableList<Category> = mutableListOf()
-    private val viewModel: MainViewModel by lazy {
+    private var movieCategories: MutableList<Category> = mutableListOf()
+    private val homeViewModel: MainViewModel by lazy {
         ViewModelProvider(this)[MainViewModel::class.java]
     }
 
-    private lateinit var moviesCategoryAdapter: MoviesHomeBasicAdapter
+    private lateinit var moviesCategoriesAdapter: MoviesHomeBasicAdapter
 
     companion object {
         fun newInstance() = MainFragment()
@@ -35,7 +34,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        viewModel.homeLiveData.observe(viewLifecycleOwner) { state -> renderData(state) }
+        homeViewModel.homeLiveData.observe(viewLifecycleOwner) { state -> renderData(state) }
         val categoriesList: List<CategoriesData> =
             listOf(
                 CategoriesData("Popular", "popular"),
@@ -44,43 +43,52 @@ class MainFragment : Fragment() {
                 CategoriesData("Top Rated", "top_rated")
             )
         categoriesList.forEach {
-            viewModel.getCategoryMovies(
+            homeViewModel.getMovieCategory(
                 it.queryName,
                 "ru-RU",
                 1
             )
         }
-        initRecyclerViews()
+        initBasicCategoriesList()
         return binding.root
     }
 
     private fun renderData(categoryAppState: CategoryAppState) {
-        val emptyList = MovieChildListData(null, null)
+        val emptyData = MovieChildListData(null, null)
         when (categoryAppState) {
             is CategoryAppState.Success -> {
                 val movieData = categoryAppState.data
-                categories.add(movieData)
-                moviesCategoryAdapter.setParentListData(
+                movieCategories.add(movieData)
+                moviesCategoriesAdapter.setParentListData(
                     listOf(
-                        MovieChildListData(categories[0].queryName, categories[0].data),
-                        if (categories.size >= 2) MovieChildListData(categories[1].queryName, categories[1].data) else emptyList,
-                        if (categories.size >= 3) MovieChildListData(categories[2].queryName, categories[2].data) else emptyList,
-                        if (categories.size >= 4) MovieChildListData(categories[3].queryName, categories[3].data) else emptyList)
+                        MovieChildListData(movieCategories[0].queryName, movieCategories[0].data),
+                        if (movieCategories.size >= 2) MovieChildListData(
+                            movieCategories[1].queryName,
+                            movieCategories[1].data
+                        ) else emptyData,
+                        if (movieCategories.size >= 3) MovieChildListData(
+                            movieCategories[2].queryName,
+                            movieCategories[2].data
+                        ) else emptyData,
+                        if (movieCategories.size >= 4) MovieChildListData(
+                            movieCategories[3].queryName,
+                            movieCategories[3].data
+                        ) else emptyData
+                    )
                 )
             }
             is CategoryAppState.Error -> {
                 val error = categoryAppState.error
-                Log.e("APP_STATE_ERROR", error.message ?: "Error get data")
             }
             CategoryAppState.Loading -> {}
         }
     }
 
-    private fun initRecyclerViews() {
-        val basicList = binding.containerBasicList
-        moviesCategoryAdapter = MoviesHomeBasicAdapter()
-        basicList.adapter = moviesCategoryAdapter
-        basicList.layoutManager = LinearLayoutManager(requireActivity())
+    private fun initBasicCategoriesList() {
+        val basicCategoriesList = binding.containerBasicList
+        moviesCategoriesAdapter = MoviesHomeBasicAdapter()
+        basicCategoriesList.adapter = moviesCategoriesAdapter
+        basicCategoriesList.layoutManager = LinearLayoutManager(requireActivity())
     }
 
     override fun onDestroyView() {

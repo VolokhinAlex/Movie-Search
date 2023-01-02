@@ -8,19 +8,20 @@ import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.view.BaseMovieCardViewHolder
 
-class SearchAdapter(private val listener: ((MovieDataTMDB) -> Unit)?) : RecyclerView.Adapter<BaseMovieCardViewHolder>() {
+class SearchAdapter(private val onItemClickListener: ((MovieDataTMDB) -> Unit)?) :
+    RecyclerView.Adapter<BaseMovieCardViewHolder>() {
 
-    private var movieData: MutableList<MovieDataTMDB> = mutableListOf()
+    private var listMoviesData: MutableList<MovieDataTMDB> = mutableListOf()
 
     @SuppressLint("NotifyDataSetChanged")
     fun setMovieData(dataTMDB: List<MovieDataTMDB>) {
-        movieData = dataTMDB.toMutableList()
+        listMoviesData = dataTMDB.toMutableList()
         notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun clearMovieData() {
-        movieData.clear()
+        listMoviesData.clear()
         notifyDataSetChanged()
     }
 
@@ -32,9 +33,9 @@ class SearchAdapter(private val listener: ((MovieDataTMDB) -> Unit)?) : Recycler
     }
 
     override fun onBindViewHolder(holder: BaseMovieCardViewHolder, position: Int) {
-        holder.bind(movieData[position], listener)
+        holder.bind(listMoviesData[position], onItemClickListener)
     }
 
-    override fun getItemCount(): Int = movieData.size
+    override fun getItemCount(): Int = listMoviesData.size
 
 }

@@ -12,6 +12,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.java.android1.movie_search.view.compose.theme.RedDark40
 
+/**
+ * The widget is for show an error message
+ */
+
 @Composable
 fun ErrorMessage(message: String) {
     Row(

@@ -8,20 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.java.android1.movie_search.R
+import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.databinding.FragmentFavoriteBinding
 import com.example.java.android1.movie_search.model.CreditsDTO
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
 import com.example.java.android1.movie_search.viewmodel.FavoriteViewModel
-import com.example.java.android1.movie_search.app.RoomAppState
 
 class FavoriteFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = FavoriteFragment()
-    }
-    private val favoriteAdapter: FavoriteAdapter by lazy {
+    private val favoriteMoviesAdapter: FavoriteAdapter by lazy {
         FavoriteAdapter { movieData ->
             val bundle = Bundle()
             val movieDataTMDB = MovieDataTMDB(
@@ -52,7 +48,7 @@ class FavoriteFragment : Fragment() {
     }
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: FavoriteViewModel by lazy {
+    private val favoriteViewModel: FavoriteViewModel by lazy {
         ViewModelProvider(this)[FavoriteViewModel::class.java]
     }
 
@@ -61,33 +57,30 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
-
-        viewModel.localMovieLiveData.observe(viewLifecycleOwner) { renderData(it) }
-        val favoriteRecyclerView = binding.favoriteContainer
-        favoriteRecyclerView.adapter = favoriteAdapter
-        favoriteRecyclerView.layoutManager = GridLayoutManager(requireActivity(), 2)
+        favoriteViewModel.localMovieLiveData.observe(viewLifecycleOwner) { renderData(it) }
+        val favoriteMoviesListView = binding.favoriteContainer
+        favoriteMoviesListView.adapter = favoriteMoviesAdapter
+        favoriteMoviesListView.layoutManager = GridLayoutManager(requireActivity(), 2)
         return binding.root
     }
 
     private fun renderData(roomAppState: RoomAppState) {
         when (roomAppState) {
-            is RoomAppState.Error -> {
-
-            }
+            is RoomAppState.Error -> {}
             is RoomAppState.Success -> {
                 val movieData = roomAppState.data
-                favoriteAdapter.setMovieData(movieData)
+                favoriteMoviesAdapter.setFavoriteMovieListData(movieData)
             }
-            RoomAppState.Loading -> {
-
-            }
+            RoomAppState.Loading -> {}
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
+    companion object {
+        fun newInstance() = FavoriteFragment()
+    }
 }

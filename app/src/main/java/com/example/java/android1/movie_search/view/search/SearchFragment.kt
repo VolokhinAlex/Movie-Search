@@ -12,17 +12,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.java.android1.movie_search.R
+import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.databinding.FragmentSearchBinding
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
-import com.example.java.android1.movie_search.app.AppState
 import com.example.java.android1.movie_search.viewmodel.SearchViewModel
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val mBinding get() = _binding!!
 
-    private val viewModel: SearchViewModel by lazy {
+    private val searchViewModel: SearchViewModel by lazy {
         ViewModelProvider(this)[SearchViewModel::class.java]
     }
 
@@ -40,29 +40,34 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        viewModel.searchLiveData.observe(viewLifecycleOwner) { renderData(it) }
-        val searchRecyclerView = mBinding.searchContainer
-        searchRecyclerView.adapter = searchAdapter
-        searchRecyclerView.layoutManager = GridLayoutManager(requireActivity(), 2)
-        val sharedPreferences =
+        searchViewModel.searchLiveData.observe(viewLifecycleOwner) { renderData(it) }
+        val moviesSearchList = mBinding.searchContainer
+        moviesSearchList.adapter = searchAdapter
+        moviesSearchList.layoutManager = GridLayoutManager(requireActivity(), 2)
+        val searchSettings =
             requireActivity().getSharedPreferences(MOVIE_SEARCH_PREFERENCES, Context.MODE_PRIVATE)
-        viewModel.liveDataHistory.observe(viewLifecycleOwner) { getSearchHistory(it) }
-        mBinding.actionAdult.isChecked = sharedPreferences.getBoolean(IS_ADULT_KEY, false)
+        searchViewModel.liveDataHistory.observe(viewLifecycleOwner) { getSearchHistory(it) }
+        mBinding.actionAdult.isChecked = searchSettings.getBoolean(IS_ADULT_KEY, false)
         mBinding.actionAdult.setOnCheckedChangeListener { _, isChecked ->
-            readPreferences(sharedPreferences, isChecked)
+            readSearchSettings(searchSettings, isChecked)
         }
         mBinding.searchField.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { viewModel.saveSearchRequest(it, System.currentTimeMillis() / 1000L) }
+                query?.let {
+                    searchViewModel.saveSearchRequest(
+                        it,
+                        System.currentTimeMillis() / 1000L
+                    )
+                }
                 return true
             }
 
             override fun onQueryTextChange(text: String?): Boolean {
                 text?.let {
-                    viewModel.getMoviesFromRemoteSource(
+                    searchViewModel.getMoviesFromRemoteSource(
                         "ru-RU",
                         1,
-                        sharedPreferences.getBoolean(IS_ADULT_KEY, false),
+                        searchSettings.getBoolean(IS_ADULT_KEY, false),
                         it
                     )
                 }
@@ -76,14 +81,13 @@ class SearchFragment : Fragment() {
         return mBinding.root
     }
 
-    private fun renderData(appState: AppState) {
+    private fun renderData(appState: MovieAppState) {
         when (appState) {
-            is AppState.Error -> {
+            is MovieAppState.Error -> {
                 val error = appState.error
-                Log.e("APP_STATE_ERROR", error.message ?: "Error get data")
             }
-            AppState.Loading -> {}
-            is AppState.Success -> {
+            MovieAppState.Loading -> {}
+            is MovieAppState.Success -> {
                 val movieList = appState.data
                 searchAdapter.setMovieData(movieList)
             }
@@ -105,7 +109,7 @@ class SearchFragment : Fragment() {
             }
     }
 
-    private fun readPreferences(sharedPreferences: SharedPreferences, adult: Boolean) {
+    private fun readSearchSettings(sharedPreferences: SharedPreferences, adult: Boolean) {
         sharedPreferences.edit().putBoolean(IS_ADULT_KEY, adult).apply()
     }
 
