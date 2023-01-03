@@ -13,7 +13,6 @@ import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 class RemoteDataSource {
 
     private val movieApi: MovieTMDBAPI = Retrofit.Builder()
@@ -112,6 +111,19 @@ class RemoteDataSource {
             language = language
         )
         request.enqueue(callback)
+    }
+
+    suspend fun getCategory(
+        category: String,
+        language: String,
+        page: Int,
+    ): retrofit2.Response<CategoryMoviesTMDB> {
+        return movieApi.getMoviesCategory(
+            category = category,
+            token = BuildConfig.MOVIE_API_KEY,
+            language = language,
+            page = page
+        )
     }
 
     private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
