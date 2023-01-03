@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieChildListData
 
-class MoviesHomeBasicAdapter : RecyclerView.Adapter<MovieHomeBasicViewHolder>() {
+class MoviesHomeBasicAdapter(
+    private val onCategoryClickListener: (String) -> Unit
+) : RecyclerView.Adapter<MovieHomeBasicViewHolder>() {
 
     private var listMoviesCategory: List<MovieChildListData> = listOf()
 
@@ -25,7 +27,7 @@ class MoviesHomeBasicAdapter : RecyclerView.Adapter<MovieHomeBasicViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: MovieHomeBasicViewHolder, position: Int) {
-        holder.bind(listMoviesCategory[position])
+        holder.bind(listMoviesCategory[position], onCategoryClickListener)
     }
 
     override fun getItemCount(): Int = listMoviesCategory.size

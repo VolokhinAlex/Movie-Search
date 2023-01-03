@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentMainBinding
 import com.example.java.android1.movie_search.model.MovieChildListData
+import com.example.java.android1.movie_search.utils.replace
+import com.example.java.android1.movie_search.view.category_movies.CategoryMoviesFragment
 import com.example.java.android1.movie_search.view.compose.home.CategoriesData
 import com.example.java.android1.movie_search.view.compose.home.Category
 import com.example.java.android1.movie_search.view.compose.home.CategoryAppState
@@ -86,7 +89,14 @@ class MainFragment : Fragment() {
 
     private fun initBasicCategoriesList() {
         val basicCategoriesList = binding.containerBasicList
-        moviesCategoriesAdapter = MoviesHomeBasicAdapter()
+        moviesCategoriesAdapter = MoviesHomeBasicAdapter { categoryName ->
+            val bundle = Bundle()
+            bundle.putString(CategoryMoviesFragment.ARG_CATEGORY_NAME, categoryName)
+            activity?.supportFragmentManager?.replace(
+                R.id.container,
+                CategoryMoviesFragment.newInstance(bundle)
+            )
+        }
         basicCategoriesList.adapter = moviesCategoriesAdapter
         basicCategoriesList.layoutManager = LinearLayoutManager(requireActivity())
     }

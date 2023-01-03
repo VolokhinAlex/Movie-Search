@@ -3,6 +3,7 @@ package com.example.java.android1.movie_search.view.home
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
@@ -25,6 +26,7 @@ class MovieHomeBasicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
             MovieDetailsFragment.newInstance(bundle)
         )
     }
+    private val categoryMoviesListButton: AppCompatImageView
 
     init {
         listNamesCategory = itemView.findViewById(R.id.title_movie_list)
@@ -34,9 +36,10 @@ class MovieHomeBasicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
             itemView.context,
             LinearLayoutManager.HORIZONTAL, false
         )
+        categoryMoviesListButton = itemView.findViewById(R.id.action_all_list_of_movies)
     }
 
-    fun bind(movieListData: MovieChildListData) {
+    fun bind(movieListData: MovieChildListData, onCategoryClickListener: (String) -> Unit) {
         when(movieListData.title) {
             MovieCategory.NowPlaying.queryName ->  listNamesCategory.text = MovieCategory.NowPlaying.title
             MovieCategory.TopRated.queryName -> listNamesCategory.text = MovieCategory.TopRated.title
@@ -44,6 +47,9 @@ class MovieHomeBasicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
             MovieCategory.Popular.queryName -> listNamesCategory.text = MovieCategory.Popular.title
         }
         movieListData.listData?.let { movieCategoryAdapter.setMoviesCategoryData(it) }
+        categoryMoviesListButton.setOnClickListener {
+            movieListData.title?.let { categoryName -> onCategoryClickListener.invoke(categoryName) }
+        }
     }
 
 }
