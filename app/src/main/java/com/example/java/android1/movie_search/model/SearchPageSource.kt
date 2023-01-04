@@ -6,9 +6,9 @@ import com.example.java.android1.movie_search.repository.RemoteDataSource
 import retrofit2.HttpException
 import java.io.IOException
 
-class CategoryPageSource(
+class SearchPageSource(
     private val remoteDataSource: RemoteDataSource,
-    private val category: String,
+    private val query: String,
 ) : PagingSource<Int, MovieDataTMDB>() {
 
     override fun getRefreshKey(state: PagingState<Int, MovieDataTMDB>): Int? {
@@ -18,13 +18,17 @@ class CategoryPageSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieDataTMDB> {
-        if (category.isEmpty()) {
+        if (query.isEmpty()) {
             return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
         }
         val page: Int = params.key ?: 1
         return try {
-            val response =
-                remoteDataSource.getCategory(category = category, language = "ru-RU", page = page)
+            val response = remoteDataSource.getMoviesFromSearchPagination(
+                language = "ru-RU",
+                page = page,
+                adult = false,
+                query = query
+            )
             val movies = checkNotNull(response.body())
             val nextKey = if (movies.results.isEmpty()) null else page + 1
             val prevKey = if (page == 1) null else page - 1
@@ -36,4 +40,3 @@ class CategoryPageSource(
         }
     }
 }
-

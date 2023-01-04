@@ -84,6 +84,15 @@ interface MovieTMDBAPI {
         @Query("query") query: String
     ): Call<CategoryMoviesTMDB>
 
+    @GET("3/search/movie")
+    suspend fun getMoviesFromSearchPagination(
+        @Query("api_key") token: String,
+        @Query("language") language: String,
+        @Query("page") page: Int,
+        @Query("include_adult") adult: Boolean,
+        @Query("query") query: String
+    ): Response<CategoryMoviesTMDB>
+
     /**
      * The method for getting the category of movies
      */

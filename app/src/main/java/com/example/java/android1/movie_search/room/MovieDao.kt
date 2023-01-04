@@ -15,6 +15,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies_table")
     fun all(): List<MovieEntity>
 
+    @Query("SELECT * FROM movies_table WHERE movie_favorite = 1")
+    fun getAllFavorites(): List<MovieEntity>
+
     @Query("SELECT * FROM movies_table WHERE movie_id LIKE :movieId")
     fun getMovieByMovieId(movieId: Int) : MovieEntity
 

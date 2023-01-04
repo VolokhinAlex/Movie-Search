@@ -1,5 +1,6 @@
 package com.example.java.android1.movie_search.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
@@ -38,6 +39,8 @@ class MainViewModel(
             } else {
                 CategoryAppState.Error(Throwable(SERVER_ERROR))
             }
+            val test = homeLiveData.value as CategoryAppState.Success
+            //Log.e("TAG_DEBUG2", test.data.queryName)
         }
 
         override fun onFailure(call: Call<CategoryMoviesTMDB>, error: Throwable) {

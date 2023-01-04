@@ -22,7 +22,6 @@ class SearchState(
     val searchDisplay: SearchDisplay
         get() = when {
             !focused && query.text.isEmpty() -> SearchDisplay.InitialResults
-            focused && query.text.isEmpty() -> SearchDisplay.Suggestions
             searchResults.isEmpty() -> SearchDisplay.NoResults
             else -> SearchDisplay.Results
         }

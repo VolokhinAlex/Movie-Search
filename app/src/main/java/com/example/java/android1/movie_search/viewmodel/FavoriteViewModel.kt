@@ -25,7 +25,7 @@ class FavoriteViewModel(
     private fun getMoviesFromLocalDataBase() {
         val handler = Handler(Looper.getMainLooper())
         viewModelScope.launch(Dispatchers.IO) {
-            val result: List<MovieDataRoom> = movieLocalRepository.getAllMovies()
+            val result: List<MovieDataRoom> = movieLocalRepository.getAllFavorites()
             handler.post {
                 localMovieLiveData.value = RoomAppState.Success(result)
             }
