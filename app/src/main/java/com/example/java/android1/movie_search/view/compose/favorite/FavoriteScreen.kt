@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.CreditsDTO
@@ -30,6 +29,8 @@ import com.example.java.android1.movie_search.view.compose.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.compose.navigation.ScreenState
 import com.example.java.android1.movie_search.view.compose.navigation.navigate
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
+import com.example.java.android1.movie_search.view.compose.theme.TITLE_SIZE
+import com.example.java.android1.movie_search.view.compose.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.compose.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.FavoriteViewModel
 
@@ -49,15 +50,25 @@ fun FavoriteScreen(navController: NavController) {
     ) {
         HeaderFavoriteScreen()
         favoriteViewModel.localMovieLiveData.observeAsState().value?.let { state ->
-            RenderData(roomAppState = state, navController)
+            RenderDataFromDataBase(roomAppState = state, navController)
         }
     }
 }
 
+/**
+ * The method processes state from the database
+ * @param roomAppState - The state that came from the database. [RoomAppState]
+ * @param navController - Needed for the method [ShowFavoriteMovies]
+ */
+
 @Composable
-private fun RenderData(roomAppState: RoomAppState, navController: NavController) {
+private fun RenderDataFromDataBase(roomAppState: RoomAppState, navController: NavController) {
     when (roomAppState) {
-        is RoomAppState.Error -> {}
+        is RoomAppState.Error -> {
+            roomAppState.error.localizedMessage?.let {
+                ErrorMessage(message = it) {}
+            }
+        }
         is RoomAppState.Success -> {
             val movieDataRoom = roomAppState.data
             ShowFavoriteMovies(movieDataRoom, navController)
@@ -65,6 +76,13 @@ private fun RenderData(roomAppState: RoomAppState, navController: NavController)
         RoomAppState.Loading -> {}
     }
 }
+
+/**
+ * The method creates a list in the form of a grid, which is filled with movies
+ * @param movieDataRoom - List of Movies
+ * @param navController - Needed to go to the details screen about the movie
+ */
+
 
 @Composable
 private fun ShowFavoriteMovies(
@@ -125,7 +143,7 @@ fun HeaderFavoriteScreen() {
             .fillMaxWidth()
             .padding(top = 20.dp),
         color = Color.White,
-        fontSize = 22.sp,
+        fontSize = TITLE_SIZE,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center
     )

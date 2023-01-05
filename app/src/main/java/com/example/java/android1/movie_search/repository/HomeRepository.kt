@@ -9,31 +9,7 @@ import retrofit2.Callback
 
 interface HomeRepository {
 
-    fun getPopularMoviesFromRemoteServer(
-        language: String,
-        page: Int,
-        callback: Callback<CategoryMoviesTMDB>
-    )
-
-    fun getNowPlayingMoviesFromRemoteServer(
-        language: String,
-        page: Int,
-        callback: Callback<CategoryMoviesTMDB>
-    )
-
-    fun getTopRatedMoviesFromRemoteServer(
-        language: String,
-        page: Int,
-        callback: Callback<CategoryMoviesTMDB>
-    )
-
-    fun getUpcomingMoviesFromRemoteServer(
-        language: String,
-        page: Int,
-        callback: Callback<CategoryMoviesTMDB>
-    )
-
-    fun getMoviesCategoryForCompose(
+    fun getMoviesCategoryFromRemoteServer(
         category: String,
         language: String,
         page: Int,

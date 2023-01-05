@@ -4,14 +4,15 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,50 +23,17 @@ import com.example.java.android1.movie_search.view.compose.category_movies.ARG_C
 import com.example.java.android1.movie_search.view.compose.category_movies.CategoryMoviesScreen
 import com.example.java.android1.movie_search.view.compose.details.DetailsScreen
 import com.example.java.android1.movie_search.view.compose.favorite.FavoriteScreen
-import com.example.java.android1.movie_search.view.compose.home.Category
 import com.example.java.android1.movie_search.view.compose.home.HomeScreen
 import com.example.java.android1.movie_search.view.compose.navigation.ScreenState
 import com.example.java.android1.movie_search.view.compose.search.SearchScreen
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor70
-import com.example.java.android1.movie_search.viewmodel.MainViewModel
+import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
 
 const val MOVIE_DATA_KEY = "Movie Data"
 
 class MainActivity : ComponentActivity() {
-    val movieCategories: MutableList<Category> = mutableListOf()
-    private val homeViewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val categoriesQueryList = listOf("popular", "now_playing", "upcoming", "top_rated")
-//        categoriesQueryList.forEach {
-//            homeViewModel.getMovieCategory(
-//                it,
-//                "ru-RU",
-//                1
-//            )
-//        }
-//        homeViewModel.homeLiveData.observeForever {
-//            when (it) {
-//                is CategoryAppState.Error -> {}
-//                CategoryAppState.Loading -> {}
-//                is CategoryAppState.Success -> {
-//                    movieCategories.add(it.data)
-//                    //Log.e("TAG_DEBUG", movieCategories.size.toString())
-//                    if (movieCategories.size >= 2) setContent {
-//                        Navigation(movieCategories)
-//                    }
-//                    if (movieCategories.size >= 3) setContent {
-//                        Navigation(movieCategories)
-//                    }
-//                    if (movieCategories.size >= 4) setContent {
-//                        Navigation(movieCategories)
-//                    }
-//                }
-//            }
-//        }
         setContent {
             Navigation()
         }

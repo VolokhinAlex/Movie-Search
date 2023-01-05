@@ -53,42 +53,6 @@ class RemoteDataSource {
         request.enqueue(callback)
     }
 
-    fun getPopularMovies(language: String, page: Int, callback: Callback<CategoryMoviesTMDB>) {
-        val request = movieApi.getPopularMovies(
-            token = BuildConfig.MOVIE_API_KEY,
-            language = language,
-            page = page
-        )
-        request.enqueue(callback)
-    }
-
-    fun getNowPlayingMovies(language: String, page: Int, callback: Callback<CategoryMoviesTMDB>) {
-        val request = movieApi.getNowPlayingMovies(
-            token = BuildConfig.MOVIE_API_KEY,
-            language = language,
-            page = page
-        )
-        request.enqueue(callback)
-    }
-
-    fun getTopRatedMovies(language: String, page: Int, callback: Callback<CategoryMoviesTMDB>) {
-        val request = movieApi.getTopRatedMovies(
-            token = BuildConfig.MOVIE_API_KEY,
-            language = language,
-            page = page
-        )
-        request.enqueue(callback)
-    }
-
-    fun getUpcomingMovies(language: String, page: Int, callback: Callback<CategoryMoviesTMDB>) {
-        val request = movieApi.getUpcomingMovies(
-            token = BuildConfig.MOVIE_API_KEY,
-            language = language,
-            page = page
-        )
-        request.enqueue(callback)
-    }
-
     fun getMoviesCategoryForCompose(
         category: String,
         language: String,

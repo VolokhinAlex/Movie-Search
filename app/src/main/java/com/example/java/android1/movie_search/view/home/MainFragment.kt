@@ -12,7 +12,6 @@ import com.example.java.android1.movie_search.databinding.FragmentMainBinding
 import com.example.java.android1.movie_search.model.MovieChildListData
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.category_movies.CategoryMoviesFragment
-import com.example.java.android1.movie_search.view.compose.home.CategoriesData
 import com.example.java.android1.movie_search.view.compose.home.Category
 import com.example.java.android1.movie_search.view.compose.home.CategoryAppState
 import com.example.java.android1.movie_search.viewmodel.MainViewModel
@@ -38,16 +37,10 @@ class MainFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         homeViewModel.homeLiveData.observe(viewLifecycleOwner) { state -> renderData(state) }
-        val categoriesList: List<CategoriesData> =
-            listOf(
-                CategoriesData("Popular", "popular"),
-                CategoriesData("Now Playing", "now_playing"),
-                CategoriesData("Upcoming", "upcoming"),
-                CategoriesData("Top Rated", "top_rated")
-            )
-        categoriesList.forEach {
+        val categoriesQueryList = listOf("popular", "now_playing", "upcoming", "top_rated")
+        categoriesQueryList.forEach {
             homeViewModel.getMovieCategory(
-                it.queryName,
+                it,
                 "ru-RU",
                 1
             )

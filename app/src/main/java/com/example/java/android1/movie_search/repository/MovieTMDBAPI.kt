@@ -28,50 +28,6 @@ interface MovieTMDBAPI {
     ): Call<MovieDataTMDB>
 
     /**
-     * The method for getting the category of popular movies
-     */
-
-    @GET("3/movie/popular")
-    fun getPopularMovies(
-        @Query("api_key") token: String,
-        @Query("language") language: String,
-        @Query("page") page: Int
-    ): Call<CategoryMoviesTMDB>
-
-    /**
-     * The method for getting the category of now playing movies
-     */
-
-    @GET("3/movie/now_playing")
-    fun getNowPlayingMovies(
-        @Query("api_key") token: String,
-        @Query("language") language: String,
-        @Query("page") page: Int
-    ): Call<CategoryMoviesTMDB>
-
-    /**
-     * The method for getting the category of top rated movies
-     */
-
-    @GET("3/movie/top_rated")
-    fun getTopRatedMovies(
-        @Query("api_key") token: String,
-        @Query("language") language: String,
-        @Query("page") page: Int
-    ): Call<CategoryMoviesTMDB>
-
-    /**
-     * The method for getting the category of upcoming movies
-     */
-
-    @GET("3/movie/upcoming")
-    fun getUpcomingMovies(
-        @Query("api_key") token: String,
-        @Query("language") language: String,
-        @Query("page") page: Int
-    ): Call<CategoryMoviesTMDB>
-
-    /**
      * The method for getting a movie by name
      */
 

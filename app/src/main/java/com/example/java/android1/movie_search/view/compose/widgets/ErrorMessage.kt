@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.example.java.android1.movie_search.view.compose.theme.ERROR_MESSAGE_BUTTON_SIZE
+import com.example.java.android1.movie_search.view.compose.theme.ERROR_MESSAGE_TITLE_SIZE
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.compose.theme.RedDark40
 
@@ -30,14 +32,14 @@ fun ErrorMessage(message: String, click: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = message, fontSize = 25.sp, color = RedDark40,
+            text = message, fontSize = ERROR_MESSAGE_TITLE_SIZE, color = RedDark40,
             fontWeight = FontWeight(500),
             textAlign = TextAlign.Center
         )
         Button(onClick = click) {
             Text(
                 text = "retry",
-                fontSize = 20.sp,
+                fontSize = ERROR_MESSAGE_BUTTON_SIZE,
                 color = Color.White,
                 textAlign = TextAlign.Center
             )

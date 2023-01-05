@@ -153,7 +153,7 @@ class MovieDetailsFragment : Fragment() {
                 )
             )
         } else {
-            Glide.with(requireActivity()).load(R.drawable.movie_image)
+            Glide.with(requireActivity()).load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
                 .load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
                 .apply(bitmapTransform(BlurTransformation(80)))
                 .into(binding.detailMovieImage)

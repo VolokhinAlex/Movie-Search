@@ -11,8 +11,7 @@
         android:id="@+id/item_movie_actors_card_image"
         android:layout_width="@dimen/movie_actor_image_profile"
         android:layout_height="@dimen/movie_actor_image_profile"
-        android:layout_marginBottom="@dimen/movie_actor_margin"
-        app:srcCompat="@drawable/actor" />
+        android:layout_marginBottom="@dimen/movie_actor_margin" />
 
     <TextView
         android:id="@+id/item_movie_actors_card_name"

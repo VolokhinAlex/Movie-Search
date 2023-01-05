@@ -45,9 +45,9 @@ class MainViewModelCompose(
 
     }
 
-    fun getCategoryMovies(category: String, language: String, page: Int) {
+    fun getMovieCategory(category: String, language: String, page: Int) {
         homeLiveData.value = CategoryAppState.Loading
-        repository.getMoviesCategoryForCompose(category, language, page, callback)
+        repository.getMoviesCategoryFromRemoteServer(category, language, page, callback)
     }
 
 }

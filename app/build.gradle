@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -16,7 +17,6 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -30,9 +30,20 @@ android {
         def apiKey = properties.getProperty("movie_tmdb_api_key", "")
         it.buildConfigField "String", "MOVIE_API_KEY", apiKey
     }
+    signingConfigs {
+        release {
+            Properties keystoreProperties = new Properties()
+            keystoreProperties.load(project.rootProject.file("keystore.properties").newDataInputStream())
+            storeFile file("keystore.jks")
+            storePassword keystoreProperties['store_password']
+            keyAlias keystoreProperties['key_alias']
+            keyPassword keystoreProperties['key_password']
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -46,6 +57,16 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    flavorDimensions 'version'
+    productFlavors {
+        withCompose {
+            dimension 'version'
+            versionNameSuffix '.compose'
+        }
+        withoutCompose {
+            dimension 'version'
+        }
+    }
 }
 
 dependencies {
@@ -53,12 +74,15 @@ dependencies {
     implementation 'androidx.paging:paging-runtime:3.1.1'
     testImplementation 'androidx.paging:paging-common:3.1.1'
 
-
     // Open Street Map
     implementation 'org.osmdroid:osmdroid-android:6.1.14'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'com.github.MKergall:osmbonuspack:6.9.0'
+
+    // Firebase
     implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
 
     // Compose
     implementation("androidx.paging:paging-compose:1.0.0-alpha17")
@@ -103,7 +127,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     // JUNIT
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 }

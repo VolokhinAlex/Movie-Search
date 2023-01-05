@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -30,12 +29,17 @@ import com.example.java.android1.movie_search.view.compose.home.MovieCategory
 import com.example.java.android1.movie_search.view.compose.navigation.ScreenState
 import com.example.java.android1.movie_search.view.compose.navigation.navigate
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
+import com.example.java.android1.movie_search.view.compose.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.compose.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.compose.widgets.Loader
 import com.example.java.android1.movie_search.view.compose.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.CategoryMoviesViewModel
 
 const val ARG_CATEGORY_NAME = "Category Name"
+
+/**
+ * The main method for the layout of the entire screen
+ */
 
 @Composable
 fun CategoryMoviesScreen(categoryName: String, navController: NavController) {
@@ -59,6 +63,10 @@ fun CategoryMoviesScreen(categoryName: String, navController: NavController) {
     }
 }
 
+/**
+ * The method sets the title of the screen and adds a button to go to the previous screen
+ */
+
 @Composable
 private fun Header(text: String, navController: NavController) {
     Row(
@@ -79,12 +87,18 @@ private fun Header(text: String, navController: NavController) {
         }
         Text(
             text = text,
-            fontSize = 22.sp,
+            fontSize = TITLE_SIZE,
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
     }
 }
+
+/**
+ * The method creates a list in the form of a grid, which is filled with movies
+ * @param lazyMovieItems - List of Movies
+ * @param navController - Needed to go to the details screen about the movie
+ */
 
 @Composable
 private fun ShowCategoryMovies(

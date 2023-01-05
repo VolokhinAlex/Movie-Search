@@ -15,12 +15,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
+import com.example.java.android1.movie_search.view.compose.theme.CARD_TEXT_SIZE
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor70
 import java.text.DecimalFormat
 
@@ -56,7 +56,7 @@ fun MovieCard(
             Text(
                 text = movieDataTMDB.title ?: "",
                 color = Color.White,
-                fontSize = 20.sp,
+                fontSize = CARD_TEXT_SIZE,
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -70,7 +70,7 @@ fun MovieCard(
                 Text(
                     text = "${movieDataTMDB.release_date?.let { "".getYearFromStringFullDate(it) }}",
                     color = Color.White,
-                    fontSize = 20.sp
+                    fontSize = CARD_TEXT_SIZE
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -79,7 +79,7 @@ fun MovieCard(
                         text = ratingFormat.format(movieDataTMDB.vote_average),
                         modifier = Modifier.padding(end = 5.dp),
                         color = Color.White,
-                        fontSize = 20.sp
+                        fontSize = CARD_TEXT_SIZE
                     )
                     Image(
                         painter = painterResource(id = R.drawable.ic_baseline_star_rate_24),
