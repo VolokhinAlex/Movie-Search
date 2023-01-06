@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,15 +27,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.app.MovieActorState
 import com.example.java.android1.movie_search.model.ActorDTO
 import com.example.java.android1.movie_search.model.CastDTO
+import com.example.java.android1.movie_search.repository.MovieActorRepositoryImpl
+import com.example.java.android1.movie_search.repository.RemoteDataSource
 import com.example.java.android1.movie_search.view.compose.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.compose.widgets.Loader
 import com.example.java.android1.movie_search.view.compose.widgets.MapView
 import com.example.java.android1.movie_search.viewmodel.MovieActorViewModel
+import com.example.java.android1.movie_search.viewmodel.MovieActorViewModelFactory
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import org.osmdroid.config.Configuration
@@ -42,6 +49,12 @@ import org.osmdroid.views.overlay.Marker
 
 class MovieActorFragment : Fragment() {
     private var castDTO: CastDTO? = null
+    private val movieActorViewModel: MovieActorViewModel by lazy {
+        ViewModelProvider(
+            this,
+            MovieActorViewModelFactory(MovieActorRepositoryImpl(RemoteDataSource()))
+        )[MovieActorViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,16 +68,12 @@ class MovieActorFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = ComposeView(requireContext()).apply {
         setContent {
-            val viewModel by remember {
-                mutableStateOf(MovieActorViewModel())
-            }
-            val movieActorViewModel = viewModel.movieActorLiveData.observeAsState()
-            movieActorViewModel.value?.let { RenderData(it) }
-            movieActorViewModel.value
+            val movieActorState = movieActorViewModel.movieActorLiveData.observeAsState()
+            movieActorState.value?.let { RenderData(it) }
             castDTO?.let { castDto ->
-                LaunchedEffect(Unit) {
+                LaunchedEffect(true) {
                     castDto.id?.let { actorId ->
-                        viewModel.getMovieActorData(
+                        movieActorViewModel.getMovieActorData(
                             actorId,
                             "ru-RU"
                         )

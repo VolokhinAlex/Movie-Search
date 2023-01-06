@@ -4,9 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,7 +17,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.java.android1.movie_search.app.App.Companion.historySearchDao
+import com.example.java.android1.movie_search.app.App.Companion.movieDao
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.repository.*
 import com.example.java.android1.movie_search.view.compose.category_movies.ARG_CATEGORY_NAME
 import com.example.java.android1.movie_search.view.compose.category_movies.CategoryMoviesScreen
 import com.example.java.android1.movie_search.view.compose.details.DetailsScreen
@@ -27,21 +29,56 @@ import com.example.java.android1.movie_search.view.compose.home.HomeScreen
 import com.example.java.android1.movie_search.view.compose.navigation.ScreenState
 import com.example.java.android1.movie_search.view.compose.search.SearchScreen
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor70
-import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
+import com.example.java.android1.movie_search.viewmodel.*
 
 const val MOVIE_DATA_KEY = "Movie Data"
 
 class MainActivity : ComponentActivity() {
+
+    private val homeViewModel: MainViewModel by viewModels {
+        MainViewModelFactory(HomeRepositoryImpl(RemoteDataSource()))
+    }
+    private val detailsViewModel: DetailsViewModel by viewModels {
+        DetailsViewModelFactory(
+            DetailsRepositoryImpl(RemoteDataSource()),
+            MovieLocalRepositoryImpl(movieDao)
+        )
+    }
+    private val searchViewModel: SearchViewModel by viewModels {
+        SearchViewModelFactory(
+            SearchRepositoryImpl(RemoteDataSource()),
+            LocalSearchRepositoryImpl(historySearchDao)
+        )
+    }
+    private val favoriteViewModel: FavoriteViewModel by viewModels {
+        FavoriteViewModelFactory(MovieLocalRepositoryImpl(movieDao))
+    }
+    private val categoryViewModel: CategoryMoviesViewModel by viewModels {
+        CategoryMoviesViewModelFactory(CategoryRepositoryImpl(RemoteDataSource()))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Navigation()
+            Navigation(
+                homeViewModel,
+                detailsViewModel,
+                searchViewModel,
+                favoriteViewModel,
+                categoryViewModel
+            )
         }
     }
 }
 
 @Composable
-fun Navigation() {
+fun Navigation(
+    homeViewModel: MainViewModel,
+    detailsViewModel: DetailsViewModel,
+    searchViewModel: SearchViewModel,
+    favoriteViewModel: FavoriteViewModel,
+    categoryViewModel: CategoryMoviesViewModel
+) {
     val navController = rememberNavController()
     BottomNavigation(navController) { innerPadding ->
         NavHost(
@@ -50,29 +87,31 @@ fun Navigation() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = ScreenState.HomeScreen.route) {
-                HomeScreen(navController = navController)
+                HomeScreen(navController = navController, homeViewModel)
             }
             composable(route = ScreenState.DetailsScreen.route) {
                 val movieData = it.arguments?.getParcelable<MovieDataTMDB>(MOVIE_DATA_KEY)
                 movieData?.let { data ->
                     DetailsScreen(
                         movieDataTMDB = data,
-                        navController = navController
+                        navController = navController,
+                        movieDetailsViewModel = detailsViewModel
                     )
                 }
             }
             composable(route = ScreenState.SearchScreen.route) {
-                SearchScreen(navController = navController)
+                SearchScreen(navController = navController, searchViewModel = searchViewModel)
             }
             composable(route = ScreenState.FavoriteScreen.route) {
-                FavoriteScreen(navController = navController)
+                FavoriteScreen(navController = navController, favoriteViewModel = favoriteViewModel)
             }
             composable(route = ScreenState.CategoryMoviesScreen.route) {
                 val categoryName = it.arguments?.getString(ARG_CATEGORY_NAME)
                 categoryName?.let {
                     CategoryMoviesScreen(
                         categoryName = categoryName,
-                        navController = navController
+                        navController = navController,
+                        categoryMoviesViewModel = categoryViewModel
                     )
                 }
             }

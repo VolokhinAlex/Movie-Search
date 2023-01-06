@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,12 +41,13 @@ const val ARG_CATEGORY_NAME = "Category Name"
  */
 
 @Composable
-fun CategoryMoviesScreen(categoryName: String, navController: NavController) {
-    val categoryMoviesViewModel by lazy {
-        mutableStateOf(CategoryMoviesViewModel())
-    }
+fun CategoryMoviesScreen(
+    categoryName: String,
+    navController: NavController,
+    categoryMoviesViewModel: CategoryMoviesViewModel
+) {
     val categoryMovies =
-        categoryMoviesViewModel.value.getCategoryMoviesFromRemoteServer(categoryName)
+        categoryMoviesViewModel.getCategoryMoviesFromRemoteServer(categoryName)
             .collectAsLazyPagingItems()
     Column(modifier = Modifier.background(PrimaryColor80)) {
         when (categoryName) {

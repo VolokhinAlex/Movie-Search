@@ -13,8 +13,11 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -46,11 +49,12 @@ import java.text.DecimalFormat
  */
 
 @Composable
-fun DetailsScreen(movieDataTMDB: MovieDataTMDB, navController: NavController) {
-    val movieDetailsViewModel by remember {
-        mutableStateOf(DetailsViewModel())
-    }
-    LaunchedEffect(Unit) {
+fun DetailsScreen(
+    movieDataTMDB: MovieDataTMDB,
+    navController: NavController,
+    movieDetailsViewModel: DetailsViewModel
+) {
+    LaunchedEffect(true) {
         movieDataTMDB.id?.let { movieDetailsViewModel.getMovieDetailsFromRemoteSource(it, "ru-RU") }
     }
     movieDetailsViewModel.detailsLiveData.observeAsState().value?.let { state ->

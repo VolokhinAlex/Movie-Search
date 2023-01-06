@@ -8,13 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.java.android1.movie_search.R
+import com.example.java.android1.movie_search.app.App
 import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.databinding.FragmentFavoriteBinding
 import com.example.java.android1.movie_search.model.CreditsDTO
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.repository.MovieLocalRepositoryImpl
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
 import com.example.java.android1.movie_search.viewmodel.FavoriteViewModel
+import com.example.java.android1.movie_search.viewmodel.FavoriteViewModelFactory
 
 class FavoriteFragment : Fragment() {
     private val favoriteMoviesAdapter: FavoriteAdapter by lazy {
@@ -49,7 +52,10 @@ class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
     private val favoriteViewModel: FavoriteViewModel by lazy {
-        ViewModelProvider(this)[FavoriteViewModel::class.java]
+        ViewModelProvider(
+            this,
+            FavoriteViewModelFactory(MovieLocalRepositoryImpl(App.movieDao))
+        )[FavoriteViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -58,6 +64,7 @@ class FavoriteFragment : Fragment() {
     ): View {
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         favoriteViewModel.localMovieLiveData.observe(viewLifecycleOwner) { renderData(it) }
+        favoriteViewModel.getMoviesFromLocalDataBase()
         val favoriteMoviesListView = binding.favoriteContainer
         favoriteMoviesListView.adapter = favoriteMoviesAdapter
         favoriteMoviesListView.layoutManager = GridLayoutManager(requireActivity(), 2)

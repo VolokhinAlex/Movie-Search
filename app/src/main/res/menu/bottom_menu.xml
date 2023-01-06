@@ -8,12 +8,6 @@
         android:icon="@drawable/bottom_icon_home"/>
 
     <item
-        android:id="@+id/action_catalog"
-        android:title="@string/bottom_menu_catalog"
-        android:orderInCategory="30"
-        android:icon="@drawable/bottom_icon_catalog"/>
-
-    <item
         android:id="@+id/action_search"
         android:title="@string/bottom_menu_search"
         android:orderInCategory="20"

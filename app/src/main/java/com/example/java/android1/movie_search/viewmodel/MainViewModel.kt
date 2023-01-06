@@ -1,11 +1,11 @@
 package com.example.java.android1.movie_search.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.repository.HomeRepository
-import com.example.java.android1.movie_search.repository.HomeRepositoryImpl
-import com.example.java.android1.movie_search.repository.RemoteDataSource
 import com.example.java.android1.movie_search.view.compose.home.Category
 import com.example.java.android1.movie_search.view.compose.home.CategoryAppState
 import retrofit2.Call
@@ -15,9 +15,11 @@ import retrofit2.Response
 private const val SERVER_ERROR = "Ошибка сервера"
 
 class MainViewModel(
-    val homeLiveData: MutableLiveData<CategoryAppState> = MutableLiveData(),
-    private val repository: HomeRepository = HomeRepositoryImpl(RemoteDataSource()),
+    private val repository: HomeRepository
 ) : ViewModel() {
+
+    private val _homeLiveData: MutableLiveData<CategoryAppState> = MutableLiveData()
+    val homeLiveData: LiveData<CategoryAppState> = _homeLiveData
 
     private val callback = object : Callback<CategoryMoviesTMDB> {
 
@@ -26,7 +28,7 @@ class MainViewModel(
             response: Response<CategoryMoviesTMDB>
         ) {
             val serverResponse = response.body()
-            homeLiveData.value = if (response.isSuccessful && serverResponse != null) {
+            _homeLiveData.value = if (response.isSuccessful && serverResponse != null) {
                 val request = call.request().url.toString()
                 val queryName = request.substring(request.indexOf("movie/"), request.indexOf("?"))
                 CategoryAppState.Success(
@@ -41,14 +43,24 @@ class MainViewModel(
         }
 
         override fun onFailure(call: Call<CategoryMoviesTMDB>, error: Throwable) {
-            homeLiveData.value = CategoryAppState.Error(error)
+            _homeLiveData.value = CategoryAppState.Error(error)
         }
 
     }
 
     fun getMovieCategory(category: String, language: String, page: Int) {
-        homeLiveData.value = CategoryAppState.Loading
+        _homeLiveData.value = CategoryAppState.Loading
         repository.getMoviesCategoryFromRemoteServer(category, language, page, callback)
     }
 
+}
+
+class MainViewModelFactory(private val repository: HomeRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            MainViewModel(repository) as T
+        } else {
+            throw IllegalArgumentException("ViewModel Not Found")
+        }
+    }
 }

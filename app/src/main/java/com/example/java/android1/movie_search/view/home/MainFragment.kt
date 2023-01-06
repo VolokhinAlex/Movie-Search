@@ -10,11 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentMainBinding
 import com.example.java.android1.movie_search.model.MovieChildListData
+import com.example.java.android1.movie_search.repository.HomeRepositoryImpl
+import com.example.java.android1.movie_search.repository.RemoteDataSource
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.category_movies.CategoryMoviesFragment
 import com.example.java.android1.movie_search.view.compose.home.Category
 import com.example.java.android1.movie_search.view.compose.home.CategoryAppState
 import com.example.java.android1.movie_search.viewmodel.MainViewModel
+import com.example.java.android1.movie_search.viewmodel.MainViewModelFactory
 
 class MainFragment : Fragment() {
 
@@ -22,7 +25,10 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
     private var movieCategories: MutableList<Category> = mutableListOf()
     private val homeViewModel: MainViewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
+        ViewModelProvider(
+            this,
+            MainViewModelFactory(HomeRepositoryImpl(RemoteDataSource()))
+        )[MainViewModel::class.java]
     }
 
     private lateinit var moviesCategoriesAdapter: MoviesHomeBasicAdapter

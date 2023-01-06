@@ -13,7 +13,6 @@ import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.ActivityMainBinding
 import com.example.java.android1.movie_search.utils.MyNetworkCallback
 import com.example.java.android1.movie_search.utils.visible
-import com.example.java.android1.movie_search.view.catalog.CatalogFragment
 import com.example.java.android1.movie_search.view.favorite.FavoriteFragment
 import com.example.java.android1.movie_search.view.home.MainFragment
 import com.example.java.android1.movie_search.view.search.SearchFragment
@@ -51,9 +50,6 @@ class MainActivity : AppCompatActivity() {
                 binding.bottomNavigation.menu.findItem(R.id.action_home).itemId -> supportFragmentManager.popBackStack()
                 binding.bottomNavigation.menu.findItem(R.id.action_search).itemId -> addFragment(
                     SearchFragment.newInstance()
-                )
-                binding.bottomNavigation.menu.findItem(R.id.action_catalog).itemId -> addFragment(
-                    CatalogFragment.newInstance()
                 )
                 binding.bottomNavigation.menu.findItem(R.id.action_favorite).itemId -> addFragment(
                     FavoriteFragment.newInstance()

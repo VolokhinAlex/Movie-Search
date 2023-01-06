@@ -3,7 +3,6 @@ package com.example.java.android1.movie_search.view.search
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,18 +11,28 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.java.android1.movie_search.R
+import com.example.java.android1.movie_search.app.App
 import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.databinding.FragmentSearchBinding
+import com.example.java.android1.movie_search.repository.LocalSearchRepositoryImpl
+import com.example.java.android1.movie_search.repository.RemoteDataSource
+import com.example.java.android1.movie_search.repository.SearchRepositoryImpl
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
 import com.example.java.android1.movie_search.viewmodel.SearchViewModel
+import com.example.java.android1.movie_search.viewmodel.SearchViewModelFactory
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val mBinding get() = _binding!!
 
     private val searchViewModel: SearchViewModel by lazy {
-        ViewModelProvider(this)[SearchViewModel::class.java]
+        ViewModelProvider(
+            this, SearchViewModelFactory(
+                SearchRepositoryImpl(RemoteDataSource()),
+                LocalSearchRepositoryImpl(App.historySearchDao)
+            )
+        )[SearchViewModel::class.java]
     }
 
     private val searchAdapter = SearchAdapter { movieData ->

@@ -16,17 +16,22 @@ import coil.load
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.example.java.android1.movie_search.R
+import com.example.java.android1.movie_search.app.App
 import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.databinding.FragmentMovieDetailsBinding
 import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.repository.DetailsRepositoryImpl
+import com.example.java.android1.movie_search.repository.MovieLocalRepositoryImpl
+import com.example.java.android1.movie_search.repository.RemoteDataSource
 import com.example.java.android1.movie_search.utils.DialogFragmentNote
 import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.actor.MovieActorFragment
 import com.example.java.android1.movie_search.view.actor.MovieActorFragment.Companion.ARG_ACTOR_MOVIE_DATA
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
+import com.example.java.android1.movie_search.viewmodel.DetailsViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import jp.wasabeef.glide.transformations.BlurTransformation
 import java.text.DecimalFormat
@@ -47,7 +52,12 @@ class MovieDetailsFragment : Fragment() {
         )
     }
     private val movieDetailsViewModel: DetailsViewModel by lazy {
-        ViewModelProvider(this)[DetailsViewModel::class.java]
+        ViewModelProvider(
+            this, DetailsViewModelFactory(
+                DetailsRepositoryImpl(RemoteDataSource()),
+                MovieLocalRepositoryImpl(App.movieDao)
+            )
+        )[DetailsViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -153,7 +163,8 @@ class MovieDetailsFragment : Fragment() {
                 )
             )
         } else {
-            Glide.with(requireActivity()).load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
+            Glide.with(requireActivity())
+                .load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
                 .load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
                 .apply(bitmapTransform(BlurTransformation(80)))
                 .into(binding.detailMovieImage)

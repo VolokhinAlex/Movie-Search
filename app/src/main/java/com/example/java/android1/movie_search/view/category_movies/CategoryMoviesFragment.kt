@@ -9,23 +9,33 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.repository.CategoryRepositoryImpl
+import com.example.java.android1.movie_search.repository.RemoteDataSource
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.compose.widgets.MovieCard
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
 import com.example.java.android1.movie_search.viewmodel.CategoryMoviesViewModel
+import com.example.java.android1.movie_search.viewmodel.CategoryMoviesViewModelFactory
 
 class CategoryMoviesFragment : Fragment() {
     private var categoryName: String? = null
+
+    private val categoryMoviesViewModel: CategoryMoviesViewModel by lazy {
+        ViewModelProvider(
+            this,
+            CategoryMoviesViewModelFactory(CategoryRepositoryImpl(RemoteDataSource()))
+        )[CategoryMoviesViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +49,9 @@ class CategoryMoviesFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = ComposeView(requireContext()).apply {
         setContent {
-            val categoryMoviesViewModel by lazy {
-                mutableStateOf(CategoryMoviesViewModel())
-            }
             categoryName?.let { categoryName ->
                 val categoryMovies =
-                    categoryMoviesViewModel.value.getCategoryMoviesFromRemoteServer(categoryName)
+                    categoryMoviesViewModel.getCategoryMoviesFromRemoteServer(categoryName)
                         .collectAsLazyPagingItems()
                 Box(modifier = Modifier.background(PrimaryColor80)) {
                     ShowCategoryMovies(categoryMovies)

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,7 @@ import com.example.java.android1.movie_search.view.compose.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.compose.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.compose.widgets.Loader
 import com.example.java.android1.movie_search.view.compose.widgets.MovieCard
+import com.example.java.android1.movie_search.viewmodel.MainViewModel
 
 /**
  * The main method for the layout of the home screen methods
@@ -34,30 +36,25 @@ import com.example.java.android1.movie_search.view.compose.widgets.MovieCard
 
 @SuppressLint("MutableCollectionMutableState", "CoroutineCreationDuringComposition")
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, homeViewModel: MainViewModel) {
     val movieCategories = remember { mutableStateOf(mutableListOf<Category>()) }
-    val homeMainViewModel by remember {
-        mutableStateOf(MainViewModelCompose())
+    LaunchedEffect(true) {
+        getDataFromRemoteServer(homeViewModel)
     }
+    getDataFromRemoteServer(homeViewModel)
+    homeViewModel.homeLiveData.observeAsState().value?.let {
+        RenderDataFromRemoteServer(it, movieCategories, navController, homeViewModel)
+    }
+}
+
+private fun getDataFromRemoteServer(homeViewModel: MainViewModel) {
     val categoriesQueryList = listOf("popular", "now_playing", "upcoming", "top_rated")
-    LaunchedEffect(Unit) {
-        categoriesQueryList.forEach {
-            homeMainViewModel.getMovieCategory(
-                it,
-                "ru-RU",
-                1
-            )
-        }
-    }
-//    homeMainViewModel.viewModelScope.launch {
-//        homeMainViewModel.homeLiveData.collect {
-//            if (it is CategoryAppState.Success) {
-//                Log.e("TAG_CHECKER", it.data.queryName)
-//            }
-//        }
-//    }
-    homeMainViewModel.homeLiveData.collectAsState().value?.let {
-        RenderDataFromRemoteServer(it, movieCategories, navController)
+    categoriesQueryList.forEach {
+        homeViewModel.getMovieCategory(
+            it,
+            "ru-RU",
+            1
+        )
     }
 }
 
@@ -70,6 +67,7 @@ private fun RenderDataFromRemoteServer(
     categoryAppState: CategoryAppState,
     movieCategories: MutableState<MutableList<Category>>,
     navController: NavController,
+    homeViewModel: MainViewModel
 ) {
     when (categoryAppState) {
         is CategoryAppState.Success -> {
@@ -79,7 +77,7 @@ private fun RenderDataFromRemoteServer(
             Log.e("", movieCategories.value.size.toString())
         }
         is CategoryAppState.Error -> categoryAppState.error.localizedMessage?.let {
-            ErrorMessage(message = it) {}
+            ErrorMessage(message = it) { getDataFromRemoteServer(homeViewModel) }
         }
         CategoryAppState.Loading -> Loader()
     }
@@ -91,9 +89,11 @@ private fun RenderDataFromRemoteServer(
 
 @Composable
 fun CategoriesList(categoriesList: List<Category>, navController: NavController) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(PrimaryColor80)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PrimaryColor80)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()

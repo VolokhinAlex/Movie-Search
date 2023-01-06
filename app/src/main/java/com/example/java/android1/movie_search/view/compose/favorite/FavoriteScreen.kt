@@ -9,10 +9,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,16 +37,16 @@ import com.example.java.android1.movie_search.viewmodel.FavoriteViewModel
  */
 
 @Composable
-fun FavoriteScreen(navController: NavController) {
-    val favoriteViewModel by remember {
-        mutableStateOf(FavoriteViewModel())
-    }
+fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(PrimaryColor80), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HeaderFavoriteScreen()
+        LaunchedEffect(key1 = true, block = {
+            favoriteViewModel.getMoviesFromLocalDataBase()
+        })
         favoriteViewModel.localMovieLiveData.observeAsState().value?.let { state ->
             RenderDataFromDataBase(roomAppState = state, navController)
         }
