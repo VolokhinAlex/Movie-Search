@@ -45,6 +45,7 @@ class MovieActorViewModel(
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 class MovieActorViewModelFactory(private val repository: MovieActorRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -12,14 +12,6 @@ import retrofit2.Callback
 
 interface SearchRepository {
 
-    fun getMoviesFromRemoteServer(
-        language: String,
-        page: Int,
-        adult: Boolean,
-        query: String,
-        callback: Callback<CategoryMoviesTMDB>
-    )
-
     fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>>
 
 }

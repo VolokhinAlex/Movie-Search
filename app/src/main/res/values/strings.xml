@@ -1,25 +1,3 @@
 <resources>
-    <string name="app_name">Movie-Search</string>
-    <string name="bottom_menu_home">Home</string>
-    <string name="bottom_menu_catalog">Catalog</string>
-    <string name="bottom_menu_search">Search</string>
-    <string name="bottom_menu_profile">Profile</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hello_from_profile_fragment">Hello From Profile Fragment</string>
-    <string name="hello_from_search_fragment">Hello from Search Fragment</string>
-    <string name="hello_from_catalog_fragment">Hello from Catalog Fragment</string>
-    <string name="category_latest">New Products</string>
-    <string name="category_popular">Popular</string>
-    <string name="overview">Англия, XIX век. 21-летняя провинциалка Эмма Вудхаус красива, богата, остроумна и считает, что прекрасно разбирается в людях. Девушка решила, что никогда не выйдет замуж и не оставит отца одного. Когда её подруга в связи с собственным замужеством переезжает в дом супруга, Эмма находит себе новую компаньонку - сироту Гарриет Смит - и теперь, используя все свои хитрости, пытается устроить девушке личную жизнь.</string>
-    <string name="movie_cast">В ролях</string>
-    <string name="category_top_rated_movies">The Best Movies</string>
-    <string name="category_upcoming">Upcoming</string>
-    <string name="category_now_playing">NowPlaying</string>
-    <string name="label_imdb_rating">Rating IMDB</string>
-    <string name="with_adult_movie">With Adult Movie</string>
-    <string name="save_note">Save Note</string>
-    <string name="bottom_menu_favorite">Favorite</string>
-    <string name="contacts">Contacts</string>
-    <string name="map">Map</string>
+    <string name="app_name">Movie Club</string>
 </resources>

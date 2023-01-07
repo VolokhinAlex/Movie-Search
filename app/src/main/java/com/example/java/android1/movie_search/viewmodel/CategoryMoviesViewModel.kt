@@ -16,6 +16,7 @@ class CategoryMoviesViewModel(
 
 }
 
+@Suppress("UNCHECKED_CAST")
 class CategoryMoviesViewModelFactory(private val repository: CategoryRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

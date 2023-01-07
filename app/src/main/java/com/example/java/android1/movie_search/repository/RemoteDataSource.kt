@@ -36,38 +36,6 @@ class RemoteDataSource {
         request.enqueue(callback)
     }
 
-    fun getMoviesFromSearch(
-        language: String,
-        page: Int,
-        adult: Boolean,
-        query: String,
-        callback: Callback<CategoryMoviesTMDB>
-    ) {
-        val request = movieApi.getMoviesFromSearch(
-            token = BuildConfig.MOVIE_API_KEY,
-            language = language,
-            page = page,
-            adult = adult,
-            query = query
-        )
-        request.enqueue(callback)
-    }
-
-    fun getMoviesCategoryForCompose(
-        category: String,
-        language: String,
-        page: Int,
-        callback: Callback<CategoryMoviesTMDB>
-    ) {
-        val request = movieApi.getMoviesCategoryForCompose(
-            category = category,
-            token = BuildConfig.MOVIE_API_KEY,
-            language = language,
-            page = page
-        )
-        request.enqueue(callback)
-    }
-
     fun getActorData(personId: Long, language: String, callback: Callback<ActorDTO>) {
         val request = movieApi.getActorData(
             personId = personId,
@@ -82,7 +50,7 @@ class RemoteDataSource {
         language: String,
         page: Int,
     ): retrofit2.Response<CategoryMoviesTMDB> {
-        return movieApi.getMoviesCategory(
+        return movieApi.getCategoryMovies(
             category = category,
             token = BuildConfig.MOVIE_API_KEY,
             language = language,
@@ -90,13 +58,13 @@ class RemoteDataSource {
         )
     }
 
-    suspend fun getMoviesFromSearchPagination(
+    suspend fun getMoviesBySearch(
         language: String,
         page: Int,
         adult: Boolean,
         query: String,
     ): retrofit2.Response<CategoryMoviesTMDB> {
-        return movieApi.getMoviesFromSearchPagination(
+        return movieApi.getMoviesBySearch(
             token = BuildConfig.MOVIE_API_KEY,
             language = language,
             page = page,

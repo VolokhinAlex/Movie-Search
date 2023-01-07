@@ -23,6 +23,7 @@ class FavoriteViewModel(
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 class FavoriteViewModelFactory(private val repository: MovieLocalRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

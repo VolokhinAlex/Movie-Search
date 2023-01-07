@@ -28,38 +28,17 @@ interface MovieTMDBAPI {
     ): Call<MovieDataTMDB>
 
     /**
-     * The method for getting a movie by name
+     * The method for getting a movie by search
      */
 
     @GET("3/search/movie")
-    fun getMoviesFromSearch(
-        @Query("api_key") token: String,
-        @Query("language") language: String,
-        @Query("page") page: Int,
-        @Query("include_adult") adult: Boolean,
-        @Query("query") query: String
-    ): Call<CategoryMoviesTMDB>
-
-    @GET("3/search/movie")
-    suspend fun getMoviesFromSearchPagination(
+    suspend fun getMoviesBySearch(
         @Query("api_key") token: String,
         @Query("language") language: String,
         @Query("page") page: Int,
         @Query("include_adult") adult: Boolean,
         @Query("query") query: String
     ): Response<CategoryMoviesTMDB>
-
-    /**
-     * The method for getting the category of movies
-     */
-
-    @GET("3/movie/{category}")
-    fun getMoviesCategoryForCompose(
-        @Path("category") category: String,
-        @Query("api_key") token: String,
-        @Query("language") language: String,
-        @Query("page") page: Int
-    ): Call<CategoryMoviesTMDB>
 
     /**
      * The method for getting the actor data
@@ -72,8 +51,12 @@ interface MovieTMDBAPI {
         @Query("language") language: String
     ): Call<ActorDTO>
 
+    /**
+     * The method for getting the category of movies
+     */
+
     @GET("3/movie/{category}")
-    suspend fun getMoviesCategory(
+    suspend fun getCategoryMovies(
         @Path("category") category: String,
         @Query("api_key") token: String,
         @Query("language") language: String,

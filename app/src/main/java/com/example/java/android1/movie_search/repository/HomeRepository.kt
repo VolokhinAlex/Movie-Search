@@ -1,7 +1,6 @@
 package com.example.java.android1.movie_search.repository
 
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
-import retrofit2.Callback
 import retrofit2.Response
 
 /**
@@ -9,13 +8,6 @@ import retrofit2.Response
  */
 
 interface HomeRepository {
-
-    fun getMoviesCategoryFromRemoteServer(
-        category: String,
-        language: String,
-        page: Int,
-        callback: Callback<CategoryMoviesTMDB>
-    )
 
     suspend fun getCategoryMoviesFromRemoteServer(
         category: String,

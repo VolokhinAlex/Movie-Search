@@ -81,6 +81,7 @@ class DetailsViewModel(
 
 }
 
+@Suppress("UNCHECKED_CAST")
 class DetailsViewModelFactory(
     private val repositoryRemote: DetailsRepository,
     private val localRepository: MovieLocalRepository

@@ -17,16 +17,6 @@ class SearchRepositoryImpl(
     private val remoteDataSource: RemoteDataSource
 ) : SearchRepository {
 
-    override fun getMoviesFromRemoteServer(
-        language: String,
-        page: Int,
-        adult: Boolean,
-        query: String,
-        callback: Callback<CategoryMoviesTMDB>
-    ) {
-        remoteDataSource.getMoviesFromSearch(language, page, adult, query, callback)
-    }
-
     override fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> = Pager(
         config = PagingConfig(
             pageSize = CategoryRepositoryImpl.CATEGORY_PAGE_SIZE,
