@@ -26,10 +26,9 @@ class SearchViewModel(
         localSearchRepository.getHistorySearch().asLiveData()
 
     fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> =
-        repository.getSearchRequest(query)
+        repository.getMoviesBySearchFromRemoteServer(query)
 
     private val callback = object : Callback<CategoryMoviesTMDB> {
-
         override fun onResponse(
             call: Call<CategoryMoviesTMDB>,
             response: Response<CategoryMoviesTMDB>
@@ -45,7 +44,6 @@ class SearchViewModel(
         override fun onFailure(call: Call<CategoryMoviesTMDB>, error: Throwable) {
             _searchLiveData.value = MovieAppState.Error(error)
         }
-
     }
 
     fun getMoviesFromRemoteSource(language: String, page: Int, adult: Boolean, query: String) {
@@ -74,7 +72,7 @@ class SearchViewModelFactory(
         return if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
             SearchViewModel(repository, localSearchRepository) as T
         } else {
-            throw IllegalArgumentException("Not Found")
+            throw IllegalArgumentException("SearchViewModel not found")
         }
     }
 }

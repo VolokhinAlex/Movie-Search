@@ -1,7 +1,5 @@
 package com.example.java.android1.movie_search.viewmodel
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.*
 import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.app.RoomAppState
@@ -20,8 +18,7 @@ private const val CORRUPTED_DATA = "Неполные данные"
 class DetailsViewModel(
     private val repository: DetailsRepository,
     private val movieLocalRepository: MovieLocalRepository
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private val _detailsLiveData: MutableLiveData<MovieAppState> = MutableLiveData()
     val detailsLiveData: LiveData<MovieAppState> = _detailsLiveData
@@ -32,7 +29,7 @@ class DetailsViewModel(
         override fun onResponse(call: Call<MovieDataTMDB>, response: Response<MovieDataTMDB>) {
             val serverResponse: MovieDataTMDB? = response.body()
             _detailsLiveData.value = if (response.isSuccessful && serverResponse != null) {
-                getMovieFromLocalDataBase(serverResponse)
+                getMovieDetailsFromLocalDataBase(serverResponse)
                 checkResponse(serverResponse)
             } else {
                 MovieAppState.Error(Throwable(REQUEST_ERROR))
@@ -42,7 +39,6 @@ class DetailsViewModel(
         override fun onFailure(call: Call<MovieDataTMDB>, error: Throwable) {
             _detailsLiveData.value = MovieAppState.Error(error)
         }
-
     }
 
     private fun checkResponse(movieData: MovieDataTMDB): MovieAppState {
@@ -66,14 +62,11 @@ class DetailsViewModel(
         movieLocalRepository.saveMovieToLocalDataBase(movieData)
     }
 
-    fun getMovieFromLocalDataBase(movieData: MovieDataTMDB) {
+    fun getMovieDetailsFromLocalDataBase(movieData: MovieDataTMDB) {
         if (movieData.id != null) {
-            val handler = Handler(Looper.getMainLooper())
             viewModelScope.launch(Dispatchers.IO) {
                 val result = movieLocalRepository.getMovieFromLocalDataBase(movieData.id)
-                handler.post {
-                    _movieLocalLiveData.value = RoomAppState.Success(listOf(result))
-                }
+                _movieLocalLiveData.postValue(RoomAppState.Success(listOf(result)))
             }
         }
     }
@@ -99,7 +92,7 @@ class DetailsViewModelFactory(
                 movieLocalRepository = localRepository
             ) as T
         } else {
-            throw IllegalArgumentException("Not Found")
+            throw IllegalArgumentException("DetailsViewModel not found")
         }
     }
 }

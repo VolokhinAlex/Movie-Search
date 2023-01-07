@@ -12,7 +12,8 @@ class CategoryMoviesViewModel(
 ) : ViewModel() {
 
     fun getCategoryMoviesFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> =
-        repository.getCategoryResult(query)
+        repository.getCategoryMoviesFromRemoteServer(query)
+
 }
 
 class CategoryMoviesViewModelFactory(private val repository: CategoryRepository) :
@@ -21,7 +22,7 @@ class CategoryMoviesViewModelFactory(private val repository: CategoryRepository)
         return if (modelClass.isAssignableFrom(CategoryMoviesViewModel::class.java)) {
             CategoryMoviesViewModel(repository) as T
         } else {
-            throw IllegalArgumentException("View Model Not Found")
+            throw IllegalArgumentException("CategoryMoviesViewModel not found")
         }
     }
 }

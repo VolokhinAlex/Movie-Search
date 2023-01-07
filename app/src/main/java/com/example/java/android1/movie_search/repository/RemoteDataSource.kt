@@ -77,7 +77,7 @@ class RemoteDataSource {
         request.enqueue(callback)
     }
 
-    suspend fun getCategory(
+    suspend fun getCategoryMovies(
         category: String,
         language: String,
         page: Int,

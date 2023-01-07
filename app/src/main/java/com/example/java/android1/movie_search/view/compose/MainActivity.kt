@@ -19,9 +19,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.java.android1.movie_search.app.App.Companion.historySearchDao
 import com.example.java.android1.movie_search.app.App.Companion.movieDao
+import com.example.java.android1.movie_search.model.CategoryData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
-import com.example.java.android1.movie_search.view.compose.category_movies.ARG_CATEGORY_NAME
+import com.example.java.android1.movie_search.view.compose.category_movies.ARG_CATEGORY_NAME_DATA
 import com.example.java.android1.movie_search.view.compose.category_movies.CategoryMoviesScreen
 import com.example.java.android1.movie_search.view.compose.details.DetailsScreen
 import com.example.java.android1.movie_search.view.compose.favorite.FavoriteScreen
@@ -32,7 +33,7 @@ import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor70
 import com.example.java.android1.movie_search.viewmodel.*
 
 const val MOVIE_DATA_KEY = "Movie Data"
-
+val movieCategoriesTest = mutableListOf<CategoryData>()
 class MainActivity : ComponentActivity() {
 
     private val homeViewModel: MainViewModel by viewModels {
@@ -106,7 +107,7 @@ fun Navigation(
                 FavoriteScreen(navController = navController, favoriteViewModel = favoriteViewModel)
             }
             composable(route = ScreenState.CategoryMoviesScreen.route) {
-                val categoryName = it.arguments?.getString(ARG_CATEGORY_NAME)
+                val categoryName = it.arguments?.getString(ARG_CATEGORY_NAME_DATA)
                 categoryName?.let {
                     CategoryMoviesScreen(
                         categoryName = categoryName,

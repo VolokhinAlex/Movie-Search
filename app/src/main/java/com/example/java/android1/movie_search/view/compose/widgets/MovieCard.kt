@@ -19,7 +19,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieDataTMDB
-import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
+import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
 import com.example.java.android1.movie_search.view.compose.theme.CARD_TEXT_SIZE
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor70
 import java.text.DecimalFormat
@@ -68,7 +68,7 @@ fun MovieCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "${movieDataTMDB.release_date?.let { "".getYearFromStringFullDate(it) }}",
+                    text = "${movieDataTMDB.release_date?.let { "".convertStringFullDateToOnlyYear(it) }}",
                     color = Color.White,
                     fontSize = CARD_TEXT_SIZE
                 )

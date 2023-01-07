@@ -24,7 +24,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.view.compose.MOVIE_DATA_KEY
-import com.example.java.android1.movie_search.view.compose.home.MovieCategory
+import com.example.java.android1.movie_search.app.MovieCategory
 import com.example.java.android1.movie_search.view.compose.navigation.ScreenState
 import com.example.java.android1.movie_search.view.compose.navigation.navigate
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
@@ -34,7 +34,7 @@ import com.example.java.android1.movie_search.view.compose.widgets.Loader
 import com.example.java.android1.movie_search.view.compose.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.CategoryMoviesViewModel
 
-const val ARG_CATEGORY_NAME = "Category Name"
+const val ARG_CATEGORY_NAME_DATA = "CategoryData Name"
 
 /**
  * The main method for the layout of the entire screen
@@ -130,12 +130,8 @@ private fun ShowCategoryMovies(
         item(span = { GridItemSpan(2) }) {
             lazyMovieItems.apply {
                 when {
-                    loadState.refresh is LoadState.Loading -> {
-                        Loader()
-                    }
-                    loadState.append is LoadState.Loading -> {
-                        Loader()
-                    }
+                    loadState.refresh is LoadState.Loading ->  Loader()
+                    loadState.append is LoadState.Loading ->  Loader()
                     loadState.refresh is LoadState.Error -> {
                         val message = lazyMovieItems.loadState.refresh as LoadState.Error
                         ErrorMessage(message = message.error.localizedMessage!!) {

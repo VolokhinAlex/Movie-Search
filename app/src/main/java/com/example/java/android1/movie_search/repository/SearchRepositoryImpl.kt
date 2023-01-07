@@ -27,7 +27,7 @@ class SearchRepositoryImpl(
         remoteDataSource.getMoviesFromSearch(language, page, adult, query, callback)
     }
 
-    override fun getSearchRequest(query: String): Flow<PagingData<MovieDataTMDB>> = Pager(
+    override fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> = Pager(
         config = PagingConfig(
             pageSize = CategoryRepositoryImpl.CATEGORY_PAGE_SIZE,
             enablePlaceholders = false

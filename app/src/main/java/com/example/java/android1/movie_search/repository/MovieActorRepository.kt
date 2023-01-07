@@ -8,11 +8,11 @@ import retrofit2.Callback
  */
 
 interface MovieActorRepository {
-
-    fun getMovieActorFromRemoteServer(
+    
+    fun getMovieActorsFromRemoteServer(
         personId: Long,
         language: String,
         callback: Callback<ActorDTO>
     )
-
+    
 }

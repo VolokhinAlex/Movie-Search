@@ -7,6 +7,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.example.java.android1.movie_search.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -32,7 +33,7 @@ class MessageNotificationService : FirebaseMessagingService() {
     private fun onShowNotification(title: String, message: String) {
         val notificationBuilder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .apply {
-                setSmallIcon(com.google.firebase.installations.R.drawable.notification_icon_background)
+                setSmallIcon(R.mipmap.ic_launcher_round)
                 setContentTitle(title)
                 setContentText(message)
                 priority = NotificationCompat.PRIORITY_MAX

@@ -22,7 +22,7 @@ import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.CreditsDTO
 import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
-import com.example.java.android1.movie_search.utils.converterMovieRoomToMovieDto
+import com.example.java.android1.movie_search.utils.convertMovieRoomToMovieDto
 import com.example.java.android1.movie_search.view.compose.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.compose.navigation.ScreenState
 import com.example.java.android1.movie_search.view.compose.navigation.navigate
@@ -44,11 +44,9 @@ fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteView
             .background(PrimaryColor80), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HeaderFavoriteScreen()
-        LaunchedEffect(key1 = true, block = {
-            favoriteViewModel.getMoviesFromLocalDataBase()
-        })
+        LaunchedEffect(true) { favoriteViewModel.getMoviesFromLocalDataBase() }
         favoriteViewModel.localMovieLiveData.observeAsState().value?.let { state ->
-            RenderDataFromDataBase(roomAppState = state, navController)
+            RenderDataFromDataBase(roomAppState = state, navController = navController)
         }
     }
 }
@@ -62,10 +60,8 @@ fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteView
 @Composable
 private fun RenderDataFromDataBase(roomAppState: RoomAppState, navController: NavController) {
     when (roomAppState) {
-        is RoomAppState.Error -> {
-            roomAppState.error.localizedMessage?.let {
-                ErrorMessage(message = it) {}
-            }
+        is RoomAppState.Error -> roomAppState.error.localizedMessage?.let {
+            ErrorMessage(message = it) {}
         }
         is RoomAppState.Success -> {
             val movieDataRoom = roomAppState.data
@@ -80,7 +76,6 @@ private fun RenderDataFromDataBase(roomAppState: RoomAppState, navController: Na
  * @param movieDataRoom - List of Movies
  * @param navController - Needed to go to the details screen about the movie
  */
-
 
 @Composable
 private fun ShowFavoriteMovies(
@@ -123,7 +118,7 @@ private fun ShowFavoriteMovies(
                         bundle.putParcelable(MOVIE_DATA_KEY, movieDataTMDB)
                         navController.navigate(ScreenState.DetailsScreen.route, bundle)
                     },
-                movieDataTMDB = converterMovieRoomToMovieDto(item)
+                movieDataTMDB = convertMovieRoomToMovieDto(item)
             )
         }
     }

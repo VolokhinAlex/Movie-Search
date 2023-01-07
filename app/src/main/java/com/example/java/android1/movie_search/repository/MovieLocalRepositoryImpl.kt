@@ -1,15 +1,12 @@
 package com.example.java.android1.movie_search.repository
 
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.room.MovieDao
-import com.example.java.android1.movie_search.room.MovieEntity
-import com.example.java.android1.movie_search.utils.converterMovieDtoToMovieEntity
-import com.example.java.android1.movie_search.utils.converterMovieEntityToListMovieDataRoom
-import com.example.java.android1.movie_search.utils.converterMovieEntityToMovieDataRoom
-import kotlinx.coroutines.flow.Flow
+import com.example.java.android1.movie_search.utils.convertMovieDtoToMovieEntity
+import com.example.java.android1.movie_search.utils.convertMovieEntityToListMovieDataRoom
+import com.example.java.android1.movie_search.utils.convertMovieEntityToMovieDataRoom
 
 /**
  * The implementation Movie Local Repository for interacting with local database
@@ -19,20 +16,20 @@ class MovieLocalRepositoryImpl(
     private val localDataRoom: MovieDao
 ) : MovieLocalRepository {
 
-    override fun getAllMovies(): List<MovieDataRoom> {
-        return converterMovieEntityToListMovieDataRoom(localDataRoom.all())
+    override fun getAllMoviesFromLocalDataBase(): List<MovieDataRoom> {
+        return convertMovieEntityToListMovieDataRoom(localDataRoom.all())
     }
 
-    override fun getAllFavorites(): List<MovieDataRoom> {
-        return converterMovieEntityToListMovieDataRoom(localDataRoom.getAllFavorites())
+    override fun getAllFavoritesFromLocalDataBase(): List<MovieDataRoom> {
+        return convertMovieEntityToListMovieDataRoom(localDataRoom.getAllFavorites())
     }
 
     override fun getMovieFromLocalDataBase(movieId: Int?): MovieDataRoom =
-        converterMovieEntityToMovieDataRoom(movieId?.let { localDataRoom.getMovieByMovieId(it) })
+        convertMovieEntityToMovieDataRoom(movieId?.let { localDataRoom.getMovieByMovieId(it) })
 
     @WorkerThread
     override suspend fun saveMovieToLocalDataBase(movieDataTMDB: MovieDataTMDB) {
-        localDataRoom.insert(converterMovieDtoToMovieEntity(movieDataTMDB))
+        localDataRoom.insert(convertMovieDtoToMovieEntity(movieDataTMDB))
     }
 
     @WorkerThread

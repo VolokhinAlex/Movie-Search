@@ -36,11 +36,11 @@ import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
-import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
+import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
 import com.example.java.android1.movie_search.view.compose.theme.*
 import com.example.java.android1.movie_search.view.compose.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.compose.widgets.Loader
-import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
+import com.example.java.android1.movie_search.view.without_compose.details.MovieDetailsFragment
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
 import java.text.DecimalFormat
 
@@ -55,7 +55,7 @@ fun DetailsScreen(
     movieDetailsViewModel: DetailsViewModel
 ) {
     LaunchedEffect(true) {
-        movieDataTMDB.id?.let { movieDetailsViewModel.getMovieDetailsFromRemoteSource(it, "ru-RU") }
+        movieDataTMDB.id?.let { movieDetailsViewModel.getMovieDetailsFromRemoteSource(it, "en-EN") }
     }
     movieDetailsViewModel.detailsLiveData.observeAsState().value?.let { state ->
         RenderDataFromRemoteServer(state, movieDetailsViewModel, navController)
@@ -76,9 +76,9 @@ private fun RenderDataFromLocalDataBase(
     roomAppState: RoomAppState
 ) {
     when (roomAppState) {
-        is RoomAppState.Error -> FavoriteOfMovie(movieDetailsViewModel, movieId, false)
-        RoomAppState.Loading -> FavoriteOfMovie(movieDetailsViewModel, movieId, false)
-        is RoomAppState.Success -> FavoriteOfMovie(
+        is RoomAppState.Error -> MovieFavorite(movieDetailsViewModel, movieId, false)
+        RoomAppState.Loading -> MovieFavorite(movieDetailsViewModel, movieId, false)
+        is RoomAppState.Success -> MovieFavorite(
             movieDetailsViewModel,
             movieId,
             roomAppState.data[0].movieFavorite ?: false
@@ -119,10 +119,10 @@ private fun RenderDataFromRemoteServer(
                         bottom = 20.dp
                     )
                 ) {
-                    DetailOfMovie(movieDataTMDB[0], movieDetailsViewModel)
-                    CastsOfMovie(movieDataTMDB[0])
+                    MovieDetails(movieDataTMDB[0], movieDetailsViewModel)
+                    MovieCasts(movieDataTMDB[0])
                     if (movieDataTMDB[0].videos?.results?.isNotEmpty() == true) {
-                        TrailerOfMovie(movieDataTMDB[0])
+                        MovieTrailer(movieDataTMDB[0])
                     }
                 }
             }
@@ -167,7 +167,7 @@ private fun Header(movieDataTMDB: MovieDataTMDB, navController: NavController) {
  */
 
 @Composable
-private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: DetailsViewModel) {
+private fun MovieDetails(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: DetailsViewModel) {
     val favoriteState = movieDetailsViewModel.movieLocalLiveData.observeAsState().value
     val ratingFormat = DecimalFormat("#.#")
     Row(
@@ -224,7 +224,7 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: D
                 .size(22.dp)
         )
         Text(
-            text = "${movieDataTMDB.release_date?.let { "".getYearFromStringFullDate(it) }}",
+            text = "${movieDataTMDB.release_date?.let { "".convertStringFullDateToOnlyYear(it) }}",
             modifier = Modifier.padding(end = 15.dp),
             color = Color.White,
             fontSize = DETAILS_PRIMARY_SIZE
@@ -268,7 +268,7 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: D
  */
 
 @Composable
-private fun CastsOfMovie(movieDataTMDB: MovieDataTMDB) {
+private fun MovieCasts(movieDataTMDB: MovieDataTMDB) {
     LazyRow(content = {
         movieDataTMDB.credits?.let {
             itemsIndexed(it.cast) { _, item ->
@@ -306,7 +306,7 @@ private fun CastsOfMovie(movieDataTMDB: MovieDataTMDB) {
  */
 
 @Composable
-private fun TrailerOfMovie(movieDataTMDB: MovieDataTMDB) {
+private fun MovieTrailer(movieDataTMDB: MovieDataTMDB) {
     val context = LocalContext.current
     Text(
         text = "Trailer",
@@ -361,7 +361,7 @@ private fun TrailerOfMovie(movieDataTMDB: MovieDataTMDB) {
  */
 
 @Composable
-private fun FavoriteOfMovie(
+private fun MovieFavorite(
     movieDetailsViewModel: DetailsViewModel,
     movieId: Int,
     favorite: Boolean

@@ -20,6 +20,6 @@ interface SearchRepository {
         callback: Callback<CategoryMoviesTMDB>
     )
 
-    fun getSearchRequest(query: String): Flow<PagingData<MovieDataTMDB>>
+    fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>>
 
 }
