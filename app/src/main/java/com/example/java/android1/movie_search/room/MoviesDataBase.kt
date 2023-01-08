@@ -8,14 +8,12 @@ import androidx.room.RoomDatabase
  */
 
 @Database(
-    entities = [MovieEntity::class, HistorySearchEntity::class],
+    entities = [MovieEntity::class],
     version = 1,
     exportSchema = false
 )
 abstract class MoviesDataBase : RoomDatabase() {
 
     abstract fun moviesDao(): MovieDao
-
-    abstract fun historySearchDao(): HistorySearchDao
 
 }

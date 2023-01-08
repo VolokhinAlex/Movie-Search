@@ -17,10 +17,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.java.android1.movie_search.app.App.Companion.historySearchDao
 import com.example.java.android1.movie_search.app.App.Companion.movieDao
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
+import com.example.java.android1.movie_search.view.actor_details.ARG_ACTOR_ID
+import com.example.java.android1.movie_search.view.actor_details.ActorDetailsScreen
 import com.example.java.android1.movie_search.view.category_movies.ARG_CATEGORY_NAME_DATA
 import com.example.java.android1.movie_search.view.category_movies.CategoryMoviesScreen
 import com.example.java.android1.movie_search.view.details.DetailsScreen
@@ -45,16 +46,16 @@ class MainActivity : ComponentActivity() {
         )
     }
     private val searchViewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(
-            SearchRepositoryImpl(RemoteDataSource()),
-            LocalSearchRepositoryImpl(historySearchDao)
-        )
+        SearchViewModelFactory(SearchRepositoryImpl(RemoteDataSource()))
     }
     private val favoriteViewModel: FavoriteViewModel by viewModels {
         FavoriteViewModelFactory(MovieLocalRepositoryImpl(movieDao))
     }
     private val categoryViewModel: CategoryMoviesViewModel by viewModels {
         CategoryMoviesViewModelFactory(CategoryRepositoryImpl(RemoteDataSource()))
+    }
+    private val actorDetailsViewModel: MovieActorViewModel by viewModels {
+        MovieActorViewModelFactory(MovieActorRepositoryImpl(RemoteDataSource()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +66,8 @@ class MainActivity : ComponentActivity() {
                 detailsViewModel,
                 searchViewModel,
                 favoriteViewModel,
-                categoryViewModel
+                categoryViewModel,
+                actorDetailsViewModel
             )
         }
     }
@@ -77,7 +79,8 @@ fun Navigation(
     detailsViewModel: DetailsViewModel,
     searchViewModel: SearchViewModel,
     favoriteViewModel: FavoriteViewModel,
-    categoryViewModel: CategoryMoviesViewModel
+    categoryViewModel: CategoryMoviesViewModel,
+    actorDetailsViewModel: MovieActorViewModel
 ) {
     val navController = rememberNavController()
     BottomNavigation(navController) { innerPadding ->
@@ -115,6 +118,16 @@ fun Navigation(
                     )
                 }
             }
+            composable(route = ScreenState.ActorDetailsScreen.route) {
+                val actorId = it.arguments?.getLong(ARG_ACTOR_ID)
+                actorId?.let {
+                    ActorDetailsScreen(
+                        actorMovieId = actorId,
+                        navController = navController,
+                        actorViewModel = actorDetailsViewModel
+                    )
+                }
+            }
         }
     }
 }
@@ -128,7 +141,9 @@ fun BottomNavigation(navController: NavController, content: @Composable (Padding
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     Scaffold(
         bottomBar = {
-            if (ScreenState.DetailsScreen.route != currentRoute && ScreenState.CategoryMoviesScreen.route != currentRoute) {
+            if (ScreenState.DetailsScreen.route != currentRoute && ScreenState.CategoryMoviesScreen
+                    .route != currentRoute && ScreenState.ActorDetailsScreen.route != currentRoute
+            ) {
                 NavigationBar(containerColor = PrimaryColor70) {
                     bottomNavItems.forEach { item ->
                         val selected =

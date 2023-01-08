@@ -48,14 +48,14 @@ class MainViewModel(
     ) {
         viewModelScope.launch {
             try {
-                val response = repository.getCategoryMoviesFromRemoteServer(
+                val serverResponse = repository.getCategoryMoviesFromRemoteServer(
                     category,
                     language,
                     page
                 )
-                val movieData = response.body()
+                val movieData = serverResponse.body()
                 livedata.value =
-                    if (response.isSuccessful && movieData != null) {
+                    if (serverResponse.isSuccessful && movieData != null) {
                         CategoryAppState.Success(
                             CategoryData(
                                 category,

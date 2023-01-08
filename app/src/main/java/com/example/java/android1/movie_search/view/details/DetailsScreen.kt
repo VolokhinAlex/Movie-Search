@@ -2,6 +2,7 @@ package com.example.java.android1.movie_search.view.details
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +40,9 @@ import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
 import com.example.java.android1.movie_search.utils.timeToFormatHoursAndMinutes
+import com.example.java.android1.movie_search.view.actor_details.ARG_ACTOR_ID
+import com.example.java.android1.movie_search.view.navigation.ScreenState
+import com.example.java.android1.movie_search.view.navigation.navigate
 import com.example.java.android1.movie_search.view.theme.*
 import com.example.java.android1.movie_search.view.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.widgets.Loader
@@ -60,9 +65,9 @@ fun DetailsScreen(
     LaunchedEffect(true) {
         movieDataTMDB.id?.let { movieDetailsViewModel.getMovieDetailsFromRemoteSource(it, "en-EN") }
     }
-    movieDetailsViewModel.detailsLiveData.observeAsState().value?.let { state ->
+    movieDetailsViewModel.detailsMovieData.observeAsState().value?.let { state ->
         movieDataTMDB.id?.let {
-            RenderDataFromRemoteServer(
+            RenderMovieDetailsDataFromRemoteServer(
                 state, movieDetailsViewModel, navController,
                 it
             )
@@ -102,7 +107,7 @@ private fun RenderDataFromLocalDataBase(
  */
 
 @Composable
-private fun RenderDataFromRemoteServer(
+private fun RenderMovieDetailsDataFromRemoteServer(
     movieAppState: MovieAppState,
     movieDetailsViewModel: DetailsViewModel,
     navController: NavController,
@@ -133,7 +138,7 @@ private fun RenderDataFromRemoteServer(
                     )
                 ) {
                     MovieDetails(movieDataTMDB[0], movieDetailsViewModel)
-                    MovieCasts(movieDataTMDB[0])
+                    MovieCasts(movieDataTMDB[0], navController)
                     if (movieDataTMDB[0].videos?.results?.isNotEmpty() == true) {
                         MovieTrailer(movieDataTMDB[0])
                     }
@@ -183,7 +188,7 @@ private fun Header(movieDataTMDB: MovieDataTMDB, navController: NavController) {
 
 @Composable
 private fun MovieDetails(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: DetailsViewModel) {
-    val favoriteState = movieDetailsViewModel.movieLocalLiveData.observeAsState().value
+    val favoriteState = movieDetailsViewModel.movieLocalData.observeAsState().value
     val ratingFormat = DecimalFormat("#.#")
     Row(
         modifier = Modifier
@@ -238,7 +243,7 @@ private fun MovieDetails(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: De
                 .size(22.dp)
         )
         Text(
-            text = "${movieDataTMDB.release_date?.let { "".convertStringFullDateToOnlyYear(it) }}",
+            text = "${movieDataTMDB.release_date?.let { convertStringFullDateToOnlyYear(it) }}",
             modifier = Modifier.padding(end = 15.dp),
             color = Color.White,
             fontSize = DETAILS_PRIMARY_SIZE
@@ -252,7 +257,7 @@ private fun MovieDetails(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: De
         )
     }
     Text(
-        text = "Overview",
+        text = stringResource(id = R.string.overview),
         modifier = Modifier.padding(top = DETAILS_PRIMARY_PAGING, bottom = DETAILS_PRIMARY_PAGING),
         color = Color.White,
         fontSize = TITLE_SIZE,
@@ -264,7 +269,7 @@ private fun MovieDetails(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: De
         color = Color.White
     )
     Text(
-        text = "Casts",
+        text = stringResource(id = R.string.casts),
         color = Color.White,
         modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING),
         fontSize = TITLE_SIZE,
@@ -277,13 +282,23 @@ private fun MovieDetails(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: De
  */
 
 @Composable
-private fun MovieCasts(movieDataTMDB: MovieDataTMDB) {
+private fun MovieCasts(movieDataTMDB: MovieDataTMDB, navController: NavController) {
     LazyRow(content = {
         movieDataTMDB.credits?.let {
             itemsIndexed(it.cast) { _, item ->
                 Column(
                     modifier = Modifier
-                        .padding(top = 15.dp, end = 15.dp),
+                        .padding(top = 15.dp, end = 15.dp)
+                        .clickable {
+                            val actorDetailsBundle = Bundle()
+                            item.id?.let { actorId ->
+                                actorDetailsBundle.putLong(ARG_ACTOR_ID, actorId)
+                                navController.navigate(
+                                    ScreenState.ActorDetailsScreen.route,
+                                    actorDetailsBundle
+                                )
+                            }
+                        },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     SubcomposeAsyncImage(
@@ -318,7 +333,7 @@ private fun MovieCasts(movieDataTMDB: MovieDataTMDB) {
 private fun MovieTrailer(movieDataTMDB: MovieDataTMDB) {
     val context = LocalContext.current
     Text(
-        text = "Trailer",
+        text = stringResource(id = R.string.trailer),
         color = Color.White,
         modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
         fontSize = TITLE_SIZE,
@@ -381,7 +396,7 @@ private fun MovieFavorite(
             .size(25.dp)
             .clickable {
                 isFavorite.value = !isFavorite.value
-                movieDetailsViewModel.updateMovieFavorite(
+                movieDetailsViewModel.setFavoriteMovie(
                     movieId = movieId,
                     favorite = isFavorite.value
                 )

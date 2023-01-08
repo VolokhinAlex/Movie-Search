@@ -12,7 +12,6 @@ class App : Application() {
     }
 
     companion object {
-
         var appInstance: App? = null
         private const val DB_NAME = "MovieSearch.db"
 
@@ -24,16 +23,6 @@ class App : Application() {
             )
                 .build()
                 .moviesDao()
-        }
-
-        val historySearchDao by lazy {
-            Room.databaseBuilder(
-                appInstance!!.applicationContext,
-                MoviesDataBase::class.java,
-                DB_NAME
-            )
-                .build()
-                .historySearchDao()
         }
     }
 

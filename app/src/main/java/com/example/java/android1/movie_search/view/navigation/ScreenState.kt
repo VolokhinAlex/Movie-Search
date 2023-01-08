@@ -19,4 +19,5 @@ sealed class ScreenState(val route: String, val name: String, val icon: ImageVec
     object SearchScreen : ScreenState(route = "search_screen", "Search", Icons.Rounded.Search)
     object FavoriteScreen : ScreenState(route = "favorite_screen", "Favorite", Icons.Rounded.Favorite)
     object CategoryMoviesScreen : ScreenState(route = "category_movies_screen", "", null)
+    object ActorDetailsScreen : ScreenState(route = "actor_details_screen", "", null)
 }

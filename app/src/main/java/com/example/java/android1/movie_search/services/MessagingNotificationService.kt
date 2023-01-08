@@ -4,21 +4,18 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.example.java.android1.movie_search.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-class MessageNotificationService : FirebaseMessagingService() {
+class MessagingNotificationService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Log.e("TAG_CHECKER", message.from.toString())
         val remoteMessage = message.data
         if (remoteMessage.isNotEmpty()) {
             onHandleDataMessage(remoteMessage.toMap())
-            Log.e("TAG_CHECKER", remoteMessage.toString())
         }
     }
 
@@ -36,7 +33,7 @@ class MessageNotificationService : FirebaseMessagingService() {
                 setSmallIcon(R.mipmap.ic_launcher_round)
                 setContentTitle(title)
                 setContentText(message)
-                priority = NotificationCompat.PRIORITY_MAX
+                priority = NotificationCompat.PRIORITY_DEFAULT
             }
 
         val notificationManager =

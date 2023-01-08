@@ -20,15 +20,15 @@ class DetailsViewModel(
     private val movieLocalRepository: MovieLocalRepository
 ) : ViewModel() {
 
-    private val _detailsLiveData: MutableLiveData<MovieAppState> = MutableLiveData()
-    val detailsLiveData: LiveData<MovieAppState> = _detailsLiveData
-    private val _movieLocalLiveData: MutableLiveData<RoomAppState> = MutableLiveData()
-    val movieLocalLiveData: LiveData<RoomAppState> = _movieLocalLiveData
+    private val _detailsMovieData: MutableLiveData<MovieAppState> = MutableLiveData()
+    val detailsMovieData: LiveData<MovieAppState> = _detailsMovieData
+    private val _movieLocalData: MutableLiveData<RoomAppState> = MutableLiveData()
+    val movieLocalData: LiveData<RoomAppState> = _movieLocalData
 
     private val callback = object : Callback<MovieDataTMDB> {
         override fun onResponse(call: Call<MovieDataTMDB>, response: Response<MovieDataTMDB>) {
             val serverResponse: MovieDataTMDB? = response.body()
-            _detailsLiveData.value = if (response.isSuccessful && serverResponse != null) {
+            _detailsMovieData.value = if (response.isSuccessful && serverResponse != null) {
                 getMovieDetailsFromLocalDataBase(serverResponse)
                 checkResponse(serverResponse)
             } else {
@@ -37,7 +37,7 @@ class DetailsViewModel(
         }
 
         override fun onFailure(call: Call<MovieDataTMDB>, error: Throwable) {
-            _detailsLiveData.value = MovieAppState.Error(error)
+            _detailsMovieData.value = MovieAppState.Error(error)
         }
     }
 
@@ -45,7 +45,7 @@ class DetailsViewModel(
         return if (movieData.id != null && movieData.genres != null && movieData.release_date !=
             null && movieData.runtime != null && movieData.overview != null
         ) {
-            saveMovieData(movieData)
+            saveMovieDataToLocalBase(movieData)
             MovieAppState.Success(listOf(movieData))
         } else {
             MovieAppState.Error(Throwable(CORRUPTED_DATA))
@@ -53,12 +53,12 @@ class DetailsViewModel(
     }
 
     fun getMovieDetailsFromRemoteSource(movieId: Int, language: String) {
-        _detailsLiveData.value = MovieAppState.Loading
+        _detailsMovieData.value = MovieAppState.Loading
         repository.getMovieDetailsFromRemoteServer(movieId, language, callback)
     }
 
-    private fun saveMovieData(movieData: MovieDataTMDB) = viewModelScope.launch {
-        _movieLocalLiveData.value = RoomAppState.Loading
+    private fun saveMovieDataToLocalBase(movieData: MovieDataTMDB) = viewModelScope.launch {
+        _movieLocalData.value = RoomAppState.Loading
         movieLocalRepository.saveMovieToLocalDataBase(movieData)
     }
 
@@ -66,16 +66,12 @@ class DetailsViewModel(
         if (movieData.id != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 val result = movieLocalRepository.getMovieFromLocalDataBase(movieData.id)
-                _movieLocalLiveData.postValue(RoomAppState.Success(listOf(result)))
+                _movieLocalData.postValue(RoomAppState.Success(listOf(result)))
             }
         }
     }
 
-    fun updateMovieNote(movieId: Int, note: String) = viewModelScope.launch {
-        movieLocalRepository.updateMovieNoteInLocalDataBase(movieId, note)
-    }
-
-    fun updateMovieFavorite(movieId: Int, favorite: Boolean) = viewModelScope.launch {
+    fun setFavoriteMovie(movieId: Int, favorite: Boolean) = viewModelScope.launch {
         movieLocalRepository.updateMovieFavoriteInLocalDataBase(movieId, favorite)
     }
 

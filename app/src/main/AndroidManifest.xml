@@ -20,7 +20,7 @@
         android:theme="@style/Theme.MovieSearch"
         tools:targetApi="31">
         <service
-            android:name=".services.MessageNotificationService"
+            android:name=".services.MessagingNotificationService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

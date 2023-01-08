@@ -68,7 +68,7 @@ fun MovieCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "${movieDataTMDB.release_date?.let { "".convertStringFullDateToOnlyYear(it) }}",
+                    text = "${movieDataTMDB.release_date?.let { convertStringFullDateToOnlyYear(it) }}",
                     color = Color.White,
                     fontSize = CARD_TEXT_SIZE
                 )

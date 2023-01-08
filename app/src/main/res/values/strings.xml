@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Movie Club</string>
+    <string name="birthday">Birthday</string>
+    <string name="biography">Biography</string>
+    <string name="overview">Overview</string>
+    <string name="casts">Casts</string>
+    <string name="trailer">Trailer</string>
 </resources>

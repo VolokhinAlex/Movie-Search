@@ -16,10 +16,6 @@ class MovieLocalRepositoryImpl(
     private val localDataRoom: MovieDao
 ) : MovieLocalRepository {
 
-    override fun getAllMoviesFromLocalDataBase(): List<MovieDataRoom> {
-        return convertMovieEntityToListMovieDataRoom(localDataRoom.all())
-    }
-
     override fun getAllFavoritesFromLocalDataBase(): List<MovieDataRoom> {
         return convertMovieEntityToListMovieDataRoom(localDataRoom.getAllFavorites())
     }
@@ -30,11 +26,6 @@ class MovieLocalRepositoryImpl(
     @WorkerThread
     override suspend fun saveMovieToLocalDataBase(movieDataTMDB: MovieDataTMDB) {
         localDataRoom.insert(convertMovieDtoToMovieEntity(movieDataTMDB))
-    }
-
-    @WorkerThread
-    override suspend fun updateMovieNoteInLocalDataBase(movieId: Int, note: String) {
-        localDataRoom.updateNote(movieId, note)
     }
 
     @WorkerThread
