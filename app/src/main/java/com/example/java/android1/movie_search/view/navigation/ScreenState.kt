@@ -14,10 +14,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
  */
 
 sealed class ScreenState(val route: String, val name: String, val icon: ImageVector?) {
-    object HomeScreen : ScreenState(route = "home_screen", "Home", Icons.Rounded.Home)
-    object DetailsScreen : ScreenState(route = "details_screen", "", null)
-    object SearchScreen : ScreenState(route = "search_screen", "Search", Icons.Rounded.Search)
-    object FavoriteScreen : ScreenState(route = "favorite_screen", "Favorite", Icons.Rounded.Favorite)
-    object CategoryMoviesScreen : ScreenState(route = "category_movies_screen", "", null)
-    object ActorDetailsScreen : ScreenState(route = "actor_details_screen", "", null)
+    object HomeScreen : ScreenState(route = "home_screen", name = "Home", icon = Icons.Rounded.Home)
+    object DetailsScreen : ScreenState(route = "details_screen", name = "", icon = null)
+    object SearchScreen : ScreenState(route = "search_screen", name = "Search", icon = Icons.Rounded.Search)
+    object FavoriteScreen : ScreenState(route = "favorite_screen", name = "Favorite", icon = Icons.Rounded.Favorite)
+    object CategoryMoviesScreen : ScreenState(route = "category_movies_screen", name = "", icon = null)
+    object ActorDetailsScreen : ScreenState(route = "actor_details_screen", name = "", icon = null)
 }

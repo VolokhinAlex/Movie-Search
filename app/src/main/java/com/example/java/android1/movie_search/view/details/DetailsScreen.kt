@@ -40,12 +40,13 @@ import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
 import com.example.java.android1.movie_search.utils.timeToFormatHoursAndMinutes
+import com.example.java.android1.movie_search.view.LanguageQuery
 import com.example.java.android1.movie_search.view.actor_details.ARG_ACTOR_ID
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
 import com.example.java.android1.movie_search.view.theme.*
 import com.example.java.android1.movie_search.view.widgets.ErrorMessage
-import com.example.java.android1.movie_search.view.widgets.Loader
+import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
 import java.text.DecimalFormat
 
@@ -63,7 +64,12 @@ fun DetailsScreen(
     movieDetailsViewModel: DetailsViewModel
 ) {
     LaunchedEffect(true) {
-        movieDataTMDB.id?.let { movieDetailsViewModel.getMovieDetailsFromRemoteSource(it, "en-EN") }
+        movieDataTMDB.id?.let {
+            movieDetailsViewModel.getMovieDetailsFromRemoteSource(
+                it,
+                LanguageQuery.EN.languageQuery
+            )
+        }
     }
     movieDetailsViewModel.detailsMovieData.observeAsState().value?.let { state ->
         movieDataTMDB.id?.let {
@@ -83,14 +89,14 @@ fun DetailsScreen(
  */
 
 @Composable
-private fun RenderDataFromLocalDataBase(
+private fun RenderMovieDetailsDataFromLocalDataBase(
     movieDetailsViewModel: DetailsViewModel,
     movieId: Int,
     roomAppState: RoomAppState
 ) {
     when (roomAppState) {
         is RoomAppState.Error -> MovieFavorite(movieDetailsViewModel, movieId, false)
-        RoomAppState.Loading -> Loader()
+        RoomAppState.Loading -> LoadingProgressBar()
         is RoomAppState.Success -> MovieFavorite(
             movieDetailsViewModel,
             movieId,
@@ -116,19 +122,22 @@ private fun RenderMovieDetailsDataFromRemoteServer(
     when (movieAppState) {
         is MovieAppState.Error -> movieAppState.error.localizedMessage?.let {
             ErrorMessage(message = it) {
-                movieDetailsViewModel.getMovieDetailsFromRemoteSource(movieId, "en-EN")
+                movieDetailsViewModel.getMovieDetailsFromRemoteSource(
+                    movieId,
+                    LanguageQuery.EN.languageQuery
+                )
             }
         }
-        MovieAppState.Loading -> Loader()
+        MovieAppState.Loading -> LoadingProgressBar()
         is MovieAppState.Success -> {
-            val movieDataTMDB = movieAppState.data
+            val listMovieDataTMDB = movieAppState.data
             Column(
                 modifier = Modifier
                     .background(PrimaryColor80)
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                Header(movieDataTMDB[0], navController)
+                HeaderDetailsScreen(listMovieDataTMDB[0], navController)
                 Column(
                     modifier = Modifier.padding(
                         start = 15.dp,
@@ -137,10 +146,10 @@ private fun RenderMovieDetailsDataFromRemoteServer(
                         bottom = 20.dp
                     )
                 ) {
-                    MovieDetails(movieDataTMDB[0], movieDetailsViewModel)
-                    MovieCasts(movieDataTMDB[0], navController)
-                    if (movieDataTMDB[0].videos?.results?.isNotEmpty() == true) {
-                        MovieTrailer(movieDataTMDB[0])
+                    MovieDetails(listMovieDataTMDB[0], movieDetailsViewModel)
+                    MovieCasts(listMovieDataTMDB[0], navController)
+                    if (listMovieDataTMDB[0].videos?.results?.isNotEmpty() == true) {
+                        MovieTrailer(listMovieDataTMDB[0])
                     }
                 }
             }
@@ -155,13 +164,11 @@ private fun RenderMovieDetailsDataFromRemoteServer(
  */
 
 @Composable
-private fun Header(movieDataTMDB: MovieDataTMDB, navController: NavController) {
+private fun HeaderDetailsScreen(movieDataTMDB: MovieDataTMDB, navController: NavController) {
     Box {
         SubcomposeAsyncImage(
             model = "https://image.tmdb.org/t/p/w500${movieDataTMDB.poster_path}",
-            loading = {
-                Loader()
-            },
+            loading = { LoadingProgressBar() },
             contentDescription = "movie_poster",
             modifier = Modifier
                 .clip(RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp))
@@ -203,7 +210,13 @@ private fun MovieDetails(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: De
             fontWeight = FontWeight.Bold,
         )
         movieDataTMDB.id?.let { movieId ->
-            favoriteState?.let { RenderDataFromLocalDataBase(movieDetailsViewModel, movieId, it) }
+            favoriteState?.let {
+                RenderMovieDetailsDataFromLocalDataBase(
+                    movieDetailsViewModel,
+                    movieId,
+                    it
+                )
+            }
         }
     }
     LazyRow(
@@ -249,31 +262,23 @@ private fun MovieDetails(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: De
             fontSize = DETAILS_PRIMARY_SIZE
         )
         Text(
-            text = "${
-                movieDataTMDB.runtime?.let { timeToFormatHoursAndMinutes(it) }
-            }",
+            text = "${movieDataTMDB.runtime?.let { timeToFormatHoursAndMinutes(it) }}",
             color = Color.White,
             fontSize = DETAILS_PRIMARY_SIZE
         )
     }
-    Text(
+    SetSubCategoryTitle(
         text = stringResource(id = R.string.overview),
-        modifier = Modifier.padding(top = DETAILS_PRIMARY_PAGING, bottom = DETAILS_PRIMARY_PAGING),
-        color = Color.White,
-        fontSize = TITLE_SIZE,
-        fontWeight = FontWeight.Bold
+        modifier = Modifier.padding(top = DETAILS_PRIMARY_PAGING, bottom = DETAILS_PRIMARY_PAGING)
     )
     Text(
         text = "${movieDataTMDB.overview}",
         modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING),
         color = Color.White
     )
-    Text(
+    SetSubCategoryTitle(
         text = stringResource(id = R.string.casts),
-        color = Color.White,
-        modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING),
-        fontSize = TITLE_SIZE,
-        fontWeight = FontWeight.Bold
+        modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING)
     )
 }
 
@@ -304,7 +309,7 @@ private fun MovieCasts(movieDataTMDB: MovieDataTMDB, navController: NavControlle
                     SubcomposeAsyncImage(
                         model = "https://image.tmdb.org/t/p/w500${item.profile_path}",
                         loading = {
-                            Loader()
+                            LoadingProgressBar()
                         },
                         contentDescription = "movie_poster",
                         modifier = Modifier
@@ -332,18 +337,15 @@ private fun MovieCasts(movieDataTMDB: MovieDataTMDB, navController: NavControlle
 @Composable
 private fun MovieTrailer(movieDataTMDB: MovieDataTMDB) {
     val context = LocalContext.current
-    Text(
+    SetSubCategoryTitle(
         text = stringResource(id = R.string.trailer),
-        color = Color.White,
-        modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
-        fontSize = TITLE_SIZE,
-        fontWeight = FontWeight.Bold
+        modifier = Modifier.padding(top = 15.dp, bottom = 15.dp)
     )
     Box(modifier = Modifier.size(width = 250.dp, height = 150.dp)) {
         SubcomposeAsyncImage(
             model = "https://image.tmdb.org/t/p/w500${movieDataTMDB.backdrop_path}",
             loading = {
-                Loader()
+                LoadingProgressBar()
             },
             contentDescription = "movie_poster",
             modifier = Modifier
@@ -415,4 +417,19 @@ private fun MovieFavorite(
             )
         }
     }
+}
+
+/**
+ * The method for setting the name of the subcategory section on the movie details screen
+ */
+
+@Composable
+private fun SetSubCategoryTitle(text: String, modifier: Modifier) {
+    Text(
+        text = text,
+        color = Color.White,
+        modifier = modifier,
+        fontSize = TITLE_SIZE,
+        fontWeight = FontWeight.Bold
+    )
 }

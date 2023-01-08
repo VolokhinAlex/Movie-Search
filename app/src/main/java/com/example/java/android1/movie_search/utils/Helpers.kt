@@ -3,6 +3,11 @@ package com.example.java.android1.movie_search.utils
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Converting a full date to a year only
+ * @sample 2022/12/12 -> 2022
+ */
+
 fun convertStringFullDateToOnlyYear(stringDate: String): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     if (stringDate != "") {

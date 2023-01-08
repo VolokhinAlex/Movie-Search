@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.view.theme.CARD_HEIGHT_SIZE
+import com.example.java.android1.movie_search.view.theme.CARD_WIDTH_SIZE
 
 /**
  * The method creates a list in the form of a grid, which is filled with movies
@@ -34,7 +36,7 @@ fun ShowListMoviesPagination(
             lazyMovieItems[item]?.let { movieData ->
                 MovieCard(
                     modifier = Modifier
-                        .size(width = 160.dp, height = 350.dp)
+                        .size(width = CARD_WIDTH_SIZE, height = CARD_HEIGHT_SIZE)
                         .padding(bottom = 10.dp)
                         .clickable {
                             onItemClick(movieData)
@@ -46,8 +48,8 @@ fun ShowListMoviesPagination(
         item(span = { GridItemSpan(2) }) {
             lazyMovieItems.apply {
                 when {
-                    loadState.refresh is LoadState.Loading -> Loader()
-                    loadState.append is LoadState.Loading -> Loader()
+                    loadState.refresh is LoadState.Loading -> LoadingProgressBar()
+                    loadState.append is LoadState.Loading -> LoadingProgressBar()
                     loadState.refresh is LoadState.Error -> {
                         val message = lazyMovieItems.loadState.refresh as LoadState.Error
                         ErrorMessage(message = message.error.localizedMessage!!) { lazyMovieItems.retry() }

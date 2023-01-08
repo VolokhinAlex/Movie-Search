@@ -11,10 +11,13 @@ import com.example.java.android1.movie_search.view.theme.BlueDark40
 import com.example.java.android1.movie_search.view.theme.PrimaryColor80
 
 @Composable
-fun Loader() {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(PrimaryColor80)) {
+fun LoadingProgressBar() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PrimaryColor80),
+        contentAlignment = Alignment.Center
+    ) {
         CircularProgressIndicator(
             modifier = Modifier.align(Alignment.Center),
             color = BlueDark40

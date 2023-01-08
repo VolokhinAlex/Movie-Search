@@ -28,7 +28,7 @@ import com.example.java.android1.movie_search.view.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.widgets.ShowListMoviesPagination
 import com.example.java.android1.movie_search.viewmodel.CategoryMoviesViewModel
 
-const val ARG_CATEGORY_NAME_DATA = "CategoryData Name"
+const val ARG_CATEGORY_NAME_DATA = "CategoryMoviesData Name"
 
 /**
  * The main method for the layout of the entire screen
@@ -66,16 +66,16 @@ fun CategoryMoviesScreen(
             )
         }
         ShowListMoviesPagination(categoryMovies) { movieData ->
-            val bundle = Bundle()
-            bundle.putParcelable(MOVIE_DATA_KEY, movieData)
-            navController.navigate(ScreenState.DetailsScreen.route, bundle)
+            val detailsMovieBundle = Bundle()
+            detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieData)
+            navController.navigate(ScreenState.DetailsScreen.route, detailsMovieBundle)
         }
     }
 }
 
 /**
  * The method sets the title of the screen and adds a button to go to the previous screen
- * @param text - The title of category movies
+ * @param text - The title of the category movies
  * @param navController - Needed to navigate back
  */
 

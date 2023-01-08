@@ -16,4 +16,5 @@ interface MovieLocalRepository {
     suspend fun saveMovieToLocalDataBase(movieDataTMDB: MovieDataTMDB)
 
     suspend fun updateMovieFavoriteInLocalDataBase(movieId: Int, favorite: Boolean)
+
 }

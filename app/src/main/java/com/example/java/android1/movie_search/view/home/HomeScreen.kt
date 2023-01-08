@@ -20,16 +20,17 @@ import androidx.navigation.NavController
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.app.CategoryAppState
 import com.example.java.android1.movie_search.app.MovieCategory
-import com.example.java.android1.movie_search.model.CategoryData
+import com.example.java.android1.movie_search.model.CategoryMoviesData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.category_movies.ARG_CATEGORY_NAME_DATA
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
+import com.example.java.android1.movie_search.view.theme.CARD_WIDTH_SIZE
 import com.example.java.android1.movie_search.view.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.widgets.ErrorMessage
-import com.example.java.android1.movie_search.view.widgets.Loader
+import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.view.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.MainViewModel
 
@@ -40,18 +41,18 @@ import com.example.java.android1.movie_search.viewmodel.MainViewModel
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun HomeScreen(navController: NavController, homeViewModel: MainViewModel) {
-    val movieCategories = remember { mutableStateOf(mutableSetOf<CategoryData>()) }
+    val categoriesMovies = remember { mutableStateOf(mutableSetOf<CategoryMoviesData>()) }
     homeViewModel.popularMoviesData.observeAsState().value?.let { state ->
-        ServerResponseStateObserver(state, homeViewModel, movieCategories, navController)
+        ServerResponseStateObserver(state, homeViewModel, categoriesMovies, navController)
     }
     homeViewModel.upcomingMoviesData.observeAsState().value?.let { state ->
-        ServerResponseStateObserver(state, homeViewModel, movieCategories, navController)
+        ServerResponseStateObserver(state, homeViewModel, categoriesMovies, navController)
     }
     homeViewModel.topRatedMoviesData.observeAsState().value?.let { state ->
-        ServerResponseStateObserver(state, homeViewModel, movieCategories, navController)
+        ServerResponseStateObserver(state, homeViewModel, categoriesMovies, navController)
     }
     homeViewModel.nowPlayingMoviesData.observeAsState().value?.let { state ->
-        ServerResponseStateObserver(state, homeViewModel, movieCategories, navController)
+        ServerResponseStateObserver(state, homeViewModel, categoriesMovies, navController)
     }
 }
 
@@ -67,14 +68,14 @@ fun HomeScreen(navController: NavController, homeViewModel: MainViewModel) {
 private fun ServerResponseStateObserver(
     categoryMoviesState: CategoryAppState,
     homeViewModel: MainViewModel,
-    categoriesMoviesList: MutableState<MutableSet<CategoryData>>,
+    categoriesMoviesList: MutableState<MutableSet<CategoryMoviesData>>,
     navController: NavController
 ) {
     when (categoryMoviesState) {
         is CategoryAppState.Error -> categoryMoviesState.error.localizedMessage?.let { message ->
             ErrorMessage(message = message) { homeViewModel.fetchAllCategoriesMovies() }
         }
-        CategoryAppState.Loading -> Loader()
+        CategoryAppState.Loading -> LoadingProgressBar()
         is CategoryAppState.Success -> {
             categoriesMoviesList.value.add(categoryMoviesState.data)
             CategoriesList(categoriesMoviesList.value.toList(), navController)
@@ -89,7 +90,7 @@ private fun ServerResponseStateObserver(
  */
 
 @Composable
-fun CategoriesList(categoriesMoviesList: List<CategoryData>, navController: NavController) {
+fun CategoriesList(categoriesMoviesList: List<CategoryMoviesData>, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -126,7 +127,7 @@ fun CategoriesList(categoriesMoviesList: List<CategoryData>, navController: NavC
                     }
                     Image(
                         painter = painterResource(id = R.drawable.compose_arrow_right),
-                        contentDescription = "More Movies",
+                        contentDescription = stringResource(id = R.string.more_movies),
                         modifier = Modifier
                             .size(28.dp)
                             .clickable {
@@ -162,16 +163,19 @@ fun NestedCategoryMoviesList(category: List<MovieDataTMDB>, navController: NavCo
             key = {
                 category[it]
             },
-            itemContent = { index ->
+            itemContent = { itemIndex ->
                 MovieCard(
                     modifier = Modifier
-                        .size(width = 160.dp, height = 300.dp)
+                        .size(width = CARD_WIDTH_SIZE, height = 300.dp)
                         .padding(end = 10.dp)
                         .clickable {
-                            val bundle = Bundle()
-                            bundle.putParcelable(MOVIE_DATA_KEY, category[index])
-                            navController.navigate(ScreenState.DetailsScreen.route, bundle)
-                        }, movieDataTMDB = category[index]
+                            val detailsMovieBundle = Bundle()
+                            detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, category[itemIndex])
+                            navController.navigate(
+                                ScreenState.DetailsScreen.route,
+                                detailsMovieBundle
+                            )
+                        }, movieDataTMDB = category[itemIndex]
                 )
             }
         )

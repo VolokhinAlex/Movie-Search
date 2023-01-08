@@ -20,16 +20,18 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
 import com.example.java.android1.movie_search.view.theme.PrimaryColor70
 import com.example.java.android1.movie_search.view.theme.PrimaryColor80
+import com.example.java.android1.movie_search.view.theme.SearchFieldColor
 import com.example.java.android1.movie_search.view.widgets.ShowListMoviesPagination
 import com.example.java.android1.movie_search.viewmodel.SearchViewModel
 import kotlinx.coroutines.delay
@@ -86,7 +88,7 @@ private fun SearchField(
         searching = searchState.searching,
         focused = searchState.focused,
         modifier = modifier,
-        searchHint = "Search a movie"
+        searchHint = stringResource(id = R.string.search_hint)
     )
     LaunchedEffect(searchState.query.text) {
         searchState.searching = true
@@ -113,14 +115,12 @@ private fun SearchField(
 fun rememberSearchState(
     query: TextFieldValue = TextFieldValue(""),
     focused: Boolean = false,
-    searching: Boolean = false,
-    searchResults: List<MovieDataTMDB> = emptyList()
+    searching: Boolean = false
 ): SearchState = remember {
     SearchState(
         query = query,
         focused = focused,
-        searching = searching,
-        searchResults = searchResults
+        searching = searching
     )
 }
 
@@ -135,10 +135,9 @@ private fun SearchTextFieldHint(modifier: Modifier = Modifier, searchHint: Strin
         modifier = Modifier
             .fillMaxSize()
             .then(modifier)
-
     ) {
         Text(
-            color = Color(0xFFFFFFFF),
+            color = SearchFieldColor,
             text = searchHint,
         )
     }
@@ -204,7 +203,6 @@ fun SearchTextField(
                     textStyle = LocalTextStyle.current.copy(color = Color.White),
                     singleLine = true
                 )
-
             }
         }
     }

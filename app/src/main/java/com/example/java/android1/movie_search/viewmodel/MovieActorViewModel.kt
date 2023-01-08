@@ -35,6 +35,12 @@ class MovieActorViewModel(
         }
     }
 
+    /**
+     * The method for getting detailed information about an actor
+     * @param personId - ID to search for an actor
+     * @param language - Language to display translated data for the fields that support it.
+     */
+
     fun getMovieActorData(personId: Long, language: String) {
         _movieActorData.value = MovieActorAppState.Loading
         movieActorRepository.getMovieActorDetailsFromRemoteServer(
@@ -43,6 +49,7 @@ class MovieActorViewModel(
             callback = callback
         )
     }
+
 }
 
 @Suppress("UNCHECKED_CAST")

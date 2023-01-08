@@ -16,7 +16,7 @@ private const val REQUEST_ERROR = "Ошибка запроса на сервер
 private const val CORRUPTED_DATA = "Неполные данные"
 
 class DetailsViewModel(
-    private val repository: DetailsRepository,
+    private val detailsRepository: DetailsRepository,
     private val movieLocalRepository: MovieLocalRepository
 ) : ViewModel() {
 
@@ -41,6 +41,10 @@ class DetailsViewModel(
         }
     }
 
+    /**
+     * The method for checking the completeness of the received data
+     */
+
     private fun checkResponse(movieData: MovieDataTMDB): MovieAppState {
         return if (movieData.id != null && movieData.genres != null && movieData.release_date !=
             null && movieData.runtime != null && movieData.overview != null
@@ -52,15 +56,27 @@ class DetailsViewModel(
         }
     }
 
+    /**
+     * Method for getting details about the movie
+     */
+
     fun getMovieDetailsFromRemoteSource(movieId: Int, language: String) {
         _detailsMovieData.value = MovieAppState.Loading
-        repository.getMovieDetailsFromRemoteServer(movieId, language, callback)
+        detailsRepository.getMovieDetailsFromRemoteServer(movieId, language, callback)
     }
+
+    /**
+     * Method for saving a movie to a local database
+     */
 
     private fun saveMovieDataToLocalBase(movieData: MovieDataTMDB) = viewModelScope.launch {
         _movieLocalData.value = RoomAppState.Loading
         movieLocalRepository.saveMovieToLocalDataBase(movieData)
     }
+
+    /**
+     * Method for getting movie details from a local database
+     */
 
     fun getMovieDetailsFromLocalDataBase(movieData: MovieDataTMDB) {
         if (movieData.id != null) {
@@ -70,6 +86,10 @@ class DetailsViewModel(
             }
         }
     }
+
+    /**
+     * Method for adding a movie to the list of favorite movies
+     */
 
     fun setFavoriteMovie(movieId: Int, favorite: Boolean) = viewModelScope.launch {
         movieLocalRepository.updateMovieFavoriteInLocalDataBase(movieId, favorite)
@@ -85,7 +105,7 @@ class DetailsViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(DetailsViewModel::class.java)) {
             DetailsViewModel(
-                repository = repositoryRemote,
+                detailsRepository = repositoryRemote,
                 movieLocalRepository = localRepository
             ) as T
         } else {

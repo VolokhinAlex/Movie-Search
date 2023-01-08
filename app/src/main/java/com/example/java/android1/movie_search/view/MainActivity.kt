@@ -36,26 +36,27 @@ const val MOVIE_DATA_KEY = "Movie Data"
 
 class MainActivity : ComponentActivity() {
 
+    private val remoteDataSource = RemoteDataSource()
     private val homeViewModel: MainViewModel by viewModels {
-        MainViewModelFactory(HomeRepositoryImpl(RemoteDataSource()))
+        MainViewModelFactory(HomeRepositoryImpl(remoteDataSource))
     }
     private val detailsViewModel: DetailsViewModel by viewModels {
         DetailsViewModelFactory(
-            DetailsRepositoryImpl(RemoteDataSource()),
+            DetailsRepositoryImpl(remoteDataSource),
             MovieLocalRepositoryImpl(movieDao)
         )
     }
     private val searchViewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(SearchRepositoryImpl(RemoteDataSource()))
+        SearchViewModelFactory(SearchRepositoryImpl(remoteDataSource))
     }
     private val favoriteViewModel: FavoriteViewModel by viewModels {
         FavoriteViewModelFactory(MovieLocalRepositoryImpl(movieDao))
     }
     private val categoryViewModel: CategoryMoviesViewModel by viewModels {
-        CategoryMoviesViewModelFactory(CategoryRepositoryImpl(RemoteDataSource()))
+        CategoryMoviesViewModelFactory(CategoryRepositoryImpl(remoteDataSource))
     }
     private val actorDetailsViewModel: MovieActorViewModel by viewModels {
-        MovieActorViewModelFactory(MovieActorRepositoryImpl(RemoteDataSource()))
+        MovieActorViewModelFactory(MovieActorRepositoryImpl(remoteDataSource))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +84,7 @@ fun Navigation(
     actorDetailsViewModel: MovieActorViewModel
 ) {
     val navController = rememberNavController()
-    BottomNavigation(navController) { innerPadding ->
+    BottomNavigationBar(navController) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = ScreenState.HomeScreen.route,
@@ -93,8 +94,8 @@ fun Navigation(
                 HomeScreen(navController = navController, homeViewModel = homeViewModel)
             }
             composable(route = ScreenState.DetailsScreen.route) {
-                val movieData = it.arguments?.getParcelable<MovieDataTMDB>(MOVIE_DATA_KEY)
-                movieData?.let { data ->
+                val movieDetailsData = it.arguments?.getParcelable<MovieDataTMDB>(MOVIE_DATA_KEY)
+                movieDetailsData?.let { data ->
                     DetailsScreen(
                         movieDataTMDB = data,
                         navController = navController,
@@ -122,7 +123,7 @@ fun Navigation(
                 val actorId = it.arguments?.getLong(ARG_ACTOR_ID)
                 actorId?.let {
                     ActorDetailsScreen(
-                        actorMovieId = actorId,
+                        actorId = actorId,
                         navController = navController,
                         actorViewModel = actorDetailsViewModel
                     )
@@ -135,7 +136,10 @@ fun Navigation(
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BottomNavigation(navController: NavController, content: @Composable (PaddingValues) -> Unit) {
+fun BottomNavigationBar(
+    navController: NavController,
+    content: @Composable (PaddingValues) -> Unit
+) {
     val bottomNavItems =
         listOf(ScreenState.HomeScreen, ScreenState.SearchScreen, ScreenState.FavoriteScreen)
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -146,8 +150,7 @@ fun BottomNavigation(navController: NavController, content: @Composable (Padding
             ) {
                 NavigationBar(containerColor = PrimaryColor70) {
                     bottomNavItems.forEach { item ->
-                        val selected =
-                            item.route == navController.currentBackStackEntryAsState().value?.destination?.route
+                        val selected = item.route == currentRoute
                         NavigationBarItem(
                             selected = selected,
                             onClick = { navController.navigate(item.route) },
@@ -162,7 +165,7 @@ fun BottomNavigation(navController: NavController, content: @Composable (Padding
                                 item.icon?.let {
                                     Icon(
                                         imageVector = it,
-                                        contentDescription = "$item.name",
+                                        contentDescription = item.name,
                                     )
                                 }
                             }

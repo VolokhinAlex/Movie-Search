@@ -9,7 +9,5 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface SearchRepository {
-
     fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>>
-
 }

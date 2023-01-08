@@ -11,16 +11,21 @@ class FavoriteViewModel(
     private val movieLocalRepository: MovieLocalRepository
 ) : ViewModel() {
 
-    private val _localMovieLiveData: MutableLiveData<RoomAppState> = MutableLiveData()
-    val localMovieLiveData: LiveData<RoomAppState> = _localMovieLiveData
+    private val _moviesFavoriteData: MutableLiveData<RoomAppState> = MutableLiveData()
+    val moviesFavoriteData: LiveData<RoomAppState> = _moviesFavoriteData
+
+    /**
+     * The method for getting a list of favorite movies
+     */
 
     fun getMoviesFromLocalDataBase() {
         viewModelScope.launch(Dispatchers.IO) {
             val result: List<MovieDataRoom> =
                 movieLocalRepository.getAllFavoritesFromLocalDataBase()
-            _localMovieLiveData.postValue(RoomAppState.Success(result))
+            _moviesFavoriteData.postValue(RoomAppState.Success(result))
         }
     }
+
 }
 
 @Suppress("UNCHECKED_CAST")

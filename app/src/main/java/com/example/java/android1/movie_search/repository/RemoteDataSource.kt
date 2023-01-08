@@ -25,6 +25,10 @@ class RemoteDataSource {
         .client(createOkHttpClient(MovieInterceptor()))
         .build().create(MovieTMDBAPI::class.java)
 
+    /**
+     * A method for getting details of the movie from a remote server
+     */
+
     fun getMovieDetails(movieId: Int, language: String, callback: Callback<MovieDataTMDB>) {
         val request =
             movieApi.getMovieDetails(
@@ -36,6 +40,10 @@ class RemoteDataSource {
         request.enqueue(callback)
     }
 
+    /**
+     * A method for getting a actor data from a remote server
+     */
+
     fun getActorData(personId: Long, language: String, callback: Callback<ActorDTO>) {
         val request = movieApi.getActorData(
             personId = personId,
@@ -44,6 +52,10 @@ class RemoteDataSource {
         )
         request.enqueue(callback)
     }
+
+    /**
+     * A method for getting a category movies from a remote server
+     */
 
     suspend fun getCategoryMovies(
         category: String,
@@ -57,6 +69,10 @@ class RemoteDataSource {
             page = page
         )
     }
+
+    /**
+     * A method for getting a list of movies by search from a remote server
+     */
 
     suspend fun getMoviesBySearch(
         language: String,

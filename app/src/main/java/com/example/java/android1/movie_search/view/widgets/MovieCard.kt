@@ -44,7 +44,6 @@ fun MovieCard(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data("https://image.tmdb.org/t/p/w500${movieDataTMDB.poster_path}")

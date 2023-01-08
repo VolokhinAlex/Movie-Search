@@ -8,11 +8,15 @@ import com.example.java.android1.movie_search.repository.CategoryRepository
 import kotlinx.coroutines.flow.Flow
 
 class CategoryMoviesViewModel(
-    private val repository: CategoryRepository
+    private val categoryRepository: CategoryRepository
 ) : ViewModel() {
 
+    /**
+     * The method for getting a list of films of a specific category using pagination
+     */
+
     fun getCategoryMoviesFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> =
-        repository.getCategoryMoviesFromRemoteServer(query)
+        categoryRepository.getCategoryMoviesFromRemoteServer(query)
 
 }
 

@@ -10,6 +10,11 @@ class SearchViewModel(
     private val repository: SearchRepository,
 ) : ViewModel() {
 
+    /**
+     * The method for getting a list of movies by search
+     * @param query - Request to find a list of movies
+     */
+
     fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> =
         repository.getMoviesBySearchFromRemoteServer(query)
 

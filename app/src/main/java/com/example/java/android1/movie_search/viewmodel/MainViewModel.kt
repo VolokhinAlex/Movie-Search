@@ -3,8 +3,9 @@ package com.example.java.android1.movie_search.viewmodel
 import androidx.lifecycle.*
 import com.example.java.android1.movie_search.app.CategoryAppState
 import com.example.java.android1.movie_search.app.MovieCategory
-import com.example.java.android1.movie_search.model.CategoryData
+import com.example.java.android1.movie_search.model.CategoryMoviesData
 import com.example.java.android1.movie_search.repository.HomeRepository
+import com.example.java.android1.movie_search.view.LanguageQuery
 import kotlinx.coroutines.launch
 
 private const val CORRUPTED_DATA = "Неполные данные"
@@ -33,15 +34,47 @@ class MainViewModel(
         fetchAllCategoriesMovies()
     }
 
+    /**
+     * The method for getting all categories of movies.
+     */
+
     fun fetchAllCategoriesMovies() {
-        getCategoryMovies(_popularMoviesData, MovieCategory.Popular.queryName, "en-EN", 1)
-        getCategoryMovies(_nowPlayingMoviesData, MovieCategory.NowPlaying.queryName, "en-EN", 1)
-        getCategoryMovies(_upcomingMoviesData, MovieCategory.Upcoming.queryName, "en-EN", 1)
-        getCategoryMovies(_topRatedMoviesData, MovieCategory.TopRated.queryName, "en-EN", 1)
+        getCategoryMovies(
+            _popularMoviesData,
+            MovieCategory.Popular.queryName,
+            LanguageQuery.EN.languageQuery,
+            1
+        )
+        getCategoryMovies(
+            _nowPlayingMoviesData,
+            MovieCategory.NowPlaying.queryName,
+            LanguageQuery.EN.languageQuery,
+            1
+        )
+        getCategoryMovies(
+            _upcomingMoviesData,
+            MovieCategory.Upcoming.queryName,
+            LanguageQuery.EN.languageQuery,
+            1
+        )
+        getCategoryMovies(
+            _topRatedMoviesData,
+            MovieCategory.TopRated.queryName,
+            LanguageQuery.EN.languageQuery,
+            1
+        )
     }
 
+    /**
+     * The method for getting the movie category.
+     * @param categoryMoviesData - Mutable live data for category recording
+     * @param category - Category to be requested. See [MovieCategory]
+     * @param language - Language to display translated data for the fields that support it.
+     * @param page - The page to be requested
+     */
+
     private fun getCategoryMovies(
-        livedata: MutableLiveData<CategoryAppState>,
+        categoryMoviesData: MutableLiveData<CategoryAppState>,
         category: String,
         language: String,
         page: Int
@@ -54,10 +87,10 @@ class MainViewModel(
                     page
                 )
                 val movieData = serverResponse.body()
-                livedata.value =
+                categoryMoviesData.value =
                     if (serverResponse.isSuccessful && movieData != null) {
                         CategoryAppState.Success(
-                            CategoryData(
+                            CategoryMoviesData(
                                 category,
                                 movieData.results
                             )
@@ -66,7 +99,7 @@ class MainViewModel(
                         CategoryAppState.Error(Throwable(CORRUPTED_DATA))
                     }
             } catch (exception: Throwable) {
-                livedata.value = CategoryAppState.Error(exception)
+                categoryMoviesData.value = CategoryAppState.Error(exception)
             }
         }
     }

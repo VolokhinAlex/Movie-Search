@@ -19,7 +19,6 @@ fun NavController.navigate(
         .Builder
         .fromUri(NavDestination.createRoute(route).toUri())
         .build()
-
     val deepLinkMatch = graph.matchDeepLink(routeLink)
     if (deepLinkMatch != null) {
         val destination = deepLinkMatch.destination

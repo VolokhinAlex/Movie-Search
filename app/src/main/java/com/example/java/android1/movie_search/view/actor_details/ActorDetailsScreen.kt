@@ -25,30 +25,31 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.app.MovieActorAppState
 import com.example.java.android1.movie_search.model.ActorDTO
+import com.example.java.android1.movie_search.view.LanguageQuery
 import com.example.java.android1.movie_search.view.theme.DETAILS_PRIMARY_SIZE
 import com.example.java.android1.movie_search.view.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.widgets.ErrorMessage
-import com.example.java.android1.movie_search.view.widgets.Loader
+import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.viewmodel.MovieActorViewModel
 
 const val ARG_ACTOR_ID = "actor id"
 
 /**
  * The main method [ActorDetailsScreen] that combines all the necessary methods for this screen
- * @param actorMovieId - actor id has gotten from remote server
+ * @param actorId - actor id has gotten from remote server
  * @param navController - Controller for screen navigation
  * @param actorViewModel - Actor View Model [MovieActorViewModel]
  */
 
 @Composable
 fun ActorDetailsScreen(
-    actorMovieId: Long,
+    actorId: Long,
     navController: NavController,
     actorViewModel: MovieActorViewModel
 ) {
     LaunchedEffect(key1 = true) {
-        actorViewModel.getMovieActorData(actorMovieId, "en-EN")
+        actorViewModel.getMovieActorData(actorId, LanguageQuery.EN.languageQuery)
     }
     actorViewModel.movieActorData.observeAsState().value?.let { actorState ->
         RenderActorDataFromRemoteServer(actorState, navController)
@@ -72,12 +73,14 @@ fun RenderActorDataFromRemoteServer(
                 message = it
             ) {}
         }
-        MovieActorAppState.Loading -> Loader()
+        MovieActorAppState.Loading -> LoadingProgressBar()
         is MovieActorAppState.Success -> {
             val actorDTO = movieActorAppState.data
-            Column(modifier = Modifier
-                .background(PrimaryColor80)
-                .fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .background(PrimaryColor80)
+                    .fillMaxSize()
+            ) {
                 HeaderActorDetailsScreen(navController = navController)
                 ActorDetails(actorDTO)
             }
@@ -127,9 +130,7 @@ fun ActorDetails(actorDTO: ActorDTO) {
     ) {
         SubcomposeAsyncImage(
             model = "https://image.tmdb.org/t/p/w500${actorDTO.profile_path}",
-            loading = {
-                Loader()
-            },
+            loading = { LoadingProgressBar() },
             contentDescription = "actor_photo",
             modifier = Modifier
                 .clip(CircleShape)
@@ -161,6 +162,4 @@ fun ActorDetails(actorDTO: ActorDTO) {
             )
         }
     }
-
-
 }

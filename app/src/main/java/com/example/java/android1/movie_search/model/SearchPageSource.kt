@@ -3,6 +3,7 @@ package com.example.java.android1.movie_search.model
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.java.android1.movie_search.repository.RemoteDataSource
+import com.example.java.android1.movie_search.view.LanguageQuery
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -23,20 +24,21 @@ class SearchPageSource(
         }
         val page: Int = params.key ?: 1
         return try {
-            val response = remoteDataSource.getMoviesBySearch(
-                language = "en-EN",
+            val serverResponse = remoteDataSource.getMoviesBySearch(
+                language = LanguageQuery.EN.languageQuery,
                 page = page,
                 adult = false,
                 query = query
             )
-            val movies = checkNotNull(response.body())
-            val nextKey = if (movies.results.isEmpty()) null else page + 1
+            val moviesList = checkNotNull(serverResponse.body())
+            val nextKey = if (moviesList.results.isEmpty()) null else page + 1
             val prevKey = if (page == 1) null else page - 1
-            LoadResult.Page(data = movies.results, prevKey = prevKey, nextKey = nextKey)
+            LoadResult.Page(data = moviesList.results, prevKey = prevKey, nextKey = nextKey)
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
         } catch (exception: HttpException) {
             return LoadResult.Error(exception)
         }
     }
+
 }

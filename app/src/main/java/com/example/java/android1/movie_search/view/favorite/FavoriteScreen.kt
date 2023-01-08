@@ -19,23 +19,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.java.android1.movie_search.app.RoomAppState
-import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.model.CreditsDTO
 import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.convertMovieRoomToMovieDto
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
+import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
+import com.example.java.android1.movie_search.view.theme.CARD_HEIGHT_SIZE
+import com.example.java.android1.movie_search.view.theme.CARD_WIDTH_SIZE
 import com.example.java.android1.movie_search.view.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.widgets.ErrorMessage
-import com.example.java.android1.movie_search.view.widgets.Loader
+import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.view.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.FavoriteViewModel
 
 /**
  * The main method [FavoriteScreen] that combines all the necessary methods for this screen
- * @param navController -Controller for screen navigation
+ * @param navController - Controller for screen navigation
  * @param favoriteViewModel - Favorite View Model [FavoriteViewModel]
  */
 
@@ -48,8 +50,8 @@ fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteView
     ) {
         HeaderFavoriteScreen()
         LaunchedEffect(true) { favoriteViewModel.getMoviesFromLocalDataBase() }
-        favoriteViewModel.localMovieLiveData.observeAsState().value?.let { state ->
-            RenderDataFromDataBase(
+        favoriteViewModel.moviesFavoriteData.observeAsState().value?.let { state ->
+            RenderFavoriteDataFromLocalDataBase(
                 roomAppState = state,
                 navController = navController,
                 favoriteViewModel = favoriteViewModel
@@ -66,7 +68,7 @@ fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteView
  */
 
 @Composable
-private fun RenderDataFromDataBase(
+private fun RenderFavoriteDataFromLocalDataBase(
     roomAppState: RoomAppState,
     navController: NavController,
     favoriteViewModel: FavoriteViewModel
@@ -76,22 +78,22 @@ private fun RenderDataFromDataBase(
             ErrorMessage(message = it) { favoriteViewModel.getMoviesFromLocalDataBase() }
         }
         is RoomAppState.Success -> {
-            val movieDataRoom = roomAppState.data
-            ShowFavoriteMovies(movieDataRoom, navController)
+            val favoriteMoviesData = roomAppState.data
+            ShowFavoriteMovies(favoriteMoviesData, navController)
         }
-        RoomAppState.Loading -> Loader()
+        RoomAppState.Loading -> LoadingProgressBar()
     }
 }
 
 /**
  * The method creates a list in the form of a grid, which is filled with movies
- * @param movieDataRoom - List of Movies
+ * @param favoriteMoviesData - List of Movies
  * @param navController - Needed to go to the details screen about the movie
  */
 
 @Composable
 private fun ShowFavoriteMovies(
-    movieDataRoom: List<MovieDataRoom>,
+    favoriteMoviesData: List<MovieDataRoom>,
     navController: NavController,
 ) {
     LazyVerticalGrid(
@@ -101,21 +103,21 @@ private fun ShowFavoriteMovies(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        itemsIndexed(movieDataRoom) { _, item ->
+        itemsIndexed(favoriteMoviesData) { _, item ->
             MovieCard(
                 modifier = Modifier
-                    .size(width = 160.dp, height = 350.dp)
+                    .size(width = CARD_WIDTH_SIZE, height = CARD_HEIGHT_SIZE)
                     .padding(bottom = 10.dp)
                     .clickable {
-                        val bundle = Bundle()
+                        val detailsMovieBundle = Bundle()
                         val movieDataTMDB = MovieDataTMDB(
                             null, null, item.moviePoster, null, item.movieId,
                             null, null, null, null, item.movieTitle,
                             null, item.movieRating, item.movieReleaseDate, null,
                             null, CreditsDTO(listOf()), videos = null
                         )
-                        bundle.putParcelable(MOVIE_DATA_KEY, movieDataTMDB)
-                        navController.navigate(ScreenState.DetailsScreen.route, bundle)
+                        detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieDataTMDB)
+                        navController.navigate(ScreenState.DetailsScreen.route, detailsMovieBundle)
                     },
                 movieDataTMDB = convertMovieRoomToMovieDto(item)
             )

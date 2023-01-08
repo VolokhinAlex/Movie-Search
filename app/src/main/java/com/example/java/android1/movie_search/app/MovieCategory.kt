@@ -1,5 +1,9 @@
 package com.example.java.android1.movie_search.app
 
+/**
+ * List of available categories in TMDB API
+ */
+
 sealed class MovieCategory(val queryName: String, val title: String) {
     object NowPlaying : MovieCategory("now_playing", "Now Playing")
     object Popular : MovieCategory("popular", "Popular")

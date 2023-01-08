@@ -19,6 +19,10 @@ class MessagingNotificationService : FirebaseMessagingService() {
         }
     }
 
+    /**
+     * Method for getting the title and text from the map
+     */
+
     private fun onHandleDataMessage(remoteData: Map<String, String>) {
         val title = remoteData[PUSH_KEY_TITLE]
         val message = remoteData[PUSH_KEY_MESSAGE]
@@ -26,6 +30,10 @@ class MessagingNotificationService : FirebaseMessagingService() {
             onShowNotification(title, message)
         }
     }
+
+    /**
+     * Method for displaying notifications
+     */
 
     private fun onShowNotification(title: String, message: String) {
         val notificationBuilder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
@@ -45,6 +53,11 @@ class MessagingNotificationService : FirebaseMessagingService() {
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
+
+    /**
+     * A method for creating a notification channel. Works only on Android 8.0 Oreo and above.
+     * The channels below will not be used and the usual notifications will be used
+     */
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun onCreateNotificationChannel(manager: NotificationManager) {
