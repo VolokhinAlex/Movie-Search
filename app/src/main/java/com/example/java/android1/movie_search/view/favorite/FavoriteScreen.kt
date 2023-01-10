@@ -14,6 +14,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -132,7 +133,7 @@ private fun ShowFavoriteMovies(
 @Composable
 fun HeaderFavoriteScreen() {
     Text(
-        text = ScreenState.FavoriteScreen.name,
+        text = stringResource(id = ScreenState.FavoriteScreen.name),
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp),

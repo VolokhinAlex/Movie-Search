@@ -183,9 +183,9 @@ fun NestedCategoryMoviesList(category: List<MovieDataTMDB>, navController: NavCo
 }
 
 @Composable
-private fun SetCategoryTitle(title: String) {
+private fun SetCategoryTitle(title: Int) {
     Text(
-        text = title,
+        text = stringResource(title),
         fontSize = TITLE_SIZE,
         fontWeight = FontWeight.Bold,
         color = Color.White

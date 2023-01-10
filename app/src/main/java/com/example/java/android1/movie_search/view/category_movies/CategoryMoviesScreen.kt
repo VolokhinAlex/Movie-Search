@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -75,12 +76,12 @@ fun CategoryMoviesScreen(
 
 /**
  * The method sets the title of the screen and adds a button to go to the previous screen
- * @param text - The title of the category movies
+ * @param title - The title of the category movies
  * @param navController - Needed to navigate back
  */
 
 @Composable
-private fun HeaderCategoryMoviesScreen(text: String, navController: NavController) {
+private fun HeaderCategoryMoviesScreen(title: Int, navController: NavController) {
     Row(
         modifier = Modifier.padding(top = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -98,7 +99,7 @@ private fun HeaderCategoryMoviesScreen(text: String, navController: NavControlle
             )
         }
         Text(
-            text = text,
+            text = stringResource(id = title),
             fontSize = TITLE_SIZE,
             fontWeight = FontWeight.Bold,
             color = Color.White

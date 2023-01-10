@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -156,7 +157,7 @@ fun BottomNavigationBar(
                             onClick = { navController.navigate(item.route) },
                             label = {
                                 Text(
-                                    text = item.name,
+                                    text = stringResource(id = item.name),
                                     fontWeight = FontWeight.SemiBold,
                                     color = if (selected) Color.White else Color.Unspecified
                                 )
@@ -165,7 +166,7 @@ fun BottomNavigationBar(
                                 item.icon?.let {
                                     Icon(
                                         imageVector = it,
-                                        contentDescription = item.name,
+                                        contentDescription = stringResource(id = item.name),
                                     )
                                 }
                             }

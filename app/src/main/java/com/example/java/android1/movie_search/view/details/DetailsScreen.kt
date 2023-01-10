@@ -171,7 +171,7 @@ private fun HeaderDetailsScreen(movieDataTMDB: MovieDataTMDB, navController: Nav
             loading = { LoadingProgressBar() },
             contentDescription = "movie_poster",
             modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp))
+                .clip(RoundedCornerShape(bottomStart = 5.dp, bottomEnd = 5.dp))
                 .fillMaxWidth(),
             contentScale = ContentScale.Crop
         )
