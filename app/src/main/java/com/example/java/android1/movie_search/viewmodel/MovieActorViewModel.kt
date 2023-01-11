@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.java.android1.movie_search.app.MovieActorAppState
 import com.example.java.android1.movie_search.model.ActorDTO
 import com.example.java.android1.movie_search.repository.MovieActorRepository
+import com.example.java.android1.movie_search.repository.MovieActorRepositoryImpl
+import com.example.java.android1.movie_search.repository.RemoteDataSource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,11 +55,10 @@ class MovieActorViewModel(
 }
 
 @Suppress("UNCHECKED_CAST")
-class MovieActorViewModelFactory(private val repository: MovieActorRepository) :
-    ViewModelProvider.Factory {
+class MovieActorViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(MovieActorViewModel::class.java)) {
-            MovieActorViewModel(repository) as T
+            MovieActorViewModel(movieActorRepository = MovieActorRepositoryImpl(RemoteDataSource())) as T
         } else {
             throw IllegalArgumentException("MovieActorViewModel not found")
         }

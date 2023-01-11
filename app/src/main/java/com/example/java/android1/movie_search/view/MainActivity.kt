@@ -18,7 +18,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.java.android1.movie_search.app.App.Companion.movieDao
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
 import com.example.java.android1.movie_search.view.actor_details.ARG_ACTOR_ID
@@ -37,28 +36,12 @@ const val MOVIE_DATA_KEY = "Movie Data"
 
 class MainActivity : ComponentActivity() {
 
-    private val remoteDataSource = RemoteDataSource()
-    private val homeViewModel: MainViewModel by viewModels {
-        MainViewModelFactory(HomeRepositoryImpl(remoteDataSource))
-    }
-    private val detailsViewModel: DetailsViewModel by viewModels {
-        DetailsViewModelFactory(
-            DetailsRepositoryImpl(remoteDataSource),
-            MovieLocalRepositoryImpl(movieDao)
-        )
-    }
-    private val searchViewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(SearchRepositoryImpl(remoteDataSource))
-    }
-    private val favoriteViewModel: FavoriteViewModel by viewModels {
-        FavoriteViewModelFactory(MovieLocalRepositoryImpl(movieDao))
-    }
-    private val categoryViewModel: CategoryMoviesViewModel by viewModels {
-        CategoryMoviesViewModelFactory(CategoryRepositoryImpl(remoteDataSource))
-    }
-    private val actorDetailsViewModel: MovieActorViewModel by viewModels {
-        MovieActorViewModelFactory(MovieActorRepositoryImpl(remoteDataSource))
-    }
+    private val homeViewModel: MainViewModel by viewModels { MainViewModelFactory() }
+    private val detailsViewModel: DetailsViewModel by viewModels { DetailsViewModelFactory() }
+    private val searchViewModel: SearchViewModel by viewModels { SearchViewModelFactory() }
+    private val favoriteViewModel: FavoriteViewModel by viewModels { FavoriteViewModelFactory() }
+    private val categoryViewModel: CategoryMoviesViewModel by viewModels { CategoryMoviesViewModelFactory() }
+    private val actorDetailsViewModel: MovieActorViewModel by viewModels { MovieActorViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

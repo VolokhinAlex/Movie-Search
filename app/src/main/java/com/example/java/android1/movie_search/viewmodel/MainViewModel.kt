@@ -5,13 +5,15 @@ import com.example.java.android1.movie_search.app.CategoryAppState
 import com.example.java.android1.movie_search.app.MovieCategory
 import com.example.java.android1.movie_search.model.CategoryMoviesData
 import com.example.java.android1.movie_search.repository.HomeRepository
+import com.example.java.android1.movie_search.repository.HomeRepositoryImpl
+import com.example.java.android1.movie_search.repository.RemoteDataSource
 import com.example.java.android1.movie_search.view.LanguageQuery
 import kotlinx.coroutines.launch
 
 private const val CORRUPTED_DATA = "Неполные данные"
 
 class MainViewModel(
-    private val repository: HomeRepository
+    private val homeRepository: HomeRepository
 ) : ViewModel() {
 
     private val _popularMoviesData: MutableLiveData<CategoryAppState> =
@@ -81,7 +83,7 @@ class MainViewModel(
     ) {
         viewModelScope.launch {
             try {
-                val serverResponse = repository.getCategoryMoviesFromRemoteServer(
+                val serverResponse = homeRepository.getCategoryMoviesFromRemoteServer(
                     category,
                     language,
                     page
@@ -106,10 +108,10 @@ class MainViewModel(
 }
 
 @Suppress("UNCHECKED_CAST")
-class MainViewModelFactory(private val repository: HomeRepository) : ViewModelProvider.Factory {
+class MainViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            MainViewModel(repository) as T
+            MainViewModel(homeRepository = HomeRepositoryImpl(RemoteDataSource())) as T
         } else {
             throw IllegalArgumentException("MainViewModel not found")
         }

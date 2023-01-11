@@ -20,9 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.java.android1.movie_search.app.RoomAppState
-import com.example.java.android1.movie_search.model.CreditsDTO
 import com.example.java.android1.movie_search.model.MovieDataRoom
-import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.convertMovieRoomToMovieDto
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.navigation.ScreenState
@@ -75,8 +73,8 @@ private fun RenderFavoriteDataFromLocalDataBase(
     favoriteViewModel: FavoriteViewModel
 ) {
     when (roomAppState) {
-        is RoomAppState.Error -> roomAppState.error.localizedMessage?.let {
-            ErrorMessage(message = it) { favoriteViewModel.getMoviesFromLocalDataBase() }
+        is RoomAppState.Error -> roomAppState.error.localizedMessage?.let { message ->
+            ErrorMessage(message = message) { favoriteViewModel.getMoviesFromLocalDataBase() }
         }
         is RoomAppState.Success -> {
             val favoriteMoviesData = roomAppState.data
@@ -88,7 +86,7 @@ private fun RenderFavoriteDataFromLocalDataBase(
 
 /**
  * The method creates a list in the form of a grid, which is filled with movies
- * @param favoriteMoviesData - List of Movies
+ * @param favoriteMoviesData - List of Favorite Movies
  * @param navController - Needed to go to the details screen about the movie
  */
 
@@ -111,12 +109,7 @@ private fun ShowFavoriteMovies(
                     .padding(bottom = 10.dp)
                     .clickable {
                         val detailsMovieBundle = Bundle()
-                        val movieDataTMDB = MovieDataTMDB(
-                            null, null, item.moviePoster, null, item.movieId,
-                            null, null, null, null, item.movieTitle,
-                            null, item.movieRating, item.movieReleaseDate, null,
-                            null, CreditsDTO(listOf()), videos = null
-                        )
+                        val movieDataTMDB = convertMovieRoomToMovieDto(item)
                         detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieDataTMDB)
                         navController.navigate(ScreenState.DetailsScreen.route, detailsMovieBundle)
                     },

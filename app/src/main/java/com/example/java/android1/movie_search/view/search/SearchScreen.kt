@@ -68,6 +68,7 @@ fun SearchScreen(
 /**
  * The method for displaying, and implementing a search
  *  @param searchState - Search States
+ *  @param searchViewModel - Search View Model [SearchViewModel]
  *  @param navController - Controller for screen navigation
  */
 
@@ -100,15 +101,18 @@ private fun SearchField(
             searchViewModel.getMoviesBySearchFromRemoteServer(searchState.query.text)
                 .collectAsLazyPagingItems()
         ShowListMoviesPagination(listMoviesBySearch) { movieData ->
-            val bundle = Bundle()
-            bundle.putParcelable(MOVIE_DATA_KEY, movieData)
-            navController.navigate(ScreenState.DetailsScreen.route, bundle)
+            val detailsMovieBundle = Bundle()
+            detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieData)
+            navController.navigate(ScreenState.DetailsScreen.route, detailsMovieBundle)
         }
     }
 }
 
 /**
  * The method for remembering all search states
+ * @param query - The entered value in the text field
+ * @param focused - Equals true if the user opened by a text field otherwise false
+ * @param searching - Equals true while the user enters some text in the text field otherwise false
  */
 
 @Composable
@@ -126,6 +130,7 @@ fun rememberSearchState(
 
 /**
  * The method for showing hint in the search text field
+ * @param searchHint - Hint of the text input field
  */
 
 @Composable

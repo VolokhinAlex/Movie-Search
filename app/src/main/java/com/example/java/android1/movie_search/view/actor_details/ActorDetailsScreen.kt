@@ -1,5 +1,6 @@
 package com.example.java.android1.movie_search.view.actor_details
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -68,21 +69,19 @@ fun RenderActorDataFromRemoteServer(
     navController: NavController
 ) {
     when (movieActorAppState) {
-        is MovieActorAppState.Error -> movieActorAppState.error.localizedMessage?.let {
-            ErrorMessage(
-                message = it
-            ) {}
+        is MovieActorAppState.Error -> movieActorAppState.error.localizedMessage?.let { message ->
+            ErrorMessage(message = message) {}
         }
         MovieActorAppState.Loading -> LoadingProgressBar()
         is MovieActorAppState.Success -> {
-            val actorDTO = movieActorAppState.data
+            val actorDetailsData = movieActorAppState.data
             Column(
                 modifier = Modifier
                     .background(PrimaryColor80)
                     .fillMaxSize()
             ) {
                 HeaderActorDetailsScreen(navController = navController)
-                ActorDetails(actorDTO)
+                ActorDetails(actorDetailsData)
             }
         }
     }
@@ -146,20 +145,25 @@ fun ActorDetails(actorDTO: ActorDTO) {
             )
         }
         actorDTO.birthday?.let { birthday ->
-            Text(
-                text = "${stringResource(id = R.string.birthday)}: $birthday",
-                modifier = Modifier.padding(top = 10.dp),
-                fontSize = DETAILS_PRIMARY_SIZE,
-                color = Color.White
-            )
+            ActorDetailsText(title = R.string.birthday, details = birthday)
         }
         actorDTO.biography?.let { biography ->
-            Text(
-                text = "${stringResource(id = R.string.biography)}: $biography",
-                modifier = Modifier.padding(top = 10.dp),
-                fontSize = DETAILS_PRIMARY_SIZE,
-                color = Color.White
-            )
+            ActorDetailsText(title = R.string.biography, details = biography)
         }
     }
+}
+
+/**
+ * The method sets the title and details about actor from remote server
+ * of the section in actor details screen
+ */
+
+@Composable
+private fun ActorDetailsText(@StringRes title: Int, details: String) {
+    Text(
+        text = "${stringResource(id = title)}: $details",
+        modifier = Modifier.padding(top = 10.dp),
+        fontSize = DETAILS_PRIMARY_SIZE,
+        color = Color.White
+    )
 }

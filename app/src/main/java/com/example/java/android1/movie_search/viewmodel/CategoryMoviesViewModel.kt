@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagingData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.CategoryRepository
+import com.example.java.android1.movie_search.repository.CategoryRepositoryImpl
+import com.example.java.android1.movie_search.repository.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
 
 class CategoryMoviesViewModel(
@@ -21,11 +23,10 @@ class CategoryMoviesViewModel(
 }
 
 @Suppress("UNCHECKED_CAST")
-class CategoryMoviesViewModelFactory(private val repository: CategoryRepository) :
-    ViewModelProvider.Factory {
+class CategoryMoviesViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(CategoryMoviesViewModel::class.java)) {
-            CategoryMoviesViewModel(repository) as T
+            CategoryMoviesViewModel(categoryRepository = CategoryRepositoryImpl(RemoteDataSource())) as T
         } else {
             throw IllegalArgumentException("CategoryMoviesViewModel not found")
         }

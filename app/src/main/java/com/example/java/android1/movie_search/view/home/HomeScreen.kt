@@ -2,6 +2,7 @@ package com.example.java.android1.movie_search.view.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -36,6 +37,8 @@ import com.example.java.android1.movie_search.viewmodel.MainViewModel
 
 /**
  * The main method for the layout of the home screen methods
+ * @param navController - To navigate in the other screen
+ * @param homeViewModel - Main View Model
  */
 
 @SuppressLint("MutableCollectionMutableState")
@@ -143,7 +146,10 @@ fun CategoriesList(categoriesMoviesList: List<CategoryMoviesData>, navController
                             }
                     )
                 }
-                NestedCategoryMoviesList(categoryMovies.data, navController)
+                NestedCategoryMoviesList(
+                    category = categoryMovies.data,
+                    navController = navController
+                )
             }
         }
     }
@@ -182,8 +188,13 @@ fun NestedCategoryMoviesList(category: List<MovieDataTMDB>, navController: NavCo
     }
 }
 
+/**
+ * The method for setting title of each category
+ * @param title - The title of category from strings resource
+ */
+
 @Composable
-private fun SetCategoryTitle(title: Int) {
+private fun SetCategoryTitle(@StringRes title: Int) {
     Text(
         text = stringResource(title),
         fontSize = TITLE_SIZE,

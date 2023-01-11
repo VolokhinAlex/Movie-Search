@@ -1,11 +1,11 @@
 package com.example.java.android1.movie_search.viewmodel
 
 import androidx.lifecycle.*
-import com.example.java.android1.movie_search.app.MovieAppState
+import com.example.java.android1.movie_search.app.App
+import com.example.java.android1.movie_search.app.MovieDataAppState
 import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
-import com.example.java.android1.movie_search.repository.DetailsRepository
-import com.example.java.android1.movie_search.repository.MovieLocalRepository
+import com.example.java.android1.movie_search.repository.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -20,8 +20,8 @@ class DetailsViewModel(
     private val movieLocalRepository: MovieLocalRepository
 ) : ViewModel() {
 
-    private val _detailsMovieData: MutableLiveData<MovieAppState> = MutableLiveData()
-    val detailsMovieData: LiveData<MovieAppState> = _detailsMovieData
+    private val _detailsMovieData: MutableLiveData<MovieDataAppState> = MutableLiveData()
+    val detailsMovieData: LiveData<MovieDataAppState> = _detailsMovieData
     private val _movieLocalData: MutableLiveData<RoomAppState> = MutableLiveData()
     val movieLocalData: LiveData<RoomAppState> = _movieLocalData
 
@@ -32,12 +32,12 @@ class DetailsViewModel(
                 getMovieDetailsFromLocalDataBase(serverResponse)
                 checkResponse(serverResponse)
             } else {
-                MovieAppState.Error(Throwable(REQUEST_ERROR))
+                MovieDataAppState.Error(Throwable(REQUEST_ERROR))
             }
         }
 
         override fun onFailure(call: Call<MovieDataTMDB>, error: Throwable) {
-            _detailsMovieData.value = MovieAppState.Error(error)
+            _detailsMovieData.value = MovieDataAppState.Error(error)
         }
     }
 
@@ -45,14 +45,14 @@ class DetailsViewModel(
      * The method for checking the completeness of the received data
      */
 
-    private fun checkResponse(movieData: MovieDataTMDB): MovieAppState {
+    private fun checkResponse(movieData: MovieDataTMDB): MovieDataAppState {
         return if (movieData.id != null && movieData.genres != null && movieData.release_date !=
             null && movieData.runtime != null && movieData.overview != null
         ) {
             saveMovieDataToLocalBase(movieData)
-            MovieAppState.Success(listOf(movieData))
+            MovieDataAppState.Success(movieData)
         } else {
-            MovieAppState.Error(Throwable(CORRUPTED_DATA))
+            MovieDataAppState.Error(Throwable(CORRUPTED_DATA))
         }
     }
 
@@ -61,7 +61,7 @@ class DetailsViewModel(
      */
 
     fun getMovieDetailsFromRemoteSource(movieId: Int, language: String) {
-        _detailsMovieData.value = MovieAppState.Loading
+        _detailsMovieData.value = MovieDataAppState.Loading
         detailsRepository.getMovieDetailsFromRemoteServer(movieId, language, callback)
     }
 
@@ -98,15 +98,12 @@ class DetailsViewModel(
 }
 
 @Suppress("UNCHECKED_CAST")
-class DetailsViewModelFactory(
-    private val repositoryRemote: DetailsRepository,
-    private val localRepository: MovieLocalRepository
-) : ViewModelProvider.Factory {
+class DetailsViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(DetailsViewModel::class.java)) {
             DetailsViewModel(
-                detailsRepository = repositoryRemote,
-                movieLocalRepository = localRepository
+                detailsRepository = DetailsRepositoryImpl(RemoteDataSource()),
+                movieLocalRepository = MovieLocalRepositoryImpl(App.movieDao)
             ) as T
         } else {
             throw IllegalArgumentException("DetailsViewModel not found")

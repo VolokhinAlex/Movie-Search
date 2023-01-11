@@ -3,11 +3,13 @@ package com.example.java.android1.movie_search.viewmodel
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.repository.RemoteDataSource
 import com.example.java.android1.movie_search.repository.SearchRepository
+import com.example.java.android1.movie_search.repository.SearchRepositoryImpl
 import kotlinx.coroutines.flow.Flow
 
 class SearchViewModel(
-    private val repository: SearchRepository,
+    private val searchRepository: SearchRepository,
 ) : ViewModel() {
 
     /**
@@ -16,17 +18,15 @@ class SearchViewModel(
      */
 
     fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> =
-        repository.getMoviesBySearchFromRemoteServer(query)
+        searchRepository.getMoviesBySearchFromRemoteServer(query)
 
 }
 
 @Suppress("UNCHECKED_CAST")
-class SearchViewModelFactory(
-    private val repository: SearchRepository
-) : ViewModelProvider.Factory {
+class SearchViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
-            SearchViewModel(repository) as T
+            SearchViewModel(searchRepository = SearchRepositoryImpl(RemoteDataSource())) as T
         } else {
             throw IllegalArgumentException("SearchViewModel not found")
         }
