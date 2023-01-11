@@ -132,7 +132,7 @@ private fun RenderMovieDetailsDataFromRemoteServer(
         MovieDataAppState.Loading -> LoadingProgressBar()
         is MovieDataAppState.Success -> {
             val listOfMovies =
-                movieDataAppState.data //: TODO Проверить запросы и ответы(без списка)
+                movieDataAppState.data 
             Column(
                 modifier = Modifier
                     .background(PrimaryColor80)
