@@ -3,6 +3,7 @@ package com.example.java.android1.movie_search.services
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -33,12 +34,15 @@ class MessagingNotificationService : FirebaseMessagingService() {
 
     /**
      * Method for displaying notifications
+     * @param title - The title (first row) of the notification
+     * @param message - Set the text (second row) of the notification
      */
 
     private fun onShowNotification(title: String, message: String) {
         val notificationBuilder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .apply {
-                setSmallIcon(R.mipmap.ic_launcher_round)
+                setSmallIcon(R.drawable.ic_notification)
+                setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_notification))
                 setContentTitle(title)
                 setContentText(message)
                 priority = NotificationCompat.PRIORITY_DEFAULT
