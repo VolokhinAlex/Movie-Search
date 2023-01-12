@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fragment_title_size">25sp</dimen>
+    <dimen name="card_corner_radius">25dp</dimen>
+    <dimen name="card_elevation">20dp</dimen>
+    <dimen name="image_width_size">110dp</dimen>
+    <dimen name="image_height_size">200dp</dimen>
+    <dimen name="card_title_text_size">20sp</dimen>
+    <dimen name="card_text_size">20sp</dimen>
+    <dimen name="card_overview_text_size">16sp</dimen>
+    <dimen name="main_fragment_margin">20dp</dimen>
+    <dimen name="recycler_view_title_text_size">25sp</dimen>
+    <dimen name="movie_details_title">35sp</dimen>
+    <dimen name="movie_details_text">18sp</dimen>
+    <dimen name="movie_details_margin_bottom">10dp</dimen>
+    <dimen name="movie_details_margin_end">15dp</dimen>
+    <dimen name="movie_details_rating">25sp</dimen>
+    <dimen name="movie_details_label_rating">23sp</dimen>
+    <dimen name="movie_actor_image_profile">80dp</dimen>
+    <dimen name="movie_actor_name_profile">15sp</dimen>
+    <dimen name="movie_actor_margin">10dp</dimen>
+</resources>
