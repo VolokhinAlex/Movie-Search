@@ -10,12 +10,12 @@ import java.io.IOException
 /**
  * Needed to navigate through the pages of the list
  * @param remoteDataSource - A class with methods for getting data from a remote server
- * @param category - A category movies to be received from a remote server
+ * @param movieId - A Movie ID that similar movies will be searched for
  */
 
-class CategoryPageSource(
+class SimilarPageSource(
     private val remoteDataSource: RemoteDataSource,
-    private val category: String,
+    private val movieId: Int,
 ) : PagingSource<Int, MovieDataTMDB>() {
 
     override fun getRefreshKey(state: PagingState<Int, MovieDataTMDB>): Int? {
@@ -25,21 +25,17 @@ class CategoryPageSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieDataTMDB> {
-        if (category.isEmpty()) {
-            return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
-        }
         val page: Int = params.key ?: 1
         return try {
-            val serverResponse =
-                remoteDataSource.getCategoryMovies(
-                    category = category,
-                    language = LanguageQuery.EN.languageQuery,
-                    page = page
-                )
-            val categoryMovies = checkNotNull(serverResponse.body())
-            val nextKey = if (categoryMovies.results.isEmpty()) null else page + 1
+            val serverResponse = remoteDataSource.getSimilarMovies(
+                movieId = movieId,
+                language = LanguageQuery.EN.languageQuery,
+                page = page,
+            )
+            val moviesList = checkNotNull(serverResponse.body())
+            val nextKey = if (moviesList.results.isEmpty()) null else page + 1
             val prevKey = if (page == 1) null else page - 1
-            LoadResult.Page(data = categoryMovies.results, prevKey = prevKey, nextKey = nextKey)
+            LoadResult.Page(data = moviesList.results, prevKey = prevKey, nextKey = nextKey)
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
         } catch (exception: HttpException) {
@@ -48,4 +44,3 @@ class CategoryPageSource(
     }
 
 }
-

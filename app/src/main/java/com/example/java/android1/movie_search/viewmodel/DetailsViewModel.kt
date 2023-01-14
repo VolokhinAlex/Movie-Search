@@ -1,12 +1,14 @@
 package com.example.java.android1.movie_search.viewmodel
 
 import androidx.lifecycle.*
+import androidx.paging.PagingData
 import com.example.java.android1.movie_search.app.App
 import com.example.java.android1.movie_search.app.MovieDataAppState
 import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -95,6 +97,13 @@ class DetailsViewModel(
         movieLocalRepository.updateMovieFavoriteInLocalDataBase(movieId, favorite)
     }
 
+    /**
+     * Method for getting similar movies from the remote server
+     * @param movieId - The current ID of the movie that similar movies will be searched for
+     */
+
+    fun getSimilarMoviesFromRemoteSource(movieId: Int): Flow<PagingData<MovieDataTMDB>> =
+        detailsRepository.getSimilarMoviesFromRemoteServer(movieId)
 }
 
 @Suppress("UNCHECKED_CAST")

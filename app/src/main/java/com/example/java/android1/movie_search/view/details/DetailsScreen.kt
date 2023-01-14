@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.app.MovieDataAppState
@@ -41,12 +43,14 @@ import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
 import com.example.java.android1.movie_search.utils.timeToFormatHoursAndMinutes
 import com.example.java.android1.movie_search.view.LanguageQuery
+import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.actor_details.ARG_ACTOR_ID
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
 import com.example.java.android1.movie_search.view.theme.*
 import com.example.java.android1.movie_search.view.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
+import com.example.java.android1.movie_search.view.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
 import java.text.DecimalFormat
 
@@ -152,6 +156,13 @@ private fun RenderMovieDetailsDataFromRemoteServer(
                     MovieCasts(listOfMovies, navController)
                     if (listOfMovies.videos?.results?.isNotEmpty() == true) {
                         MovieTrailer(listOfMovies)
+                    }
+                    listOfMovies.id?.let { movieId ->
+                        SimilarMoviesList(
+                            detailsViewModel = movieDetailsViewModel,
+                            movieId = movieId,
+                            navController = navController
+                        )
                     }
                 }
             }
@@ -440,4 +451,44 @@ private fun SetSubCategoryTitle(title: String, modifier: Modifier) {
         fontSize = TITLE_SIZE,
         fontWeight = FontWeight.Bold
     )
+}
+
+/**
+ * The method adds an additional list with similar movies to the movie details screen
+ * @param detailsViewModel - Needed to get similar movies
+ * @param movieId - The current ID of the movie that similar movies will be searched for
+ * @param navController - To navigate another details screen
+ */
+
+@Composable
+private fun SimilarMoviesList(
+    detailsViewModel: DetailsViewModel,
+    movieId: Int,
+    navController: NavController
+) {
+    SetSubCategoryTitle(
+        title = stringResource(id = R.string.similar),
+        modifier = Modifier.padding(top = 15.dp)
+    )
+    val lazySimilarMovies = detailsViewModel.getSimilarMoviesFromRemoteSource(movieId = movieId)
+        .collectAsLazyPagingItems()
+    LazyRow(modifier = Modifier.padding(bottom = 20.dp, top = 15.dp)) {
+        itemsIndexed(lazySimilarMovies) { _, movieItem ->
+            movieItem?.let {
+                MovieCard(
+                    modifier = Modifier
+                        .size(width = CARD_WIDTH_SIZE, height = 300.dp)
+                        .padding(end = 10.dp)
+                        .clickable {
+                            val detailsMovieBundle = Bundle()
+                            detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieItem)
+                            navController.navigate(
+                                ScreenState.DetailsScreen.route,
+                                detailsMovieBundle
+                            )
+                        }, movieDataTMDB = it
+                )
+            }
+        }
+    }
 }

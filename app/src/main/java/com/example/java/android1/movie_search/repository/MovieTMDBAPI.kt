@@ -63,4 +63,16 @@ interface MovieTMDBAPI {
         @Query("page") page: Int
     ): Response<CategoryMoviesTMDB>
 
+    /**
+     * The method for getting the similar movies
+     */
+
+    @GET("3/movie/{movie_id}/similar")
+    suspend fun getSimilarMovies(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") token: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Response<CategoryMoviesTMDB>
+
 }
