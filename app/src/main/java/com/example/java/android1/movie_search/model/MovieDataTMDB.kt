@@ -80,6 +80,10 @@ data class GenresDTO(
 @Parcelize
 data class CreditsDTO(val cast: List<CastDTO>) : Parcelable
 
+/**
+ * The CastDTO class contains data about the character
+ */
+
 @Parcelize
 data class CastDTO(
     val id: Long?,
@@ -90,8 +94,12 @@ data class CastDTO(
 
 @Parcelize
 data class Videos(
-    val results: Trailer
+    val results: List<Trailer>
 ) : Parcelable
+
+/**
+ * The Trailer class contains data about the trailer of movie
+ */
 
 @Parcelize
 data class Trailer(
@@ -100,6 +108,10 @@ data class Trailer(
     val type: String?,
     val id: String?
 ) : Parcelable
+
+/**
+ * The CastDTO class contains data about the Actor
+ */
 
 @Parcelize
 data class ActorDTO(
@@ -111,4 +123,4 @@ data class ActorDTO(
     val place_of_birth: String?,
     val popularity: Double?,
     val profile_path: String?
-) :Parcelable
+) : Parcelable

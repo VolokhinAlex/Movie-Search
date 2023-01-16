@@ -7,13 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieChildListData
 
-class MoviesHomeBasicAdapter : RecyclerView.Adapter<MovieHomeBasicViewHolder>() {
+class MoviesHomeBasicAdapter(
+    private val onCategoryClickListener: (String) -> Unit
+) : RecyclerView.Adapter<MovieHomeBasicViewHolder>() {
 
-    private var list: List<MovieChildListData> = listOf()
+    private var listMoviesCategory: List<MovieChildListData> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setParentListData(data: List<MovieChildListData>) {
-        list = data
+    fun setParentListData(listMoviesCategory: List<MovieChildListData>) {
+        this.listMoviesCategory = listMoviesCategory
         notifyDataSetChanged()
     }
 
@@ -25,9 +27,9 @@ class MoviesHomeBasicAdapter : RecyclerView.Adapter<MovieHomeBasicViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: MovieHomeBasicViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(listMoviesCategory[position], onCategoryClickListener)
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = listMoviesCategory.size
 
 }

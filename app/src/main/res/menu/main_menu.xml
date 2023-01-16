@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_content_provider"
-        android:icon="@drawable/ic_baseline_contacts_24"
-        android:title="@string/contacts"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/menu_map"
         android:icon="@drawable/ic_baseline_map_24"
         android:title="@string/map"

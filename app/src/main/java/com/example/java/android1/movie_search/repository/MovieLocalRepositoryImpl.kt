@@ -11,6 +11,10 @@ import com.example.java.android1.movie_search.utils.converterMovieEntityToListMo
 import com.example.java.android1.movie_search.utils.converterMovieEntityToMovieDataRoom
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * The implementation Movie Local Repository for interacting with local database
+ */
+
 class MovieLocalRepositoryImpl(
     private val localDataRoom: MovieDao
 ) : MovieLocalRepository {

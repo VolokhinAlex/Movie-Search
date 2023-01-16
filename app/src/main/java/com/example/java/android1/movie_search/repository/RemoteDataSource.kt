@@ -32,7 +32,7 @@ class RemoteDataSource {
                 movieId = movieId,
                 token = BuildConfig.MOVIE_API_KEY,
                 language = language,
-                actors = "credits"
+                extraRequests = "credits,videos"
             )
         request.enqueue(callback)
     }
@@ -122,10 +122,8 @@ class RemoteDataSource {
     }
 
     class MovieInterceptor : Interceptor {
-
         override fun intercept(chain: Interceptor.Chain): Response {
             return chain.proceed(chain.request())
         }
-
     }
 }

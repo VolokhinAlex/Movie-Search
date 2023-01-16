@@ -37,7 +37,7 @@ class MovieActorViewModel(
 
     fun getMovieActorData(personId: Long, language: String) {
         movieActorLiveData.value = MovieActorState.Loading
-        movieActorRepository.getMovieActor(
+        movieActorRepository.getMovieActorFromRemoteServer(
             personId = personId,
             language = language,
             callback = callback

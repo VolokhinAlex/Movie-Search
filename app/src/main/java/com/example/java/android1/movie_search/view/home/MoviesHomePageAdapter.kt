@@ -12,11 +12,11 @@ class MoviesHomePageAdapter(
     private var onItemClickListener: ((MovieDataTMDB) -> Unit)?
 ) : RecyclerView.Adapter<BaseMovieCardViewHolder>() {
 
-    private var movieData: List<MovieDataTMDB> = listOf()
+    private var listMoviesCategory: List<MovieDataTMDB> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setMovieData(data: List<MovieDataTMDB>) {
-        movieData = data
+    fun setMoviesCategoryData(listMoviesCategory: List<MovieDataTMDB>) {
+        this.listMoviesCategory = listMoviesCategory
         notifyDataSetChanged()
     }
 
@@ -28,9 +28,9 @@ class MoviesHomePageAdapter(
     }
 
     override fun onBindViewHolder(holder: BaseMovieCardViewHolder, position: Int) {
-        holder.bind(movieData[position], onItemClickListener)
+        holder.bind(listMoviesCategory[position], onItemClickListener)
     }
 
-    override fun getItemCount(): Int = movieData.size
+    override fun getItemCount(): Int = listMoviesCategory.size
 
 }

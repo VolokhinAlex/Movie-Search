@@ -12,24 +12,24 @@ import java.text.DecimalFormat
 
 class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val image: AppCompatImageView
-    private val title: TextView
-    private val rating: TextView
-    private val year: TextView
+    private val cardImage: AppCompatImageView
+    private val cardTitle: TextView
+    private val cardRating: TextView
+    private val cardReleaseDate: TextView
     private val ratingFormat = DecimalFormat("#.#")
 
     init {
-        image = itemView.findViewById(R.id.movie_card_item_image)
-        title = itemView.findViewById(R.id.movie_card_item_title)
-        rating = itemView.findViewById(R.id.movie_card_item_rating)
-        year = itemView.findViewById(R.id.movie_card_item_year)
+        cardImage = itemView.findViewById(R.id.movie_card_item_image)
+        cardTitle = itemView.findViewById(R.id.movie_card_item_title)
+        cardRating = itemView.findViewById(R.id.movie_card_item_rating)
+        cardReleaseDate = itemView.findViewById(R.id.movie_card_item_year)
     }
 
     fun bind(movieData: MovieDataRoom, onItemClickListener: ((MovieDataRoom) -> Unit)?) {
-        title.text = movieData.movieTitle
-        year.text = movieData.movieReleaseDate?.let { "".getYearFromStringFullDate(it) }
-        rating.text = ratingFormat.format(movieData.movieRating)
-        image.load("https://image.tmdb.org/t/p/w500${movieData.moviePoster}")
+        cardTitle.text = movieData.movieTitle
+        cardReleaseDate.text = movieData.movieReleaseDate?.let { "".getYearFromStringFullDate(it) }
+        cardRating.text = ratingFormat.format(movieData.movieRating)
+        cardImage.load("https://image.tmdb.org/t/p/w500${movieData.moviePoster}")
         itemView.setOnClickListener { onItemClickListener?.invoke(movieData) }
     }
 

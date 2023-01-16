@@ -5,6 +5,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+/**
+ * The Interface for interacting with local movie table
+ */
+
 @Dao
 interface MovieDao {
 

@@ -11,11 +11,11 @@ class FavoriteAdapter(
     private var onItemClickListener: ((MovieDataRoom) -> Unit)?
 ) : RecyclerView.Adapter<FavoriteViewHolder>() {
 
-    private var movieData: List<MovieDataRoom> = listOf()
+    private var listFavoriteMoviesData: List<MovieDataRoom> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setMovieData(data: List<MovieDataRoom>) {
-        movieData = data
+    fun setFavoriteMovieListData(listMovies: List<MovieDataRoom>) {
+        listFavoriteMoviesData = listMovies
         notifyDataSetChanged()
     }
 
@@ -28,9 +28,9 @@ class FavoriteAdapter(
     }
 
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
-        holder.bind(movieData[position], onItemClickListener)
+        holder.bind(listFavoriteMoviesData[position], onItemClickListener)
     }
 
-    override fun getItemCount(): Int = movieData.size
+    override fun getItemCount(): Int = listFavoriteMoviesData.size
 
 }

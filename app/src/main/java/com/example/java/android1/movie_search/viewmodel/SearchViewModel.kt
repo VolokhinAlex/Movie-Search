@@ -2,7 +2,7 @@ package com.example.java.android1.movie_search.viewmodel
 
 import androidx.lifecycle.*
 import com.example.java.android1.movie_search.app.App.Companion.historySearchDao
-import com.example.java.android1.movie_search.app.AppState
+import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.repository.*
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ import retrofit2.Response
 private const val SERVER_ERROR = "Ошибка сервера"
 
 class SearchViewModel(
-    val searchLiveData: MutableLiveData<AppState> = MutableLiveData(),
+    val searchLiveData: MutableLiveData<MovieAppState> = MutableLiveData(),
     private val repository: SearchRepository = SearchRepositoryImpl(RemoteDataSource()),
     private val localSearchRepository: LocalSearchRepository = LocalSearchRepositoryImpl(historySearchDao),
     val liveDataHistory: LiveData<List<String>> = localSearchRepository.getHistorySearch().asLiveData()
@@ -27,21 +27,21 @@ class SearchViewModel(
         ) {
             val serverResponse = response.body()
             searchLiveData.value = if (response.isSuccessful && serverResponse != null) {
-                AppState.Success(serverResponse.results)
+                MovieAppState.Success(serverResponse.results)
             } else {
-                AppState.Error(Throwable(SERVER_ERROR))
+                MovieAppState.Error(Throwable(SERVER_ERROR))
             }
         }
 
         override fun onFailure(call: Call<CategoryMoviesTMDB>, error: Throwable) {
-            searchLiveData.value = AppState.Error(error)
+            searchLiveData.value = MovieAppState.Error(error)
         }
 
     }
 
     fun getMoviesFromRemoteSource(language: String, page: Int, adult: Boolean, query: String) {
-        searchLiveData.value = AppState.Loading
-        repository.getMoviesFromServer(
+        searchLiveData.value = MovieAppState.Loading
+        repository.getMoviesFromRemoteServer(
             language = language,
             page = page,
             adult = adult,

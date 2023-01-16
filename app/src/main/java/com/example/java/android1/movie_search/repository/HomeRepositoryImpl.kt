@@ -3,11 +3,15 @@ package com.example.java.android1.movie_search.repository
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import retrofit2.Callback
 
+/**
+ * Implementation of the interface for getting data from TMDB API
+ */
+
 class HomeRepositoryImpl(
     private val remoteDataSource: RemoteDataSource
 ) : HomeRepository {
 
-    override fun getPopularMoviesFromServer(
+    override fun getPopularMoviesFromRemoteServer(
         language: String,
         page: Int,
         callback: Callback<CategoryMoviesTMDB>
@@ -15,7 +19,7 @@ class HomeRepositoryImpl(
         remoteDataSource.getPopularMovies(language = language, page = page, callback = callback)
     }
 
-    override fun getNowPlayingMoviesFromServer(
+    override fun getNowPlayingMoviesFromRemoteServer(
         language: String,
         page: Int,
         callback: Callback<CategoryMoviesTMDB>
@@ -23,7 +27,7 @@ class HomeRepositoryImpl(
         remoteDataSource.getNowPlayingMovies(language = language, page = page, callback = callback)
     }
 
-    override fun getTopRatedMoviesFromServer(
+    override fun getTopRatedMoviesFromRemoteServer(
         language: String,
         page: Int,
         callback: Callback<CategoryMoviesTMDB>
@@ -31,7 +35,7 @@ class HomeRepositoryImpl(
         remoteDataSource.getTopRatedMovies(language = language, page = page, callback = callback)
     }
 
-    override fun getUpcomingMoviesFromServer(
+    override fun getUpcomingMoviesFromRemoteServer(
         language: String,
         page: Int,
         callback: Callback<CategoryMoviesTMDB>

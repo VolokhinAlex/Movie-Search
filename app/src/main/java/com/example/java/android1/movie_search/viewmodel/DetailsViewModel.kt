@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.java.android1.movie_search.app.App.Companion.movieDao
-import com.example.java.android1.movie_search.app.AppState
+import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
@@ -20,7 +20,7 @@ private const val REQUEST_ERROR = "Ошибка запроса на сервер
 private const val CORRUPTED_DATA = "Неполные данные"
 
 class DetailsViewModel(
-    val detailsLiveData: MutableLiveData<AppState> = MutableLiveData(),
+    val detailsLiveData: MutableLiveData<MovieAppState> = MutableLiveData(),
     private val repository: DetailsRepository = DetailsRepositoryImpl(
         RemoteDataSource()
     ),
@@ -35,30 +35,30 @@ class DetailsViewModel(
             detailsLiveData.value = if (response.isSuccessful && serverResponse != null) {
                 checkResponse(serverResponse)
             } else {
-                AppState.Error(Throwable(REQUEST_ERROR))
+                MovieAppState.Error(Throwable(REQUEST_ERROR))
             }
         }
 
         override fun onFailure(call: Call<MovieDataTMDB>, error: Throwable) {
-            detailsLiveData.value = AppState.Error(error)
+            detailsLiveData.value = MovieAppState.Error(error)
         }
 
     }
 
-    private fun checkResponse(movieData: MovieDataTMDB): AppState {
+    private fun checkResponse(movieData: MovieDataTMDB): MovieAppState {
         return if (movieData.id != null && movieData.genres != null && movieData.release_date !=
             null && movieData.runtime != null && movieData.overview != null
         ) {
             saveMovieData(movieData)
-            AppState.Success(listOf(movieData))
+            MovieAppState.Success(listOf(movieData))
         } else {
-            AppState.Error(Throwable(CORRUPTED_DATA))
+            MovieAppState.Error(Throwable(CORRUPTED_DATA))
         }
     }
 
     fun getMovieDetailsFromRemoteSource(movieId: Int, language: String) {
-        detailsLiveData.value = AppState.Loading
-        repository.getMovieDetailsFromServer(movieId, language, callback)
+        detailsLiveData.value = MovieAppState.Loading
+        repository.getMovieDetailsFromRemoteServer(movieId, language, callback)
     }
 
     private fun saveMovieData(movieData: MovieDataTMDB) = viewModelScope.launch {

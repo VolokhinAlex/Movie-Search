@@ -10,6 +10,11 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.example.java.android1.movie_search.R
 import org.osmdroid.views.MapView
 
+/**
+ * Saving the state of openstreetmap maps for convenient work with MapView from compose without
+ * using fragments
+ */
+
 @Composable
 fun rememberMapViewWithLifecycle(): MapView {
     val context = LocalContext.current
@@ -31,6 +36,10 @@ fun rememberMapViewWithLifecycle(): MapView {
 
     return mapView
 }
+
+/**
+ * Observer of remember map states
+ */
 
 @Composable
 fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver =

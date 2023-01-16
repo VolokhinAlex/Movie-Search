@@ -5,6 +5,10 @@ import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.room.MovieEntity
 
+/**
+ * Auxiliary methods for convenient conversion of one data type to another
+ */
+
 fun converterMovieEntityToMovieDataRoom(entity: MovieEntity): MovieDataRoom =
     MovieDataRoom(
         entity.movieId,

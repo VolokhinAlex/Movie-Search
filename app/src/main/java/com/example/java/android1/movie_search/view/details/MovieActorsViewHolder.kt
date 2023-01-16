@@ -10,17 +10,17 @@ import com.example.java.android1.movie_search.model.CastDTO
 
 class MovieActorsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val actorName: TextView
-    private val actorPhoto: AppCompatImageView
+    private val cardActorName: TextView
+    private val cardActorPhoto: AppCompatImageView
 
     init {
-        actorName = itemView.findViewById(R.id.item_movie_actors_card_name)
-        actorPhoto = itemView.findViewById(R.id.item_movie_actors_card_image)
+        cardActorName = itemView.findViewById(R.id.item_movie_actors_card_name)
+        cardActorPhoto = itemView.findViewById(R.id.item_movie_actors_card_image)
     }
 
     fun bind(data: CastDTO, onItemClickListener: ((CastDTO) -> Unit)?) {
-        actorName.text = data.name
-        actorPhoto.load("https://image.tmdb.org/t/p/w500${data.profile_path}")
+        cardActorName.text = data.name
+        cardActorPhoto.load("https://image.tmdb.org/t/p/w500${data.profile_path}")
         itemView.setOnClickListener {
             onItemClickListener?.invoke(data)
         }

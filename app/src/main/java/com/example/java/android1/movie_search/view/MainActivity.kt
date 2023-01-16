@@ -14,7 +14,6 @@ import com.example.java.android1.movie_search.databinding.ActivityMainBinding
 import com.example.java.android1.movie_search.utils.MyNetworkCallback
 import com.example.java.android1.movie_search.utils.visible
 import com.example.java.android1.movie_search.view.catalog.CatalogFragment
-import com.example.java.android1.movie_search.view.contacts.ContactsFragment
 import com.example.java.android1.movie_search.view.favorite.FavoriteFragment
 import com.example.java.android1.movie_search.view.home.MainFragment
 import com.example.java.android1.movie_search.view.search.SearchFragment
@@ -24,16 +23,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
-    private val mBinding get() = _binding!!
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = mBinding.root
+        val view = binding.root
         setContentView(view)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(mBinding.container.id, MainFragment.newInstance())
+                .replace(binding.container.id, MainFragment.newInstance())
                 .commitNow()
         }
         onItemSelectedInBottomNavigationBar()
@@ -46,17 +45,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onItemSelectedInBottomNavigationBar() {
-        val bottomNavigationView: BottomNavigationView = mBinding.bottomNavigation
+        val bottomNavigationView: BottomNavigationView = binding.bottomNavigation
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                mBinding.bottomNavigation.menu.findItem(R.id.action_home).itemId -> supportFragmentManager.popBackStack()
-                mBinding.bottomNavigation.menu.findItem(R.id.action_search).itemId -> addFragment(
+                binding.bottomNavigation.menu.findItem(R.id.action_home).itemId -> supportFragmentManager.popBackStack()
+                binding.bottomNavigation.menu.findItem(R.id.action_search).itemId -> addFragment(
                     SearchFragment.newInstance()
                 )
-                mBinding.bottomNavigation.menu.findItem(R.id.action_catalog).itemId -> addFragment(
+                binding.bottomNavigation.menu.findItem(R.id.action_catalog).itemId -> addFragment(
                     CatalogFragment.newInstance()
                 )
-                mBinding.bottomNavigation.menu.findItem(R.id.action_favorite).itemId -> addFragment(
+                binding.bottomNavigation.menu.findItem(R.id.action_favorite).itemId -> addFragment(
                     FavoriteFragment.newInstance()
                 )
             }
@@ -67,7 +66,7 @@ class MainActivity : AppCompatActivity() {
     private fun addFragment(fragment: Fragment) {
         supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
-            .replace(mBinding.container.id, fragment).addToBackStack(null).setTransition(
+            .replace(binding.container.id, fragment).addToBackStack(null).setTransition(
                 FragmentTransaction.TRANSIT_FRAGMENT_FADE
             )
             .commit()
@@ -79,16 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
-            R.id.menu_content_provider -> {
-                supportFragmentManager.apply {
-                    beginTransaction()
-                        .replace(R.id.container, ContactsFragment.newInstance())
-                        .addToBackStack(null)
-                        .commit()
-                }
-                true
-            }
+        return when (item.itemId) {
             R.id.menu_map -> {
                 supportFragmentManager.apply {
                     beginTransaction()
@@ -104,9 +94,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val bottomNavigationView: BottomNavigationView = mBinding.bottomNavigation
+        val bottomNavigationView: BottomNavigationView = binding.bottomNavigation
         bottomNavigationView.selectedItemId =
-            mBinding.bottomNavigation.menu.findItem(R.id.action_home).itemId
+            binding.bottomNavigation.menu.findItem(R.id.action_home).itemId
         bottomNavigationView.visible()
     }
 }
