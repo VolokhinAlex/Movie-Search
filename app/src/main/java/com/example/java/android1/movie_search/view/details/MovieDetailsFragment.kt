@@ -18,14 +18,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentMovieDetailsBinding
-import com.example.java.android1.movie_search.model.ActorData
 import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.DialogFragmentNote
 import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
-import com.example.java.android1.movie_search.viewmodel.AppState
+import com.example.java.android1.movie_search.utils.replace
+import com.example.java.android1.movie_search.view.actor.MovieActorFragment
+import com.example.java.android1.movie_search.view.actor.MovieActorFragment.Companion.ARG_ACTOR_MOVIE_DATA
+import com.example.java.android1.movie_search.app.AppState
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
-import com.example.java.android1.movie_search.viewmodel.RoomAppState
+import com.example.java.android1.movie_search.app.RoomAppState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import jp.wasabeef.glide.transformations.BlurTransformation
 import java.text.DecimalFormat
@@ -37,7 +39,14 @@ class MovieDetailsFragment : Fragment() {
     private val mBinding get() = _binding!!
     private val ratingFormat = DecimalFormat("#.#")
     private var mMovieData: MovieDataTMDB? = null
-    private val actorsAdapter = MovieActorsAdapter()
+    private val actorsAdapter = MovieActorsAdapter { actorData ->
+        val bundle = Bundle()
+        bundle.putParcelable(ARG_ACTOR_MOVIE_DATA, actorData)
+        activity?.supportFragmentManager?.replace(
+            R.id.container,
+            MovieActorFragment.newInstance(bundle)
+        )
+    }
     private val viewModel: DetailsViewModel by lazy {
         ViewModelProvider(this)[DetailsViewModel::class.java]
     }
@@ -105,8 +114,7 @@ class MovieDetailsFragment : Fragment() {
 
     private fun setMovieData(movieDataDTO: MovieDataTMDB) {
         val castDTO = movieDataDTO.credits.cast
-        val actorData: List<ActorData> = castDTO.map { ActorData(it.name, it.profile_path) }
-        actorsAdapter.setActorData(actorData)
+        actorsAdapter.setActorData(castDTO)
         val countries = StringBuilder()
         val genres = StringBuilder()
         movieDataDTO.production_countries?.forEach {
@@ -118,7 +126,8 @@ class MovieDetailsFragment : Fragment() {
         with(mBinding) {
             detailMovieFrontImage.load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
             detailMovieTitle.text = movieDataDTO.title
-            detailMovieReleaseDate.text = movieDataDTO.release_date?.let { "".getYearFromStringFullDate(it) }
+            detailMovieReleaseDate.text =
+                movieDataDTO.release_date?.let { "".getYearFromStringFullDate(it) }
             detailMovieOverview.text = movieDataDTO.overview
             detailMovieRating.text = ratingFormat.format(movieDataDTO.vote_average)
             detailMovieGenres.text =

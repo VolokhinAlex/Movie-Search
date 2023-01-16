@@ -14,7 +14,6 @@ import retrofit2.Response
 
 private const val SERVER_ERROR = "Ошибка сервера"
 
-
 class MainViewModel(
     val homeLiveData: MutableLiveData<CategoryAppState> = MutableLiveData(),
     private val repository: HomeRepository = HomeRepositoryImpl(RemoteDataSource()),

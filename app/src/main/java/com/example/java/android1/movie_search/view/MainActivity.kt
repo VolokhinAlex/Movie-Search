@@ -18,6 +18,7 @@ import com.example.java.android1.movie_search.view.contacts.ContactsFragment
 import com.example.java.android1.movie_search.view.favorite.FavoriteFragment
 import com.example.java.android1.movie_search.view.home.MainFragment
 import com.example.java.android1.movie_search.view.search.SearchFragment
+import com.example.java.android1.movie_search.view.theaters.MapFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -83,7 +84,16 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.apply {
                     beginTransaction()
                         .replace(R.id.container, ContactsFragment.newInstance())
-                        .addToBackStack("")
+                        .addToBackStack(null)
+                        .commit()
+                }
+                true
+            }
+            R.id.menu_map -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .replace(R.id.container, MapFragment.newInstance())
+                        .addToBackStack(null)
                         .commit()
                 }
                 true

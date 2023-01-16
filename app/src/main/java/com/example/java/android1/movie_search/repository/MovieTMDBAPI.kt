@@ -1,5 +1,6 @@
 package com.example.java.android1.movie_search.repository
 
+import com.example.java.android1.movie_search.model.ActorDTO
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import retrofit2.Call
@@ -61,5 +62,12 @@ interface MovieTMDBAPI {
         @Query("language") language: String,
         @Query("page") page: Int
     ): Call<CategoryMoviesTMDB>
+
+    @GET("3/person/{person_id}")
+    fun getActorData(
+        @Path("person_id") personId: Long?,
+        @Query("api_key") token: String,
+        @Query("language") language: String
+    ): Call<ActorDTO>
 
 }

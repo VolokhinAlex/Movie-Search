@@ -5,19 +5,21 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.model.ActorData
+import com.example.java.android1.movie_search.model.CastDTO
 
 /**
  * The class adapter for Actors Recycler View .
  *  This class should set the actors' data
  */
 
-class MovieActorsAdapter : RecyclerView.Adapter<MovieActorsViewHolder>() {
+class MovieActorsAdapter(
+    private var onItemClickListener: ((CastDTO) -> Unit)?
+) : RecyclerView.Adapter<MovieActorsViewHolder>() {
 
-    private var actorsData: List<ActorData> = listOf()
+    private var actorsData: List<CastDTO> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setActorData(data: List<ActorData>) {
+    fun setActorData(data: List<CastDTO>) {
         actorsData = data
         notifyDataSetChanged()
     }
@@ -30,7 +32,7 @@ class MovieActorsAdapter : RecyclerView.Adapter<MovieActorsViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MovieActorsViewHolder, position: Int) {
-        holder.bind(actorsData[position])
+        holder.bind(actorsData[position], onItemClickListener)
     }
 
     override fun getItemCount(): Int = actorsData.size

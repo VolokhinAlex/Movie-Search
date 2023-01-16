@@ -14,7 +14,7 @@ import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
 import com.example.java.android1.movie_search.viewmodel.FavoriteViewModel
-import com.example.java.android1.movie_search.viewmodel.RoomAppState
+import com.example.java.android1.movie_search.app.RoomAppState
 
 class FavoriteFragment : Fragment() {
 

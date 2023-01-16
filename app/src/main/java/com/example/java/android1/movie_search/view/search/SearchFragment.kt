@@ -15,7 +15,7 @@ import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentSearchBinding
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
-import com.example.java.android1.movie_search.viewmodel.AppState
+import com.example.java.android1.movie_search.app.AppState
 import com.example.java.android1.movie_search.viewmodel.SearchViewModel
 
 class SearchFragment : Fragment() {

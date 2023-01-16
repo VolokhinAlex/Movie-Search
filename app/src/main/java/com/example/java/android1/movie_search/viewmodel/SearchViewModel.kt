@@ -2,6 +2,7 @@ package com.example.java.android1.movie_search.viewmodel
 
 import androidx.lifecycle.*
 import com.example.java.android1.movie_search.app.App.Companion.historySearchDao
+import com.example.java.android1.movie_search.app.AppState
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.repository.*
 import kotlinx.coroutines.launch
