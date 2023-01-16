@@ -1,14 +1,17 @@
 package com.example.java.android1.movie_search.view
 
-import android.content.res.Resources
+import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.ActivityMainBinding
+import com.example.java.android1.movie_search.utils.MyNetworkCallback
+import com.example.java.android1.movie_search.utils.visible
 import com.example.java.android1.movie_search.view.catalog.CatalogFragment
 import com.example.java.android1.movie_search.view.home.MainFragment
 import com.example.java.android1.movie_search.view.profile.ProfileFragment
@@ -31,6 +34,12 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
         onItemSelectedInBottomNavigationBar()
+        val networkCallback = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            networkCallback.registerDefaultNetworkCallback(MyNetworkCallback {
+                Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
+            })
+        }
     }
 
     private fun onItemSelectedInBottomNavigationBar() {
@@ -68,8 +77,4 @@ class MainActivity : AppCompatActivity() {
             mBinding.bottomNavigation.menu.findItem(R.id.action_home).itemId
         bottomNavigationView.visible()
     }
-}
-
-fun View.visible() {
-    this.visibility = View.VISIBLE
 }
