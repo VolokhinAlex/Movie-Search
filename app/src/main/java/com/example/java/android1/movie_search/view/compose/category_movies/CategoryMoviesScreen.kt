@@ -13,37 +13,41 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.view.compose.MOVIE_DATA_KEY
-import com.example.java.android1.movie_search.view.compose.home.MovieCategory
+import com.example.java.android1.movie_search.app.MovieCategory
 import com.example.java.android1.movie_search.view.compose.navigation.ScreenState
 import com.example.java.android1.movie_search.view.compose.navigation.navigate
 import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
+import com.example.java.android1.movie_search.view.compose.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.compose.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.compose.widgets.Loader
 import com.example.java.android1.movie_search.view.compose.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.CategoryMoviesViewModel
 
-const val ARG_CATEGORY_NAME = "Category Name"
+const val ARG_CATEGORY_NAME_DATA = "CategoryData Name"
+
+/**
+ * The main method for the layout of the entire screen
+ */
 
 @Composable
-fun CategoryMoviesScreen(categoryName: String, navController: NavController) {
-    val categoryMoviesViewModel by lazy {
-        mutableStateOf(CategoryMoviesViewModel())
-    }
+fun CategoryMoviesScreen(
+    categoryName: String,
+    navController: NavController,
+    categoryMoviesViewModel: CategoryMoviesViewModel
+) {
     val categoryMovies =
-        categoryMoviesViewModel.value.getCategoryMoviesFromRemoteServer(categoryName)
+        categoryMoviesViewModel.getCategoryMoviesFromRemoteServer(categoryName)
             .collectAsLazyPagingItems()
     Column(modifier = Modifier.background(PrimaryColor80)) {
         when (categoryName) {
@@ -58,6 +62,10 @@ fun CategoryMoviesScreen(categoryName: String, navController: NavController) {
         ShowCategoryMovies(categoryMovies, navController)
     }
 }
+
+/**
+ * The method sets the title of the screen and adds a button to go to the previous screen
+ */
 
 @Composable
 private fun Header(text: String, navController: NavController) {
@@ -79,12 +87,18 @@ private fun Header(text: String, navController: NavController) {
         }
         Text(
             text = text,
-            fontSize = 22.sp,
+            fontSize = TITLE_SIZE,
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
     }
 }
+
+/**
+ * The method creates a list in the form of a grid, which is filled with movies
+ * @param lazyMovieItems - List of Movies
+ * @param navController - Needed to go to the details screen about the movie
+ */
 
 @Composable
 private fun ShowCategoryMovies(
@@ -116,12 +130,8 @@ private fun ShowCategoryMovies(
         item(span = { GridItemSpan(2) }) {
             lazyMovieItems.apply {
                 when {
-                    loadState.refresh is LoadState.Loading -> {
-                        Loader()
-                    }
-                    loadState.append is LoadState.Loading -> {
-                        Loader()
-                    }
+                    loadState.refresh is LoadState.Loading ->  Loader()
+                    loadState.append is LoadState.Loading ->  Loader()
                     loadState.refresh is LoadState.Error -> {
                         val message = lazyMovieItems.loadState.refresh as LoadState.Error
                         ErrorMessage(message = message.error.localizedMessage!!) {

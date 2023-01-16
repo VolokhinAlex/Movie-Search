@@ -9,7 +9,7 @@ import com.example.java.android1.movie_search.room.MovieEntity
  * Auxiliary methods for convenient conversion of one data type to another
  */
 
-fun converterMovieEntityToMovieDataRoom(entity: MovieEntity?): MovieDataRoom =
+fun convertMovieEntityToMovieDataRoom(entity: MovieEntity?): MovieDataRoom =
     MovieDataRoom(
         entity?.movieId,
         entity?.movieTitle,
@@ -20,7 +20,7 @@ fun converterMovieEntityToMovieDataRoom(entity: MovieEntity?): MovieDataRoom =
         entity?.movieRating
     )
 
-fun converterMovieEntityToListMovieDataRoom(entity: List<MovieEntity>): List<MovieDataRoom> =
+fun convertMovieEntityToListMovieDataRoom(entity: List<MovieEntity>): List<MovieDataRoom> =
     entity.map {
         MovieDataRoom(
             it.movieId,
@@ -33,7 +33,7 @@ fun converterMovieEntityToListMovieDataRoom(entity: List<MovieEntity>): List<Mov
         )
     }
 
-fun converterMovieDtoToMovieEntity(moviesTMDB: MovieDataTMDB): MovieEntity =
+fun convertMovieDtoToMovieEntity(moviesTMDB: MovieDataTMDB): MovieEntity =
     MovieEntity(
         moviesTMDB.id,
         moviesTMDB.title,
@@ -44,7 +44,7 @@ fun converterMovieDtoToMovieEntity(moviesTMDB: MovieDataTMDB): MovieEntity =
         moviesTMDB.vote_average
     )
 
-fun converterMovieRoomToMovieDto(movieDataRoom: MovieDataRoom): MovieDataTMDB {
+fun convertMovieRoomToMovieDto(movieDataRoom: MovieDataRoom): MovieDataTMDB {
     return MovieDataTMDB(
         null,
         null,

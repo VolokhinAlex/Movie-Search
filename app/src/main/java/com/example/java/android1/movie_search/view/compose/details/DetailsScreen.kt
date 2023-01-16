@@ -13,8 +13,11 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -33,31 +36,38 @@ import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
-import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
-import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
-import com.example.java.android1.movie_search.view.compose.theme.TransparentColor
+import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
+import com.example.java.android1.movie_search.view.compose.theme.*
 import com.example.java.android1.movie_search.view.compose.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.compose.widgets.Loader
-import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
+import com.example.java.android1.movie_search.view.without_compose.details.MovieDetailsFragment
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
+import java.text.DecimalFormat
 
 /**
  * The main method [DetailsScreen] that combines all the necessary methods for this screen
  */
 
 @Composable
-fun DetailsScreen(movieDataTMDB: MovieDataTMDB, navController: NavController) {
-    val movieDetailsViewModel by remember {
-        mutableStateOf(DetailsViewModel())
-    }
-    LaunchedEffect(Unit) {
-        movieDataTMDB.id?.let { movieDetailsViewModel.getMovieDetailsFromRemoteSource(it, "ru-RU") }
+fun DetailsScreen(
+    movieDataTMDB: MovieDataTMDB,
+    navController: NavController,
+    movieDetailsViewModel: DetailsViewModel
+) {
+    LaunchedEffect(true) {
+        movieDataTMDB.id?.let { movieDetailsViewModel.getMovieDetailsFromRemoteSource(it, "en-EN") }
     }
     movieDetailsViewModel.detailsLiveData.observeAsState().value?.let { state ->
-        RenderData(state, movieDetailsViewModel, navController)
+        RenderDataFromRemoteServer(state, movieDetailsViewModel, navController)
     }
-
 }
+
+/**
+ * The method processes state from the database
+ * @param roomAppState - The state that came from the database. [RoomAppState]
+ * @param movieDetailsViewModel - ViewModel for logic processing
+ * @param movieId - The movie id
+ */
 
 @Composable
 private fun RenderDataFromLocalDataBase(
@@ -66,9 +76,9 @@ private fun RenderDataFromLocalDataBase(
     roomAppState: RoomAppState
 ) {
     when (roomAppState) {
-        is RoomAppState.Error -> FavoriteOfMovie(movieDetailsViewModel, movieId, false)
-        RoomAppState.Loading -> FavoriteOfMovie(movieDetailsViewModel, movieId, false)
-        is RoomAppState.Success -> FavoriteOfMovie(
+        is RoomAppState.Error -> MovieFavorite(movieDetailsViewModel, movieId, false)
+        RoomAppState.Loading -> MovieFavorite(movieDetailsViewModel, movieId, false)
+        is RoomAppState.Success -> MovieFavorite(
             movieDetailsViewModel,
             movieId,
             roomAppState.data[0].movieFavorite ?: false
@@ -76,8 +86,15 @@ private fun RenderDataFromLocalDataBase(
     }
 }
 
+/**
+ * The method processes state from the remote server
+ * @param movieAppState - The state that came from the remote server. [MovieAppState]
+ * @param movieDetailsViewModel - ViewModel for logic processing
+ * @param navController - To navigate back
+ */
+
 @Composable
-private fun RenderData(
+private fun RenderDataFromRemoteServer(
     movieAppState: MovieAppState,
     movieDetailsViewModel: DetailsViewModel,
     navController: NavController
@@ -93,7 +110,7 @@ private fun RenderData(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                ScreenHeader(movieDataTMDB[0], navController)
+                Header(movieDataTMDB[0], navController)
                 Column(
                     modifier = Modifier.padding(
                         start = 15.dp,
@@ -102,9 +119,11 @@ private fun RenderData(
                         bottom = 20.dp
                     )
                 ) {
-                    DetailOfMovie(movieDataTMDB[0], movieDetailsViewModel)
-                    CastsOfMovie(movieDataTMDB[0])
-                    TrailerOfMovie(movieDataTMDB[0])
+                    MovieDetails(movieDataTMDB[0], movieDetailsViewModel)
+                    MovieCasts(movieDataTMDB[0])
+                    if (movieDataTMDB[0].videos?.results?.isNotEmpty() == true) {
+                        MovieTrailer(movieDataTMDB[0])
+                    }
                 }
             }
         }
@@ -116,7 +135,7 @@ private fun RenderData(
  */
 
 @Composable
-private fun ScreenHeader(movieDataTMDB: MovieDataTMDB, navController: NavController) {
+private fun Header(movieDataTMDB: MovieDataTMDB, navController: NavController) {
     Box {
         SubcomposeAsyncImage(
             model = "https://image.tmdb.org/t/p/w500${movieDataTMDB.poster_path}",
@@ -148,8 +167,9 @@ private fun ScreenHeader(movieDataTMDB: MovieDataTMDB, navController: NavControl
  */
 
 @Composable
-private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: DetailsViewModel) {
+private fun MovieDetails(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: DetailsViewModel) {
     val favoriteState = movieDetailsViewModel.movieLocalLiveData.observeAsState().value
+    val ratingFormat = DecimalFormat("#.#")
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -159,7 +179,7 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: D
             modifier = Modifier.fillMaxWidth(0.8f),
             text = movieDataTMDB.title ?: "",
             color = Color.White,
-            fontSize = 22.sp,
+            fontSize = TITLE_SIZE,
             fontWeight = FontWeight.Bold,
         )
         movieDataTMDB.id?.let { movieId ->
@@ -167,24 +187,34 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: D
         }
     }
 
-    LazyRow(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp), content = {
-        movieDataTMDB.genres?.let {
-            itemsIndexed(it) { index, item ->
-                item.name?.let { it1 -> Text(text = it1, fontSize = 16.sp, color = Color.White) }
-                if (index < it.size - 1) {
-                    Text(text = ", ", fontSize = 16.sp, color = Color.White)
+    LazyRow(
+        modifier = Modifier.padding(
+            top = DETAILS_PRIMARY_PAGING,
+            bottom = DETAILS_PRIMARY_PAGING
+        ), content = {
+            movieDataTMDB.genres?.let {
+                itemsIndexed(it) { index, item ->
+                    item.name?.let { it1 ->
+                        Text(
+                            text = it1,
+                            fontSize = DETAILS_PRIMARY_SIZE,
+                            color = Color.White
+                        )
+                    }
+                    if (index < it.size - 1) {
+                        Text(text = ", ", fontSize = DETAILS_PRIMARY_SIZE, color = Color.White)
+                    }
                 }
             }
-        }
-    })
+        })
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "IMDB ${movieDataTMDB.vote_average}",
+            text = "IMDB ${ratingFormat.format(movieDataTMDB.vote_average)}",
             modifier = Modifier.padding(end = 5.dp),
-            color = Color.White, fontSize = 16.sp
+            color = Color.White, fontSize = DETAILS_PRIMARY_SIZE
         )
         Image(
             painter = painterResource(id = R.drawable.ic_baseline_star_rate_24),
@@ -194,10 +224,10 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: D
                 .size(22.dp)
         )
         Text(
-            text = "${movieDataTMDB.release_date?.let { "".getYearFromStringFullDate(it) }}",
+            text = "${movieDataTMDB.release_date?.let { "".convertStringFullDateToOnlyYear(it) }}",
             modifier = Modifier.padding(end = 15.dp),
             color = Color.White,
-            fontSize = 16.sp
+            fontSize = DETAILS_PRIMARY_SIZE
         )
         Text(
             text = "${
@@ -208,27 +238,27 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: D
                 }
             }",
             color = Color.White,
-            fontSize = 16.sp
+            fontSize = DETAILS_PRIMARY_SIZE
         )
     }
     Text(
         text = "Overview",
-        modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
+        modifier = Modifier.padding(top = DETAILS_PRIMARY_PAGING, bottom = DETAILS_PRIMARY_PAGING),
         color = Color.White,
-        fontSize = 22.sp,
+        fontSize = TITLE_SIZE,
         fontWeight = FontWeight.Bold
     )
     Text(
         text = "${movieDataTMDB.overview}",
-        modifier = Modifier.padding(bottom = 10.dp),
+        modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING),
         color = Color.White
     )
 
     Text(
         text = "Casts",
         color = Color.White,
-        modifier = Modifier.padding(bottom = 10.dp),
-        fontSize = 22.sp,
+        modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING),
+        fontSize = TITLE_SIZE,
         fontWeight = FontWeight.Bold
     )
 }
@@ -238,7 +268,7 @@ private fun DetailOfMovie(movieDataTMDB: MovieDataTMDB, movieDetailsViewModel: D
  */
 
 @Composable
-private fun CastsOfMovie(movieDataTMDB: MovieDataTMDB) {
+private fun MovieCasts(movieDataTMDB: MovieDataTMDB) {
     LazyRow(content = {
         movieDataTMDB.credits?.let {
             itemsIndexed(it.cast) { _, item ->
@@ -276,13 +306,13 @@ private fun CastsOfMovie(movieDataTMDB: MovieDataTMDB) {
  */
 
 @Composable
-private fun TrailerOfMovie(movieDataTMDB: MovieDataTMDB) {
+private fun MovieTrailer(movieDataTMDB: MovieDataTMDB) {
     val context = LocalContext.current
     Text(
         text = "Trailer",
         color = Color.White,
         modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
-        fontSize = 22.sp,
+        fontSize = TITLE_SIZE,
         fontWeight = FontWeight.Bold
     )
     Box(modifier = Modifier.size(width = 250.dp, height = 150.dp)) {
@@ -331,7 +361,7 @@ private fun TrailerOfMovie(movieDataTMDB: MovieDataTMDB) {
  */
 
 @Composable
-private fun FavoriteOfMovie(
+private fun MovieFavorite(
     movieDetailsViewModel: DetailsViewModel,
     movieId: Int,
     favorite: Boolean

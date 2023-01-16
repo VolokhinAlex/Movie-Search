@@ -9,8 +9,6 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface LocalSearchRepository {
-
     fun getHistorySearch() : Flow<List<String>>
     suspend fun saveEntity(movieTitle: String, date: Long)
-
 }

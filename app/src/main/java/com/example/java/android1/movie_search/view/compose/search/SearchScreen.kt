@@ -43,10 +43,11 @@ import com.example.java.android1.movie_search.viewmodel.SearchViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun SearchScreen(navController: NavController, searchState: SearchState = rememberSearchState()) {
-    val searchViewModel by remember {
-        mutableStateOf(SearchViewModel())
-    }
+fun SearchScreen(
+    navController: NavController,
+    searchState: SearchState = rememberSearchState(),
+    searchViewModel: SearchViewModel
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()

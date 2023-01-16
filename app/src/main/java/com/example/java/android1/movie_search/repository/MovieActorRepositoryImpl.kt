@@ -11,7 +11,7 @@ class MovieActorRepositoryImpl(
     private val remoteDataSource: RemoteDataSource
 ) : MovieActorRepository {
 
-    override fun getMovieActorFromRemoteServer(personId: Long, language: String, callback: Callback<ActorDTO>) {
+    override fun getMovieActorsFromRemoteServer(personId: Long, language: String, callback: Callback<ActorDTO>) {
         remoteDataSource.getActorData(
             personId = personId,
             language = language,

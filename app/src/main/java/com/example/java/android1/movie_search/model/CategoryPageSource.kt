@@ -24,7 +24,7 @@ class CategoryPageSource(
         val page: Int = params.key ?: 1
         return try {
             val response =
-                remoteDataSource.getCategory(category = category, language = "ru-RU", page = page)
+                remoteDataSource.getCategoryMovies(category = category, language = "en-EN", page = page)
             val movies = checkNotNull(response.body())
             val nextKey = if (movies.results.isEmpty()) null else page + 1
             val prevKey = if (page == 1) null else page - 1

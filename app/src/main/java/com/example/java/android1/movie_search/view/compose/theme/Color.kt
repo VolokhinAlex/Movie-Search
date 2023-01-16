@@ -15,9 +15,6 @@ val RedDark40 = Color(0xFFA20C0C)
 
 val PrimaryColor80 = Color(0xFF111111)
 val PrimaryColor70 = Color(0xFF1B1C1E)
-
 val TransparentColor = Color(0x5E000000)
 
-//val PrimaryColor80 = Color(0xFF090F1B)
-//val PrimaryColor70 = Color(0xFF151E2F)
 

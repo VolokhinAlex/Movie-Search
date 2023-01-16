@@ -24,7 +24,7 @@ class SearchPageSource(
         val page: Int = params.key ?: 1
         return try {
             val response = remoteDataSource.getMoviesFromSearchPagination(
-                language = "ru-RU",
+                language = "en-EN",
                 page = page,
                 adult = false,
                 query = query

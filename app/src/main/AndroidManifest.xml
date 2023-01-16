@@ -29,7 +29,8 @@
         </service>
 
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.without_compose.MainActivity"
+            tools:node="remove"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>

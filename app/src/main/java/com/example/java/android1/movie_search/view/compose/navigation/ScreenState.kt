@@ -8,10 +8,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
  * The class is needed for easy navigation between screens
+ * @param route - Needed to determine the screen for navigation
+ * @param name - Needed to display the screen name in the bottom navigation bar
+ * @param icon - Needed to display the screen icon in the bottom navigation bar
  */
 
 sealed class ScreenState(val route: String, val name: String, val icon: ImageVector?) {
-
     object HomeScreen : ScreenState(route = "home_screen", "Home", Icons.Rounded.Home)
     object DetailsScreen : ScreenState(route = "details_screen", "", null)
     object SearchScreen : ScreenState(route = "search_screen", "Search", Icons.Rounded.Search)

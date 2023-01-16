@@ -19,7 +19,7 @@ fun View.visible() {
     this.visibility = View.VISIBLE
 }
 
-fun String.getYearFromStringFullDate(stringDate: String): String {
+fun String.convertStringFullDateToOnlyYear(stringDate: String): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     if (stringDate != "") {
         val date = formatter.parse(stringDate)

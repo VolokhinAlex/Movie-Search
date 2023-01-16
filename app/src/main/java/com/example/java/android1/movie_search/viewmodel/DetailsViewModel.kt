@@ -1,15 +1,11 @@
 package com.example.java.android1.movie_search.viewmodel
 
-import android.os.Handler
-import android.os.Looper
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.java.android1.movie_search.app.App.Companion.movieDao
+import androidx.lifecycle.*
 import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
-import com.example.java.android1.movie_search.repository.*
+import com.example.java.android1.movie_search.repository.DetailsRepository
+import com.example.java.android1.movie_search.repository.MovieLocalRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -20,20 +16,20 @@ private const val REQUEST_ERROR = "Ошибка запроса на сервер
 private const val CORRUPTED_DATA = "Неполные данные"
 
 class DetailsViewModel(
-    val detailsLiveData: MutableLiveData<MovieAppState> = MutableLiveData(),
-    private val repository: DetailsRepository = DetailsRepositoryImpl(
-        RemoteDataSource()
-    ),
-    private val movieLocalRepository: MovieLocalRepository = MovieLocalRepositoryImpl(movieDao),
-    val movieLocalLiveData: MutableLiveData<RoomAppState> = MutableLiveData(),
-) :
-    ViewModel() {
+    private val repository: DetailsRepository,
+    private val movieLocalRepository: MovieLocalRepository
+) : ViewModel() {
+
+    private val _detailsLiveData: MutableLiveData<MovieAppState> = MutableLiveData()
+    val detailsLiveData: LiveData<MovieAppState> = _detailsLiveData
+    private val _movieLocalLiveData: MutableLiveData<RoomAppState> = MutableLiveData()
+    val movieLocalLiveData: LiveData<RoomAppState> = _movieLocalLiveData
 
     private val callback = object : Callback<MovieDataTMDB> {
         override fun onResponse(call: Call<MovieDataTMDB>, response: Response<MovieDataTMDB>) {
             val serverResponse: MovieDataTMDB? = response.body()
-            detailsLiveData.value = if (response.isSuccessful && serverResponse != null) {
-                getMovieFromLocalDataBase(serverResponse)
+            _detailsLiveData.value = if (response.isSuccessful && serverResponse != null) {
+                getMovieDetailsFromLocalDataBase(serverResponse)
                 checkResponse(serverResponse)
             } else {
                 MovieAppState.Error(Throwable(REQUEST_ERROR))
@@ -41,9 +37,8 @@ class DetailsViewModel(
         }
 
         override fun onFailure(call: Call<MovieDataTMDB>, error: Throwable) {
-            detailsLiveData.value = MovieAppState.Error(error)
+            _detailsLiveData.value = MovieAppState.Error(error)
         }
-
     }
 
     private fun checkResponse(movieData: MovieDataTMDB): MovieAppState {
@@ -58,23 +53,20 @@ class DetailsViewModel(
     }
 
     fun getMovieDetailsFromRemoteSource(movieId: Int, language: String) {
-        detailsLiveData.value = MovieAppState.Loading
+        _detailsLiveData.value = MovieAppState.Loading
         repository.getMovieDetailsFromRemoteServer(movieId, language, callback)
     }
 
     private fun saveMovieData(movieData: MovieDataTMDB) = viewModelScope.launch {
-        movieLocalLiveData.value = RoomAppState.Loading
+        _movieLocalLiveData.value = RoomAppState.Loading
         movieLocalRepository.saveMovieToLocalDataBase(movieData)
     }
 
-    fun getMovieFromLocalDataBase(movieData: MovieDataTMDB) {
+    fun getMovieDetailsFromLocalDataBase(movieData: MovieDataTMDB) {
         if (movieData.id != null) {
-            val handler = Handler(Looper.getMainLooper())
             viewModelScope.launch(Dispatchers.IO) {
                 val result = movieLocalRepository.getMovieFromLocalDataBase(movieData.id)
-                handler.post {
-                    movieLocalLiveData.value = RoomAppState.Success(listOf(result))
-                }
+                _movieLocalLiveData.postValue(RoomAppState.Success(listOf(result)))
             }
         }
     }
@@ -87,4 +79,20 @@ class DetailsViewModel(
         movieLocalRepository.updateMovieFavoriteInLocalDataBase(movieId, favorite)
     }
 
+}
+
+class DetailsViewModelFactory(
+    private val repositoryRemote: DetailsRepository,
+    private val localRepository: MovieLocalRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return if (modelClass.isAssignableFrom(DetailsViewModel::class.java)) {
+            DetailsViewModel(
+                repository = repositoryRemote,
+                movieLocalRepository = localRepository
+            ) as T
+        } else {
+            throw IllegalArgumentException("DetailsViewModel not found")
+        }
+    }
 }
