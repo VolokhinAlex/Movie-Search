@@ -32,14 +32,14 @@ import com.example.java.android1.movie_search.view.navigation.navigate
 import com.example.java.android1.movie_search.view.theme.PrimaryColor70
 import com.example.java.android1.movie_search.view.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.theme.SearchFieldColor
-import com.example.java.android1.movie_search.view.widgets.ShowListMoviesPagination
+import com.example.java.android1.movie_search.view.widgets.ListMoviesPagination
 import com.example.java.android1.movie_search.viewmodel.SearchViewModel
 import kotlinx.coroutines.delay
 
 /**
  * The main method for the layout of the search screen methods
  * @param navController - Controller for screen navigation
- * @param searchState - Search States
+ * @param searchState - Saved search states
  * @param searchViewModel - Search View Model [SearchViewModel]
  */
 
@@ -67,7 +67,7 @@ fun SearchScreen(
 
 /**
  * The method for displaying, and implementing a search
- *  @param searchState - Search States
+ *  @param searchState - Saved search states
  *  @param searchViewModel - Search View Model [SearchViewModel]
  *  @param navController - Controller for screen navigation
  */
@@ -100,7 +100,7 @@ private fun SearchField(
         val listMoviesBySearch =
             searchViewModel.getMoviesBySearchFromRemoteServer(searchState.query.text)
                 .collectAsLazyPagingItems()
-        ShowListMoviesPagination(listMoviesBySearch) { movieData ->
+        ListMoviesPagination(listMoviesBySearch) { movieData ->
             val detailsMovieBundle = Bundle()
             detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieData)
             navController.navigate(ScreenState.DetailsScreen.route, detailsMovieBundle)

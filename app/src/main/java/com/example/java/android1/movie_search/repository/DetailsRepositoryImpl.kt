@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Callback
 
 /**
- * Implementation of the interface for getting data from TMDB API
+ * Implementation of the interface for getting data from Remote Server
  */
 
 class DetailsRepositoryImpl(
@@ -27,7 +27,11 @@ class DetailsRepositoryImpl(
         language: String,
         callback: Callback<MovieDataTMDB>
     ) {
-        remoteDataSource.getMovieDetails(movieId, language, callback)
+        remoteDataSource.getMovieDetails(
+            movieId = movieId,
+            language = language,
+            callback = callback
+        )
     }
 
     /**

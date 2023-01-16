@@ -42,13 +42,13 @@ import com.example.java.android1.movie_search.viewmodel.FavoriteViewModel
 
 @Composable
 fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteViewModel) {
+    LaunchedEffect(true) { favoriteViewModel.getMoviesFromLocalDataBase() }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(PrimaryColor80), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HeaderFavoriteScreen()
-        LaunchedEffect(true) { favoriteViewModel.getMoviesFromLocalDataBase() }
         favoriteViewModel.moviesFavoriteData.observeAsState().value?.let { state ->
             RenderFavoriteDataFromLocalDataBase(
                 roomAppState = state,
@@ -62,7 +62,7 @@ fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteView
 /**
  * The method processes state from the database
  * @param roomAppState - The state that came from the database. [RoomAppState]
- * @param navController - Needed for the method [ShowFavoriteMovies]
+ * @param navController - Needed for the method [FavoriteMoviesList]
  * @param favoriteViewModel - Needed if roomAppState came Error
  */
 
@@ -73,12 +73,12 @@ private fun RenderFavoriteDataFromLocalDataBase(
     favoriteViewModel: FavoriteViewModel
 ) {
     when (roomAppState) {
-        is RoomAppState.Error -> roomAppState.error.localizedMessage?.let { message ->
+        is RoomAppState.Error -> roomAppState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) { favoriteViewModel.getMoviesFromLocalDataBase() }
         }
         is RoomAppState.Success -> {
-            val favoriteMoviesData = roomAppState.data
-            ShowFavoriteMovies(favoriteMoviesData, navController)
+            val favoriteMoviesData = roomAppState.moviesData
+            FavoriteMoviesList(favoriteMoviesData, navController)
         }
         RoomAppState.Loading -> LoadingProgressBar()
     }
@@ -91,7 +91,7 @@ private fun RenderFavoriteDataFromLocalDataBase(
  */
 
 @Composable
-private fun ShowFavoriteMovies(
+private fun FavoriteMoviesList(
     favoriteMoviesData: List<MovieDataRoom>,
     navController: NavController,
 ) {

@@ -12,7 +12,7 @@ import com.example.java.android1.movie_search.model.MovieDataTMDB
 
 
 sealed class MovieDataAppState {
-    data class Success(val data: MovieDataTMDB) : MovieDataAppState()
-    data class Error(val error: Throwable) : MovieDataAppState()
+    data class Success(val movieDetailsData: MovieDataTMDB) : MovieDataAppState()
+    data class Error(val errorMessage: Throwable) : MovieDataAppState()
     object Loading : MovieDataAppState()
 }

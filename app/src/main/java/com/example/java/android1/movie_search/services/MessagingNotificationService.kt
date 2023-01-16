@@ -11,6 +11,10 @@ import com.example.java.android1.movie_search.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
+/**
+ * The class for receiving messages from Firebase Cloud Messaging.
+ */
+
 class MessagingNotificationService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {

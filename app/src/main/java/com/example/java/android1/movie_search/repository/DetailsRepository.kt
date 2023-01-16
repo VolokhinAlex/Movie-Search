@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Callback
 
 /**
- * The remote repository to get the details data of movie from TMDB API
+ * The remote repository to get the details data of movie from Remote Server
  */
 
 interface DetailsRepository {

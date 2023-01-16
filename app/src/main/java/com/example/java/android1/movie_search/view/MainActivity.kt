@@ -35,14 +35,12 @@ import com.example.java.android1.movie_search.viewmodel.*
 const val MOVIE_DATA_KEY = "Movie Data"
 
 class MainActivity : ComponentActivity() {
-
     private val homeViewModel: MainViewModel by viewModels { MainViewModelFactory() }
     private val detailsViewModel: DetailsViewModel by viewModels { DetailsViewModelFactory() }
     private val searchViewModel: SearchViewModel by viewModels { SearchViewModelFactory() }
     private val favoriteViewModel: FavoriteViewModel by viewModels { FavoriteViewModelFactory() }
     private val categoryViewModel: CategoryMoviesViewModel by viewModels { CategoryMoviesViewModelFactory() }
     private val actorDetailsViewModel: MovieActorViewModel by viewModels { MovieActorViewModelFactory() }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -57,7 +55,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun Navigation(
     homeViewModel: MainViewModel,
@@ -116,7 +113,6 @@ fun Navigation(
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

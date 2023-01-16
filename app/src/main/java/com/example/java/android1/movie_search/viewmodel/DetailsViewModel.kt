@@ -14,8 +14,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val REQUEST_ERROR = "Ошибка запроса на сервер"
-private const val CORRUPTED_DATA = "Неполные данные"
+private const val REQUEST_ERROR = "Server request error"
+private const val CORRUPTED_DATA = "Incomplete data"
 
 class DetailsViewModel(
     private val detailsRepository: DetailsRepository,
@@ -60,6 +60,8 @@ class DetailsViewModel(
 
     /**
      * Method for getting details about the movie
+     * @param movieId - id of the movie to get the details of
+     * @param language - Response language
      */
 
     fun getMovieDetailsFromRemoteSource(movieId: Int, language: String) {
@@ -69,6 +71,7 @@ class DetailsViewModel(
 
     /**
      * Method for saving a movie to a local database
+     * @param movieData - The movie to save
      */
 
     private fun saveMovieDataToLocalBase(movieData: MovieDataTMDB) = viewModelScope.launch {
@@ -78,6 +81,7 @@ class DetailsViewModel(
 
     /**
      * Method for getting movie details from a local database
+     * @param movieData - The movie to get
      */
 
     fun getMovieDetailsFromLocalDataBase(movieData: MovieDataTMDB) {
@@ -91,6 +95,8 @@ class DetailsViewModel(
 
     /**
      * Method for adding a movie to the list of favorite movies
+     * @param movieId - The movie id to add
+     * @param favorite - If we add then true if we delete then false
      */
 
     fun setFavoriteMovie(movieId: Int, favorite: Boolean) = viewModelScope.launch {
