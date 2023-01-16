@@ -39,7 +39,7 @@ data class MovieData(
     val originalLanguage: String,
 ) : Parcelable
 
-fun getListOfMoviesFromLocalStorage(): List<MovieData> = listOf(
+fun getListOfMoviesFromLocalStorage() = listOf(
     MovieData(
         id = 1,
         imdbId = "tt0137523",
