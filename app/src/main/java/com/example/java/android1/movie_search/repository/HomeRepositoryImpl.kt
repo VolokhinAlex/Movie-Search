@@ -39,4 +39,13 @@ class HomeRepositoryImpl(
         remoteDataSource.getUpcomingMovies(language = language, page = page, callback = callback)
     }
 
+    override fun getMoviesCategoryForCompose(
+        category: String,
+        language: String,
+        page: Int,
+        callback: Callback<CategoryMoviesTMDB>
+    ) {
+        remoteDataSource.getMoviesCategoryForCompose(category, language, page, callback)
+    }
+
 }

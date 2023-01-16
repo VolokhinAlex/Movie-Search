@@ -29,4 +29,11 @@ interface HomeRepository {
         callback: Callback<CategoryMoviesTMDB>
     )
 
+    fun getMoviesCategoryForCompose(
+        category: String,
+        language: String,
+        page: Int,
+        callback: Callback<CategoryMoviesTMDB>
+    )
+
 }

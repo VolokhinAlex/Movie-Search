@@ -15,35 +15,35 @@ interface MovieTMDBAPI {
         @Query("api_key") token: String,
         @Query("language") language: String,
         @Query("append_to_response") actors: String
-    ) : Call<MovieDataTMDB>
+    ): Call<MovieDataTMDB>
 
     @GET("3/movie/popular")
     fun getPopularMovies(
         @Query("api_key") token: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    ) : Call<CategoryMoviesTMDB>
+    ): Call<CategoryMoviesTMDB>
 
     @GET("3/movie/now_playing")
     fun getNowPlayingMovies(
         @Query("api_key") token: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    ) : Call<CategoryMoviesTMDB>
+    ): Call<CategoryMoviesTMDB>
 
     @GET("3/movie/top_rated")
     fun getTopRatedMovies(
         @Query("api_key") token: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    ) : Call<CategoryMoviesTMDB>
+    ): Call<CategoryMoviesTMDB>
 
     @GET("3/movie/upcoming")
     fun getUpcomingMovies(
         @Query("api_key") token: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    ) : Call<CategoryMoviesTMDB>
+    ): Call<CategoryMoviesTMDB>
 
     @GET("3/search/movie")
     fun getMoviesFromSearch(
@@ -52,6 +52,14 @@ interface MovieTMDBAPI {
         @Query("page") page: Int,
         @Query("include_adult") adult: Boolean,
         @Query("query") query: String
-    ) : Call<CategoryMoviesTMDB>
+    ): Call<CategoryMoviesTMDB>
+
+    @GET("3/movie/{category}")
+    fun getMoviesCategoryForCompose(
+        @Path("category") category: String,
+        @Query("api_key") token: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Call<CategoryMoviesTMDB>
 
 }
