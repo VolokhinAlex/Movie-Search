@@ -11,7 +11,9 @@ interface MovieLocalRepository {
 
     fun getAllMovies(): List<MovieDataRoom>
 
-    fun getMovieFromLocalDataBase(movieId: Int): MovieDataRoom
+    fun getAllFavorites(): List<MovieDataRoom>
+
+    fun getMovieFromLocalDataBase(movieId: Int?): MovieDataRoom
 
     suspend fun saveMovieToLocalDataBase(movieDataTMDB: MovieDataTMDB)
 

@@ -23,8 +23,12 @@ class MovieLocalRepositoryImpl(
         return converterMovieEntityToListMovieDataRoom(localDataRoom.all())
     }
 
-    override fun getMovieFromLocalDataBase(movieId: Int): MovieDataRoom =
-        converterMovieEntityToMovieDataRoom(localDataRoom.getMovieByMovieId(movieId))
+    override fun getAllFavorites(): List<MovieDataRoom> {
+        return converterMovieEntityToListMovieDataRoom(localDataRoom.getAllFavorites())
+    }
+
+    override fun getMovieFromLocalDataBase(movieId: Int?): MovieDataRoom =
+        converterMovieEntityToMovieDataRoom(movieId?.let { localDataRoom.getMovieByMovieId(it) })
 
     @WorkerThread
     override suspend fun saveMovieToLocalDataBase(movieDataTMDB: MovieDataTMDB) {

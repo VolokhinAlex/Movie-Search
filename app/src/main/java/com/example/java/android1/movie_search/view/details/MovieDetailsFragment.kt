@@ -112,8 +112,8 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun setDetailsMovieData(movieDataDTO: MovieDataTMDB) {
-        val castDTO = movieDataDTO.credits.cast
-        actorsMovieAdapter.setActorsListData(castDTO)
+        val castDTO = movieDataDTO.credits?.cast
+        castDTO?.let { actorsMovieAdapter.setActorsListData(it) }
         val countries = StringBuilder()
         val genres = StringBuilder()
         movieDataDTO.production_countries?.forEach {

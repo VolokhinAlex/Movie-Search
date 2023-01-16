@@ -126,6 +126,21 @@ class RemoteDataSource {
         )
     }
 
+    suspend fun getMoviesFromSearchPagination(
+        language: String,
+        page: Int,
+        adult: Boolean,
+        query: String,
+    ): retrofit2.Response<CategoryMoviesTMDB> {
+        return movieApi.getMoviesFromSearchPagination(
+            token = BuildConfig.MOVIE_API_KEY,
+            language = language,
+            page = page,
+            adult = adult,
+            query = query
+        )
+    }
+
     private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
         val client = OkHttpClient.Builder()
         client.addInterceptor(interceptor)

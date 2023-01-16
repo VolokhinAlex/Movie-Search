@@ -40,7 +40,7 @@ data class MovieDataTMDB(
     val release_date: String?,
     val production_countries: List<CountriesDTO>?,
     val runtime: Int?,
-    val credits: CreditsDTO,
+    val credits: CreditsDTO?,
     val videos: Videos?
 ) : Parcelable
 

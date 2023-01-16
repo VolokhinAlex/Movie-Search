@@ -33,6 +33,7 @@ class DetailsViewModel(
         override fun onResponse(call: Call<MovieDataTMDB>, response: Response<MovieDataTMDB>) {
             val serverResponse: MovieDataTMDB? = response.body()
             detailsLiveData.value = if (response.isSuccessful && serverResponse != null) {
+                getMovieFromLocalDataBase(serverResponse)
                 checkResponse(serverResponse)
             } else {
                 MovieAppState.Error(Throwable(REQUEST_ERROR))

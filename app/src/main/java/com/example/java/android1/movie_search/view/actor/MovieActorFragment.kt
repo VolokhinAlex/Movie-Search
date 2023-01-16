@@ -137,7 +137,7 @@ private fun GetActorCoordinates(location: String, geocoder: Geocoder) {
 @Composable
 private fun RenderData(movieActorState: MovieActorState) {
     when (movieActorState) {
-        is MovieActorState.Error -> movieActorState.error.message?.let { ErrorMessage(message = it) }
+        is MovieActorState.Error -> movieActorState.error.message?.let { ErrorMessage(message = it) {} }
         MovieActorState.Loading -> Loader()
         is MovieActorState.Success -> {
             val actorData = movieActorState.data

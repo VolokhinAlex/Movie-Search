@@ -1,10 +1,13 @@
 package com.example.java.android1.movie_search.viewmodel
 
 import androidx.lifecycle.*
+import androidx.paging.PagingData
 import com.example.java.android1.movie_search.app.App.Companion.historySearchDao
 import com.example.java.android1.movie_search.app.MovieAppState
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,6 +21,9 @@ class SearchViewModel(
     private val localSearchRepository: LocalSearchRepository = LocalSearchRepositoryImpl(historySearchDao),
     val liveDataHistory: LiveData<List<String>> = localSearchRepository.getHistorySearch().asLiveData()
 ) : ViewModel() {
+
+    fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> =
+        repository.getSearchRequest(query)
 
     private val callback = object : Callback<CategoryMoviesTMDB> {
 

@@ -1,12 +1,12 @@
 package com.example.java.android1.movie_search.view.compose.home
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.HomeRepository
 import com.example.java.android1.movie_search.repository.HomeRepositoryImpl
 import com.example.java.android1.movie_search.repository.RemoteDataSource
+import kotlinx.coroutines.flow.MutableStateFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,7 +14,7 @@ import retrofit2.Response
 private const val SERVER_ERROR = "Ошибка сервера"
 
 class MainViewModelCompose(
-    val homeLiveData: MutableLiveData<CategoryAppState> = MutableLiveData(),
+    val homeLiveData: MutableStateFlow<CategoryAppState> = MutableStateFlow(CategoryAppState.Loading),
     private val repository: HomeRepository = HomeRepositoryImpl(RemoteDataSource()),
 ) : ViewModel() {
 
