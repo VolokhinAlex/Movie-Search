@@ -17,4 +17,7 @@
     <string name="category_upcoming">Upcoming</string>
     <string name="category_now_playing">NowPlaying</string>
     <string name="label_imdb_rating">Rating IMDB</string>
+    <string name="with_adult_movie">With Adult Movie</string>
+    <string name="save_note">Save Note</string>
+    <string name="bottom_menu_favorite">Favorite</string>
 </resources>

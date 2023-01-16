@@ -19,9 +19,13 @@ import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.databinding.FragmentMovieDetailsBinding
 import com.example.java.android1.movie_search.model.ActorData
+import com.example.java.android1.movie_search.model.MovieDataRoom
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.utils.DialogFragmentNote
+import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
 import com.example.java.android1.movie_search.viewmodel.AppState
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
+import com.example.java.android1.movie_search.viewmodel.RoomAppState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import jp.wasabeef.glide.transformations.BlurTransformation
 import java.text.DecimalFormat
@@ -64,6 +68,7 @@ class MovieDetailsFragment : Fragment() {
                 LinearLayoutManager.HORIZONTAL, false
             )
         }
+        viewModel.movieLocalLiveData.observe(viewLifecycleOwner) { renderDataFromLocalDataBase(it) }
         return mBinding.root
     }
 
@@ -72,6 +77,7 @@ class MovieDetailsFragment : Fragment() {
             is AppState.Success -> {
                 val movieData = appState.data
                 setMovieData(movieData[0])
+                viewModel.getMovieFromLocalDataBase(movieData[0])
             }
             is AppState.Error -> {
                 val error = appState.error
@@ -79,6 +85,22 @@ class MovieDetailsFragment : Fragment() {
             }
             AppState.Loading -> {}
         }
+    }
+
+    private fun renderDataFromLocalDataBase(roomAppState: RoomAppState) {
+        when (roomAppState) {
+            is RoomAppState.Error -> {
+                val error = roomAppState.error
+                error.message?.let { Log.e("APP_STATE_ERROR", it) }
+            }
+            RoomAppState.Loading -> {}
+            is RoomAppState.Success -> {
+                val movieDataRoom = roomAppState.data
+                mBinding.itemMovieFavorite.isChecked = movieDataRoom[0].movieFavorite ?: false
+                openMovieNote(movieDataRoom[0], viewModel)
+            }
+        }
+
     }
 
     private fun setMovieData(movieDataDTO: MovieDataTMDB) {
@@ -94,14 +116,9 @@ class MovieDetailsFragment : Fragment() {
             genres.append(it.name).append(", ")
         }
         with(mBinding) {
-//            Glide.with(detailMovieFrontImage.context)
-//                .load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
-//                .into(detailMovieFrontImage)
             detailMovieFrontImage.load("https://image.tmdb.org/t/p/w500${movieDataDTO.poster_path}")
             detailMovieTitle.text = movieDataDTO.title
-            movieDataDTO.release_date?.apply {
-                detailMovieReleaseDate.text = this.substring(0, this.indexOf("-"))
-            }
+            detailMovieReleaseDate.text = movieDataDTO.release_date?.let { "".getYearFromStringFullDate(it) }
             detailMovieOverview.text = movieDataDTO.overview
             detailMovieRating.text = ratingFormat.format(movieDataDTO.vote_average)
             detailMovieGenres.text =
@@ -111,6 +128,7 @@ class MovieDetailsFragment : Fragment() {
                 if (countries.length > 2) countries.deleteCharAt(countries.lastIndexOf(", ")) else countries
         }
         setBlurForBackground(movieDataDTO)
+        movieDataDTO.id?.let { setFavoriteTrueOrFalse(it) }
     }
 
     /**
@@ -134,6 +152,12 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
+    private fun setFavoriteTrueOrFalse(movieId: Int) {
+        mBinding.itemMovieFavorite.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateMovieFavorite(movieId = movieId, favorite = isChecked)
+        }
+    }
+
     /**
      * Minutes are converted to the format of hours and minutes
      * @sample min = 96 -> 1h 36min
@@ -143,6 +167,15 @@ class MovieDetailsFragment : Fragment() {
         val hour = min / 60
         val minutes = min % 60
         return String.format("%02dh %02dmin", hour, minutes)
+    }
+
+    private fun openMovieNote(dataRoom: MovieDataRoom, viewModel: DetailsViewModel) {
+        mBinding.movieNote.setOnClickListener {
+            DialogFragmentNote(
+                dataRoom,
+                viewModel
+            ).show(requireActivity().supportFragmentManager, "")
+        }
     }
 
     companion object {

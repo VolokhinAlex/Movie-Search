@@ -18,13 +18,13 @@ import com.example.java.android1.movie_search.viewmodel.MainViewModel
 class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
-    private val mBinding get() = _binding!!
+    private val binding get() = _binding!!
     private var categories: MutableList<List<MovieDataTMDB>> = mutableListOf()
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this)[MainViewModel::class.java]
     }
 
-    private lateinit var mAdapter: MoviesHomeBasicAdapter
+    private lateinit var moviesCategoryAdapter: MoviesHomeBasicAdapter
 
     companion object {
         fun newInstance() = MainFragment()
@@ -38,7 +38,7 @@ class MainFragment : Fragment() {
         viewModel.homeLiveData.observe(viewLifecycleOwner) { state -> renderData(state) }
         viewModel.getCategoriesMovies("ru-RU", 1)
         initRecyclerViews()
-        return mBinding.root
+        return binding.root
     }
 
     private fun renderData(appState: AppState) {
@@ -47,7 +47,7 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
                 val movieData = appState.data
                 categories.add(movieData)
-                mAdapter.setParentListData(
+                moviesCategoryAdapter.setParentListData(
                     listOf(
                         MovieChildListData(getString(R.string.category_upcoming), categories[0]),
                         if (categories.size >= 2) MovieChildListData(getString(R.string.category_popular), categories[1]) else emptyList,
@@ -65,9 +65,9 @@ class MainFragment : Fragment() {
     }
 
     private fun initRecyclerViews() {
-        val basicList = mBinding.containerBasicList
-        mAdapter = MoviesHomeBasicAdapter()
-        basicList.adapter = mAdapter
+        val basicList = binding.containerBasicList
+        moviesCategoryAdapter = MoviesHomeBasicAdapter()
+        basicList.adapter = moviesCategoryAdapter
         basicList.layoutManager = LinearLayoutManager(requireActivity())
     }
 

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="10dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/movie_card_item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="220dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/movie_image" />
+
+    <TextView
+        android:id="@+id/movie_card_item_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/box_border_rating"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/movie_card_item_image"
+        app:layout_constraintTop_toTopOf="@id/movie_card_item_image"
+        tools:text="8.5" />
+
+    <TextView
+        android:id="@+id/movie_card_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/primary_text_color"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movie_card_item_image"
+        tools:text="Emma" />
+
+    <TextView
+        android:id="@+id/movie_card_item_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/primary_text_color"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movie_card_item_title"
+        tools:text="2022" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:layout_marginEnd="10dp"-->
+    <!--    android:orientation="vertical">-->
+
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        android:id="@+id/cardPoster"-->
+    <!--        android:layout_width="182dp"-->
+    <!--        android:layout_height="270dp"-->
+    <!--        app:cardCornerRadius="20dp"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--        <androidx.appcompat.widget.AppCompatImageView-->
+    <!--            android:id="@+id/item_movie_card_image"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="3"-->
+    <!--            android:scaleType="centerInside"-->
+    <!--            app:srcCompat="@drawable/movie_image" />-->
+
+    <!--    </androidx.cardview.widget.CardView>-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/item_movie_card_title"-->
+    <!--        android:layout_width="182dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="5dp"-->
+    <!--        android:textColor="@color/primary_text_color"-->
+    <!--        android:textSize="@dimen/card_title_text_size"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/cardPoster"-->
+    <!--        tools:text="Тюрьма суперзлодеев" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/item_movie_card_date"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="5dp"-->
+    <!--        android:layout_marginEnd="20dp"-->
+    <!--        android:textColor="@color/primary_text_color"-->
+    <!--        android:textSize="@dimen/card_text_size"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/item_movie_card_title"-->
+    <!--        tools:text="2020" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/item_movie_card_rating"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="start"-->
+    <!--        android:layout_marginStart="5dp"-->
+    <!--        android:textSize="@dimen/card_text_size"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/item_movie_card_title"-->
+    <!--        tools:text="8.5" />-->
+
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->

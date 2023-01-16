@@ -3,7 +3,6 @@ package com.example.java.android1.movie_search.view
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,8 +12,8 @@ import com.example.java.android1.movie_search.databinding.ActivityMainBinding
 import com.example.java.android1.movie_search.utils.MyNetworkCallback
 import com.example.java.android1.movie_search.utils.visible
 import com.example.java.android1.movie_search.view.catalog.CatalogFragment
+import com.example.java.android1.movie_search.view.favorite.FavoriteFragment
 import com.example.java.android1.movie_search.view.home.MainFragment
-import com.example.java.android1.movie_search.view.profile.ProfileFragment
 import com.example.java.android1.movie_search.view.search.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -53,8 +52,8 @@ class MainActivity : AppCompatActivity() {
                 mBinding.bottomNavigation.menu.findItem(R.id.action_catalog).itemId -> addFragment(
                     CatalogFragment.newInstance()
                 )
-                mBinding.bottomNavigation.menu.findItem(R.id.action_profile).itemId -> addFragment(
-                    ProfileFragment.newInstance()
+                mBinding.bottomNavigation.menu.findItem(R.id.action_favorite).itemId -> addFragment(
+                    FavoriteFragment.newInstance()
                 )
             }
             return@setOnItemSelectedListener true

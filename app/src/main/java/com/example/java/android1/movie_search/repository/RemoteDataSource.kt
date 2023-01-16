@@ -39,6 +39,7 @@ class RemoteDataSource {
     fun getMoviesFromSearch(
         language: String,
         page: Int,
+        adult: Boolean,
         query: String,
         callback: Callback<CategoryMoviesTMDB>
     ) {
@@ -46,6 +47,7 @@ class RemoteDataSource {
             token = BuildConfig.MOVIE_API_KEY,
             language = language,
             page = page,
+            adult = adult,
             query = query
         )
         request.enqueue(callback)

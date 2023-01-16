@@ -50,6 +50,7 @@ interface MovieTMDBAPI {
         @Query("api_key") token: String,
         @Query("language") language: String,
         @Query("page") page: Int,
+        @Query("include_adult") adult: Boolean,
         @Query("query") query: String
     ) : Call<CategoryMoviesTMDB>
 

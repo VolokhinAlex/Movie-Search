@@ -46,14 +46,29 @@
                 android:orientation="vertical"
                 tools:ignore="UselessParent">
 
-                <TextView
-                    android:id="@+id/detail_movie_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/movie_details_margin_bottom"
-                    android:textColor="@color/primary_text_color"
-                    android:textSize="@dimen/movie_details_title"
-                    tools:text="Эмма" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/detail_movie_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/movie_details_margin_bottom"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="@dimen/movie_details_title"
+                        tools:text="Эмма" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/item_movie_favorite"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="end|center"
+                        android:button="@drawable/custom_checkbox"
+                        android:buttonTint="#DA3C3C"
+                        android:focusable="true" />
+
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -108,11 +123,21 @@
                         android:id="@+id/detail_movie_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/movie_details_margin_end"
                         android:background="@drawable/details_movie_rating_background"
                         android:textColor="@color/primary_text_color"
                         android:textSize="@dimen/movie_details_rating"
                         android:textStyle="bold"
                         tools:text="6.9" />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/movie_note"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/ic_baseline_edit_note_24"
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                 </LinearLayout>
 
