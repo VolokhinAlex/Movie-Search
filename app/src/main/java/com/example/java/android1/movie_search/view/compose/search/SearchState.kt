@@ -27,10 +27,4 @@ class SearchState(
             else -> SearchDisplay.Results
         }
 
-    override fun toString(): String {
-        return "🚀 State query: $query, focused: $focused, searching: $searching " +
-                "searchResults: ${searchResults.size}, " +
-                " searchDisplay: $searchDisplay"
-
-    }
 }

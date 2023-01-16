@@ -9,6 +9,7 @@ import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieChildListData
 import com.example.java.android1.movie_search.utils.replace
 import com.example.java.android1.movie_search.view.MainActivity
+import com.example.java.android1.movie_search.view.compose.home.MovieCategory
 import com.example.java.android1.movie_search.view.details.MovieDetailsFragment
 
 class MovieHomeBasicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,7 +37,12 @@ class MovieHomeBasicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
     }
 
     fun bind(movieListData: MovieChildListData) {
-        listTitle.text = movieListData.title
+        when(movieListData.title) {
+            MovieCategory.NowPlaying.queryName ->  listTitle.text = MovieCategory.NowPlaying.title
+            MovieCategory.TopRated.queryName -> listTitle.text = MovieCategory.TopRated.title
+            MovieCategory.Upcoming.queryName -> listTitle.text = MovieCategory.Upcoming.title
+            MovieCategory.Popular.queryName -> listTitle.text = MovieCategory.Popular.title
+        }
         movieListData.listData?.let { adapter.setMovieData(it) }
     }
 

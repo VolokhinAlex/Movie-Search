@@ -41,7 +41,8 @@ fun SearchScreen(state: SearchState = rememberSearchState()) {
             onClearQuery = { state.query = TextFieldValue("") },
             onBack = { state.query = TextFieldValue("") },
             searching = state.searching,
-            focused = state.focused
+            focused = state.focused,
+            searchHint = "Search a movie"
         )
 
         LaunchedEffect(state.query.text) {
@@ -72,7 +73,7 @@ fun rememberSearchState(
 }
 
 @Composable
-private fun SearchHint(modifier: Modifier = Modifier) {
+private fun SearchHint(modifier: Modifier = Modifier, searchHint: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -82,7 +83,7 @@ private fun SearchHint(modifier: Modifier = Modifier) {
     ) {
         Text(
             color = Color(0xff757575),
-            text = "Search a movie",
+            text = searchHint,
         )
     }
 }
@@ -95,7 +96,8 @@ fun SearchTextField(
     onClearQuery: () -> Unit,
     searching: Boolean,
     focused: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    searchHint: String
 ) {
 
     val focusRequester = remember { FocusRequester() }
@@ -122,7 +124,7 @@ fun SearchTextField(
         ) {
 
             if (query.text.isEmpty()) {
-                SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
+                SearchHint(modifier.padding(start = 24.dp, end = 8.dp), searchHint)
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -157,7 +159,8 @@ fun SearchBar(
     onBack: ()-> Unit,
     searching: Boolean,
     focused: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    searchHint: String
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -184,7 +187,8 @@ fun SearchBar(
             onClearQuery,
             searching,
             focused,
-            modifier.weight(1f)
+            modifier.weight(1f),
+            searchHint
         )
     }
 }

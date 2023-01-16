@@ -21,16 +21,20 @@ import coil.request.ImageRequest
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.getYearFromStringFullDate
-import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor80
+import com.example.java.android1.movie_search.view.compose.theme.PrimaryColor70
+import java.text.DecimalFormat
 
 @Composable
-fun MovieCard(movieDataTMDB: MovieDataTMDB) {
+fun MovieCard(
+    modifier: Modifier = Modifier,
+    movieDataTMDB: MovieDataTMDB
+) {
+    val ratingFormat = DecimalFormat("#.#")
     Card(
-        modifier = Modifier
-            .size(width = 160.dp, height = 310.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = PrimaryColor80,
+            containerColor = PrimaryColor70,
         )
     ) {
         Column(
@@ -44,16 +48,6 @@ fun MovieCard(movieDataTMDB: MovieDataTMDB) {
                     .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                     .fillMaxWidth()
             )
-//            SubcomposeAsyncImage(
-//                model = "https://image.tmdb.org/t/p/w500${movieDataTMDB.poster_path}",
-//                loading = {
-//                    Loader()
-//                },
-//                contentDescription = "movie_poster",
-//                modifier = Modifier
-//                    .clip(RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp))
-//                    .fillMaxWidth()
-//            )
             Text(
                 text = movieDataTMDB.title ?: "",
                 color = Color.White,
@@ -65,7 +59,7 @@ fun MovieCard(movieDataTMDB: MovieDataTMDB) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, bottom = 5.dp),
+                    .padding(start = 10.dp, end = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
@@ -77,7 +71,7 @@ fun MovieCard(movieDataTMDB: MovieDataTMDB) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "${movieDataTMDB.vote_average}",
+                        text = ratingFormat.format(movieDataTMDB.vote_average),
                         modifier = Modifier.padding(end = 5.dp),
                         color = Color.White,
                         fontSize = 20.sp

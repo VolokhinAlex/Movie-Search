@@ -3,10 +3,10 @@ package com.example.java.android1.movie_search.view.compose.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.HomeRepository
 import com.example.java.android1.movie_search.repository.HomeRepositoryImpl
 import com.example.java.android1.movie_search.repository.RemoteDataSource
-import com.example.java.android1.movie_search.viewmodel.AppState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,7 +14,7 @@ import retrofit2.Response
 private const val SERVER_ERROR = "Ошибка сервера"
 
 class MainViewModelCompose(
-    val homeLiveData: MutableLiveData<AppState> = MutableLiveData(),
+    val homeLiveData: MutableLiveData<CategoryAppState> = MutableLiveData(),
     private val repository: HomeRepository = HomeRepositoryImpl(RemoteDataSource()),
 ) : ViewModel() {
 
@@ -26,21 +26,30 @@ class MainViewModelCompose(
         ) {
             val serverResponse = response.body()
             homeLiveData.value = if (response.isSuccessful && serverResponse != null) {
-                AppState.Success(serverResponse.results)
+                val request = call.request().url.toString()
+                val queryName = request.substring(request.indexOf("movie/"), request.indexOf("?"))
+                CategoryAppState.Success(
+                    Category(
+                        queryName.substring(queryName.indexOf("/") + 1),
+                        serverResponse.results
+                    )
+                )
             } else {
-                AppState.Error(Throwable(SERVER_ERROR))
+                CategoryAppState.Error(Throwable(SERVER_ERROR))
             }
         }
 
         override fun onFailure(call: Call<CategoryMoviesTMDB>, error: Throwable) {
-            AppState.Error(error)
+            homeLiveData.value = CategoryAppState.Error(error)
         }
 
     }
 
-    fun getUpcomingMoviesFromRemoteSource(category: String, language: String, page: Int) {
-        homeLiveData.value = AppState.Loading
+    fun getCategoryMovies(category: String, language: String, page: Int) {
+        homeLiveData.value = CategoryAppState.Loading
         repository.getMoviesCategoryForCompose(category, language, page, callback)
     }
 
 }
+
+data class Category(val queryName: String, val data: List<MovieDataTMDB>)
