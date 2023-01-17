@@ -8,19 +8,30 @@ import com.example.java.android1.movie_search.model.SearchPageSource
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Implementation of the interface for getting data from TMDB API
+ * Implementation of the interface for getting data from Remote Server
  */
 
 class SearchRepositoryImpl(
     private val remoteDataSource: RemoteDataSource
 ) : SearchRepository {
 
-    override fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> = Pager(
-        config = PagingConfig(
-            pageSize = CategoryRepositoryImpl.CATEGORY_PAGE_SIZE,
-            enablePlaceholders = false
-        ),
-        pagingSourceFactory = { SearchPageSource(remoteDataSource, query) }
-    ).flow
+    /**
+     * Method for getting a list of movies by name
+     * @param query - The name of a movie to search
+     */
+
+    override fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = CategoryRepositoryImpl.CATEGORY_PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                SearchPageSource(
+                    remoteDataSource = remoteDataSource,
+                    query = query
+                )
+            }
+        ).flow
 
 }

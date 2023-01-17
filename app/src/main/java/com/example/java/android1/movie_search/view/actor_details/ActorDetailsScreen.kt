@@ -34,7 +34,7 @@ import com.example.java.android1.movie_search.view.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.viewmodel.MovieActorViewModel
 
-const val ARG_ACTOR_ID = "actor id"
+const val ARG_ACTOR_ID = "ActorID"
 
 /**
  * The main method [ActorDetailsScreen] that combines all the necessary methods for this screen
@@ -53,7 +53,12 @@ fun ActorDetailsScreen(
         actorViewModel.getMovieActorData(actorId, LanguageQuery.EN.languageQuery)
     }
     actorViewModel.movieActorData.observeAsState().value?.let { actorState ->
-        RenderActorDataFromRemoteServer(actorState, navController)
+        RenderActorDataFromRemoteServer(
+            movieActorAppState = actorState,
+            navController = navController,
+            actorViewModel = actorViewModel,
+            actorId = actorId
+        )
     }
 }
 
@@ -61,27 +66,36 @@ fun ActorDetailsScreen(
  * The method processes state from the remote server
  * @param movieActorAppState - The state that came from the remote server. [MovieActorAppState]
  * @param navController - To navigate back
+ * @param actorViewModel - Actor View Model [MovieActorViewModel]
+ * @param actorId - actor id has gotten from remote server
  */
 
 @Composable
 fun RenderActorDataFromRemoteServer(
     movieActorAppState: MovieActorAppState,
-    navController: NavController
+    navController: NavController,
+    actorViewModel: MovieActorViewModel,
+    actorId: Long
 ) {
     when (movieActorAppState) {
-        is MovieActorAppState.Error -> movieActorAppState.error.localizedMessage?.let { message ->
-            ErrorMessage(message = message) {}
+        is MovieActorAppState.Error -> movieActorAppState.errorMessage.localizedMessage?.let { message ->
+            ErrorMessage(message = message) {
+                actorViewModel.getMovieActorData(
+                    actorId,
+                    LanguageQuery.EN.languageQuery
+                )
+            }
         }
         MovieActorAppState.Loading -> LoadingProgressBar()
         is MovieActorAppState.Success -> {
-            val actorDetailsData = movieActorAppState.data
+            val actorDetailsData = movieActorAppState.detailsActor
             Column(
                 modifier = Modifier
                     .background(PrimaryColor80)
                     .fillMaxSize()
             ) {
-                HeaderActorDetailsScreen(navController = navController)
-                ActorDetails(actorDetailsData)
+                ToolbarActorDetailsScreen(navController = navController)
+                ActorDetails(actorDetailsData = actorDetailsData)
             }
         }
     }
@@ -93,7 +107,7 @@ fun RenderActorDataFromRemoteServer(
  */
 
 @Composable
-fun HeaderActorDetailsScreen(navController: NavController) {
+fun ToolbarActorDetailsScreen(navController: NavController) {
     Row(
         modifier = Modifier.padding(top = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -106,7 +120,7 @@ fun HeaderActorDetailsScreen(navController: NavController) {
             }) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = null,
+                contentDescription = Icons.Default.ArrowBack.name,
                 tint = Color.White
             )
         }
@@ -115,10 +129,11 @@ fun HeaderActorDetailsScreen(navController: NavController) {
 
 /**
  * The method adds detailed information about the actor
+ * @param actorDetailsData - Details about a specific actor
  */
 
 @Composable
-fun ActorDetails(actorDTO: ActorDTO) {
+fun ActorDetails(actorDetailsData: ActorDTO) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -128,7 +143,7 @@ fun ActorDetails(actorDTO: ActorDTO) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SubcomposeAsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${actorDTO.profile_path}",
+            model = "https://image.tmdb.org/t/p/w500${actorDetailsData.profile_path}",
             loading = { LoadingProgressBar() },
             contentDescription = "actor_photo",
             modifier = Modifier
@@ -136,7 +151,7 @@ fun ActorDetails(actorDTO: ActorDTO) {
                 .size(100.dp),
             contentScale = ContentScale.Crop
         )
-        actorDTO.name?.let { name ->
+        actorDetailsData.name?.let { name ->
             Text(
                 text = name,
                 modifier = Modifier.padding(top = 10.dp),
@@ -144,11 +159,11 @@ fun ActorDetails(actorDTO: ActorDTO) {
                 color = Color.White
             )
         }
-        actorDTO.birthday?.let { birthday ->
-            ActorDetailsText(title = R.string.birthday, details = birthday)
+        actorDetailsData.birthday?.let { birthday ->
+            ActorDetailsTitleCategory(title = R.string.birthday, details = birthday)
         }
-        actorDTO.biography?.let { biography ->
-            ActorDetailsText(title = R.string.biography, details = biography)
+        actorDetailsData.biography?.let { biography ->
+            ActorDetailsTitleCategory(title = R.string.biography, details = biography)
         }
     }
 }
@@ -156,10 +171,12 @@ fun ActorDetails(actorDTO: ActorDTO) {
 /**
  * The method sets the title and details about actor from remote server
  * of the section in actor details screen
+ * @param title - Title of information about the actor
+ * @param details - Specific information about the actor. see [ActorDTO]
  */
 
 @Composable
-private fun ActorDetailsText(@StringRes title: Int, details: String) {
+private fun ActorDetailsTitleCategory(@StringRes title: Int, details: String) {
     Text(
         text = "${stringResource(id = title)}: $details",
         modifier = Modifier.padding(top = 10.dp),

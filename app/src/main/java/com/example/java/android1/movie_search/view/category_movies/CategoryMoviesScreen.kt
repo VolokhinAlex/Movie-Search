@@ -26,10 +26,10 @@ import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
 import com.example.java.android1.movie_search.view.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.theme.TITLE_SIZE
-import com.example.java.android1.movie_search.view.widgets.ShowListMoviesPagination
+import com.example.java.android1.movie_search.view.widgets.ListMoviesPagination
 import com.example.java.android1.movie_search.viewmodel.CategoryMoviesViewModel
 
-const val ARG_CATEGORY_NAME_DATA = "CategoryMoviesData Name"
+const val ARG_CATEGORY_NAME_DATA = "CategoryMoviesData"
 
 /**
  * The main method for the layout of the entire screen
@@ -44,7 +44,7 @@ fun CategoryMoviesScreen(
     navController: NavController,
     categoryMoviesViewModel: CategoryMoviesViewModel
 ) {
-    val categoryMovies =
+    val categoryMoviesData =
         categoryMoviesViewModel.getCategoryMoviesFromRemoteServer(categoryName)
             .collectAsLazyPagingItems()
     Column(modifier = Modifier.background(PrimaryColor80)) {
@@ -66,7 +66,7 @@ fun CategoryMoviesScreen(
                 navController
             )
         }
-        ShowListMoviesPagination(categoryMovies) { movieData ->
+        ListMoviesPagination(categoryMoviesData) { movieData ->
             val detailsMovieBundle = Bundle()
             detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieData)
             navController.navigate(ScreenState.DetailsScreen.route, detailsMovieBundle)
@@ -75,7 +75,7 @@ fun CategoryMoviesScreen(
 }
 
 /**
- * The method sets the title of the screen and adds a button to go to the previous screen
+ * The method sets the title of the screen and adds a button to go to the previous screen (Toolbar)
  * @param title - The title of the category movies
  * @param navController - Needed to navigate back
  */

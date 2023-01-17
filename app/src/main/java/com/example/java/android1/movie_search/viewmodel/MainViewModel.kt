@@ -10,7 +10,7 @@ import com.example.java.android1.movie_search.repository.RemoteDataSource
 import com.example.java.android1.movie_search.view.LanguageQuery
 import kotlinx.coroutines.launch
 
-private const val CORRUPTED_DATA = "Неполные данные"
+private const val CORRUPTED_DATA = "Incomplete data"
 
 class MainViewModel(
     private val homeRepository: HomeRepository

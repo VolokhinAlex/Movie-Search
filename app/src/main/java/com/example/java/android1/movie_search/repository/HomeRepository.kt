@@ -4,7 +4,7 @@ import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
 import retrofit2.Response
 
 /**
- * The remote repository to get the categories of movies from TMDB API
+ * The remote repository to get the categories of movies from Remote Server
  */
 
 interface HomeRepository {

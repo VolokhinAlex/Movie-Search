@@ -27,6 +27,9 @@ class RemoteDataSource {
 
     /**
      * A method for getting details of the movie from a remote server
+     * @param movieId - ID of the movie to get from the remote repository
+     * @param language - Response language
+     * @param callback - Callback for response processing
      */
 
     fun getMovieDetails(movieId: Int, language: String, callback: Callback<MovieDataTMDB>) {
@@ -42,6 +45,9 @@ class RemoteDataSource {
 
     /**
      * A method for getting a actor data from a remote server
+     * @param personId - ID of the actor to get data for
+     * @param language - Response language
+     * @param callback - Callback for response processing
      */
 
     fun getActorData(personId: Long, language: String, callback: Callback<ActorDTO>) {
@@ -55,6 +61,9 @@ class RemoteDataSource {
 
     /**
      * A method for getting a category movies from a remote server
+     * @param category - The category to get from the remote server
+     * @param language - Response language
+     * @param page - The page to request
      */
 
     suspend fun getCategoryMovies(
@@ -72,6 +81,10 @@ class RemoteDataSource {
 
     /**
      * A method for getting a list of movies by search from a remote server
+     * @param language - Response language
+     * @param page - The page to request
+     * @param adult - Show adult content or not
+     * @param query - The request to be found on the remote server
      */
 
     suspend fun getMoviesBySearch(
@@ -88,6 +101,30 @@ class RemoteDataSource {
             query = query
         )
     }
+
+    /**
+     * A method for getting a similar of movies from a remote server
+     * @param movieId - id of the movie to get a list of similar movies for
+     * @param language - Response language
+     * @param page - The page to request
+     */
+
+    suspend fun getSimilarMovies(
+        movieId: Int,
+        language: String,
+        page: Int
+    ): retrofit2.Response<CategoryMoviesTMDB> {
+        return movieApi.getSimilarMovies(
+            movieId = movieId,
+            token = BuildConfig.MOVIE_API_KEY,
+            language = language,
+            page = page
+        )
+    }
+
+    /**
+     * Needed to create a network client and add interceptors
+     */
 
     private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
         val client = OkHttpClient.Builder()

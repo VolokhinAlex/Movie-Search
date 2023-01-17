@@ -21,7 +21,7 @@ import com.example.java.android1.movie_search.view.theme.CARD_WIDTH_SIZE
  */
 
 @Composable
-fun ShowListMoviesPagination(
+fun ListMoviesPagination(
     lazyMovieItems: LazyPagingItems<MovieDataTMDB>,
     onItemClick: (MovieDataTMDB) -> Unit
 ) {

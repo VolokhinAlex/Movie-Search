@@ -38,7 +38,7 @@ import com.example.java.android1.movie_search.viewmodel.MainViewModel
 /**
  * The main method for the layout of the home screen methods
  * @param navController - To navigate in the other screen
- * @param homeViewModel - Main View Model
+ * @param homeViewModel - Main View Model, needs to get categories movies
  */
 
 @SuppressLint("MutableCollectionMutableState")
@@ -75,13 +75,13 @@ private fun ServerResponseStateObserver(
     navController: NavController
 ) {
     when (categoryMoviesState) {
-        is CategoryAppState.Error -> categoryMoviesState.error.localizedMessage?.let { message ->
+        is CategoryAppState.Error -> categoryMoviesState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) { homeViewModel.fetchAllCategoriesMovies() }
         }
         CategoryAppState.Loading -> LoadingProgressBar()
         is CategoryAppState.Success -> {
-            categoriesMoviesList.value.add(categoryMoviesState.data)
-            CategoriesList(categoriesMoviesList.value.toList(), navController)
+            categoriesMoviesList.value.add(categoryMoviesState.categoryMoviesData)
+            CategoriesMoviesList(categoriesMoviesList.value.toList(), navController)
         }
     }
 }
@@ -93,7 +93,10 @@ private fun ServerResponseStateObserver(
  */
 
 @Composable
-fun CategoriesList(categoriesMoviesList: List<CategoryMoviesData>, navController: NavController) {
+fun CategoriesMoviesList(
+    categoriesMoviesList: List<CategoryMoviesData>,
+    navController: NavController
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -104,50 +107,14 @@ fun CategoriesList(categoriesMoviesList: List<CategoryMoviesData>, navController
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Text(
-                text = stringResource(id = R.string.app_name),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp),
-                color = Color.White,
-                fontSize = TITLE_SIZE,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
+            HeaderHomeScreen(R.string.app_name)
             categoriesMoviesList.forEach { categoryMovies ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, top = 10.dp, bottom = 15.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    when (categoryMovies.queryName) {
-                        MovieCategory.NowPlaying.queryName -> SetCategoryTitle(MovieCategory.NowPlaying.title)
-                        MovieCategory.TopRated.queryName -> SetCategoryTitle(MovieCategory.TopRated.title)
-                        MovieCategory.Upcoming.queryName -> SetCategoryTitle(MovieCategory.Upcoming.title)
-                        MovieCategory.Popular.queryName -> SetCategoryTitle(MovieCategory.Popular.title)
-                    }
-                    Image(
-                        painter = painterResource(id = R.drawable.compose_arrow_right),
-                        contentDescription = stringResource(id = R.string.more_movies),
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clickable {
-                                val categoryMoviesBundle = Bundle()
-                                categoryMoviesBundle.putString(
-                                    ARG_CATEGORY_NAME_DATA,
-                                    categoryMovies.queryName
-                                )
-                                navController.navigate(
-                                    ScreenState.CategoryMoviesScreen.route,
-                                    categoryMoviesBundle
-                                )
-                            }
-                    )
-                }
+                CategoryMoviesHeader(
+                    categoryMovies = categoryMovies.queryName,
+                    navController = navController
+                )
                 NestedCategoryMoviesList(
-                    category = categoryMovies.data,
+                    categoryMovies = categoryMovies.categoryMoviesData,
                     navController = navController
                 )
             }
@@ -156,36 +123,22 @@ fun CategoriesList(categoriesMoviesList: List<CategoryMoviesData>, navController
 }
 
 /**
- * The method for generating nested side lists with movies of categories
- * @param category - List of category movies
- * @param navController - Controller for screen navigation
+ * The method for setting header of the screen
+ * @param title - The title of screen from strings resource
  */
 
 @Composable
-fun NestedCategoryMoviesList(category: List<MovieDataTMDB>, navController: NavController) {
-    LazyRow(modifier = Modifier.padding(start = 20.dp, bottom = 20.dp)) {
-        items(
-            count = category.size,
-            key = {
-                category[it]
-            },
-            itemContent = { itemIndex ->
-                MovieCard(
-                    modifier = Modifier
-                        .size(width = CARD_WIDTH_SIZE, height = 300.dp)
-                        .padding(end = 10.dp)
-                        .clickable {
-                            val detailsMovieBundle = Bundle()
-                            detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, category[itemIndex])
-                            navController.navigate(
-                                ScreenState.DetailsScreen.route,
-                                detailsMovieBundle
-                            )
-                        }, movieDataTMDB = category[itemIndex]
-                )
-            }
-        )
-    }
+private fun HeaderHomeScreen(@StringRes title: Int) {
+    Text(
+        text = stringResource(id = title),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp),
+        color = Color.White,
+        fontSize = TITLE_SIZE,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center
+    )
 }
 
 /**
@@ -194,11 +147,88 @@ fun NestedCategoryMoviesList(category: List<MovieDataTMDB>, navController: NavCo
  */
 
 @Composable
-private fun SetCategoryTitle(@StringRes title: Int) {
+private fun TitleCategoryMovies(@StringRes title: Int) {
     Text(
         text = stringResource(title),
         fontSize = TITLE_SIZE,
         fontWeight = FontWeight.Bold,
         color = Color.White
     )
+}
+
+/**
+ * The method sets the header for the movies category
+ * @param categoryMovies - Name of the current movies category
+ * @param navController - Go to the screen with the full list of films of this [categoryMovies]
+ */
+
+@Composable
+private fun CategoryMoviesHeader(categoryMovies: String, navController: NavController) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp, top = 10.dp, bottom = 15.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        when (categoryMovies) {
+            MovieCategory.NowPlaying.queryName -> TitleCategoryMovies(MovieCategory.NowPlaying.title)
+            MovieCategory.TopRated.queryName -> TitleCategoryMovies(MovieCategory.TopRated.title)
+            MovieCategory.Upcoming.queryName -> TitleCategoryMovies(MovieCategory.Upcoming.title)
+            MovieCategory.Popular.queryName -> TitleCategoryMovies(MovieCategory.Popular.title)
+        }
+        Image(
+            painter = painterResource(id = R.drawable.compose_arrow_right),
+            contentDescription = stringResource(id = R.string.more_movies),
+            modifier = Modifier
+                .size(28.dp)
+                .clickable {
+                    val categoryMoviesBundle = Bundle()
+                    categoryMoviesBundle.putString(
+                        ARG_CATEGORY_NAME_DATA,
+                        categoryMovies
+                    )
+                    navController.navigate(
+                        ScreenState.CategoryMoviesScreen.route,
+                        categoryMoviesBundle
+                    )
+                }
+        )
+    }
+}
+
+/**
+ * The method for generating nested side lists with movies of categories
+ * @param categoryMovies - List of category movies
+ * @param navController - Controller for screen navigation
+ */
+
+@Composable
+fun NestedCategoryMoviesList(categoryMovies: List<MovieDataTMDB>, navController: NavController) {
+    LazyRow(modifier = Modifier.padding(start = 20.dp, bottom = 20.dp)) {
+        items(
+            count = categoryMovies.size,
+            key = {
+                categoryMovies[it]
+            },
+            itemContent = { movieItemIndex ->
+                MovieCard(
+                    modifier = Modifier
+                        .size(width = CARD_WIDTH_SIZE, height = 300.dp)
+                        .padding(end = 10.dp)
+                        .clickable {
+                            val detailsMovieBundle = Bundle()
+                            detailsMovieBundle.putParcelable(
+                                MOVIE_DATA_KEY,
+                                categoryMovies[movieItemIndex]
+                            )
+                            navController.navigate(
+                                ScreenState.DetailsScreen.route,
+                                detailsMovieBundle
+                            )
+                        }, movieDataTMDB = categoryMovies[movieItemIndex]
+                )
+            }
+        )
+    }
 }

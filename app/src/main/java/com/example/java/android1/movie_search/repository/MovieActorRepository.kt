@@ -4,7 +4,7 @@ import com.example.java.android1.movie_search.model.ActorDTO
 import retrofit2.Callback
 
 /**
- * The remote repository to get the actors of movie from TMDB API
+ * The remote repository to get the actors of movie from Remote Server
  */
 
 interface MovieActorRepository {
