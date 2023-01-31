@@ -20,6 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.repository.*
+import com.example.java.android1.movie_search.utils.parcelable
 import com.example.java.android1.movie_search.view.actor_details.ARG_ACTOR_ID
 import com.example.java.android1.movie_search.view.actor_details.ActorDetailsScreen
 import com.example.java.android1.movie_search.view.category_movies.ARG_CATEGORY_NAME_DATA
@@ -78,7 +79,7 @@ fun Navigation(
                 HomeScreen(navController = navController, homeViewModel = homeViewModel)
             }
             composable(route = ScreenState.DetailsScreen.route) {
-                val movieDetailsData = it.arguments?.getParcelable<MovieDataTMDB>(MOVIE_DATA_KEY)
+                val movieDetailsData = it.arguments?.parcelable<MovieDataTMDB>(MOVIE_DATA_KEY)
                 movieDetailsData?.let { data ->
                     DetailsScreen(
                         movieDataTMDB = data,
