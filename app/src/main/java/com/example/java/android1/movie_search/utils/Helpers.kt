@@ -1,5 +1,8 @@
 package com.example.java.android1.movie_search.utils
 
+import android.os.Build.VERSION.SDK_INT
+import android.os.Bundle
+import android.os.Parcelable
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,4 +33,9 @@ fun timeToFormatHoursAndMinutes(min: Int): String {
     val hour = min / 60
     val minutes = min % 60
     return String.format("%02dh %02dmin", hour, minutes)
+}
+
+inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
+    SDK_INT >= 33 -> getParcelable(key, T::class.java)
+    else -> @Suppress("DEPRECATION") getParcelable(key) as? T
 }
