@@ -11,7 +11,7 @@ import com.example.java.android1.movie_search.model.CategoryMoviesData
  */
 
 sealed class CategoryAppState {
-    data class Success(val data: CategoryMoviesData) : CategoryAppState()
-    data class Error(val error: Throwable) : CategoryAppState()
+    data class Success(val categoryMoviesData: CategoryMoviesData) : CategoryAppState()
+    data class Error(val errorMessage: Throwable) : CategoryAppState()
     object Loading : CategoryAppState()
 }

@@ -6,6 +6,13 @@ import androidx.room.PrimaryKey
 
 /**
  * The model of local movie table
+ * @param movieId - movie ID
+ * @param movieTitle - The title of a particular movie
+ * @param movieNote - A note about the movie
+ * @param movieFavorite - Favorite movie. Values 1 (True) or 0 (False)
+ * @param moviePoster - Movie Image
+ * @param movieReleaseDate - Release date of the movie
+ * @param movieRating - Rating of the movie from 0 to 10
  */
 
 @Entity(tableName = "movies_table")

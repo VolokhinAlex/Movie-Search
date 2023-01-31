@@ -4,6 +4,10 @@ import androidx.paging.PagingData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Interface for getting the movie category
+ */
+
 interface CategoryRepository {
-    fun getCategoryMoviesFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>>
+    fun getCategoryMoviesFromRemoteServer(categoryMovies: String): Flow<PagingData<MovieDataTMDB>>
 }

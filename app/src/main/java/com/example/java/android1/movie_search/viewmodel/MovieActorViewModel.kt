@@ -13,7 +13,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val SERVER_ERROR = "Ошибка сервера"
+private const val SERVER_ERROR = "Server Error"
 
 class MovieActorViewModel(
     private val movieActorRepository: MovieActorRepository

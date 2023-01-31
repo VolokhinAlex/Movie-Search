@@ -8,6 +8,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 
 /**
  * The class needed to remember search states
+ * @param query - The request to save
+ * @param focused - Focus state to be saved
+ * @param searching - Search state to be saved
  */
 
 @Stable

@@ -11,7 +11,7 @@ import com.example.java.android1.movie_search.model.ActorDTO
  */
 
 sealed class MovieActorAppState {
-    data class Success(val data: ActorDTO) : MovieActorAppState()
-    data class Error(val error: Throwable) : MovieActorAppState()
+    data class Success(val detailsActor: ActorDTO) : MovieActorAppState()
+    data class Error(val errorMessage: Throwable) : MovieActorAppState()
     object Loading : MovieActorAppState()
 }

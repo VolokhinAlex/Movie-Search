@@ -5,7 +5,7 @@ import com.example.java.android1.movie_search.model.MovieDataTMDB
 import kotlinx.coroutines.flow.Flow
 
 /**
- * The remote repository to get a movie by name from TMDB API
+ * The remote repository to get a movie by name from Remote Server
  */
 
 interface SearchRepository {

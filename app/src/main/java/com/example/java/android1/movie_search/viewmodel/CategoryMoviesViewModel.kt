@@ -15,10 +15,11 @@ class CategoryMoviesViewModel(
 
     /**
      * The method for getting a list of films of a specific category using pagination
+     * @param category - The category of films to get
      */
 
-    fun getCategoryMoviesFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>> =
-        categoryRepository.getCategoryMoviesFromRemoteServer(query)
+    fun getCategoryMoviesFromRemoteServer(category: String): Flow<PagingData<MovieDataTMDB>> =
+        categoryRepository.getCategoryMoviesFromRemoteServer(category)
 
 }
 

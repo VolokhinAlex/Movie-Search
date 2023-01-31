@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.app.MovieDataAppState
@@ -41,12 +43,14 @@ import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
 import com.example.java.android1.movie_search.utils.timeToFormatHoursAndMinutes
 import com.example.java.android1.movie_search.view.LanguageQuery
+import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.actor_details.ARG_ACTOR_ID
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
 import com.example.java.android1.movie_search.view.theme.*
 import com.example.java.android1.movie_search.view.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
+import com.example.java.android1.movie_search.view.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
 import java.text.DecimalFormat
 
@@ -71,12 +75,19 @@ fun DetailsScreen(
             )
         }
     }
-    movieDetailsViewModel.detailsMovieData.observeAsState().value?.let { state ->
-        movieDataTMDB.id?.let { movieId ->
-            RenderMovieDetailsDataFromRemoteServer(
-                state, movieDetailsViewModel, navController,
-                movieId
-            )
+    Column(
+        modifier = Modifier
+            .background(PrimaryColor80)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        movieDetailsViewModel.detailsMovieData.observeAsState().value?.let { state ->
+            movieDataTMDB.id?.let { movieId ->
+                RenderMovieDetailsDataFromRemoteServer(
+                    state, movieDetailsViewModel, navController,
+                    movieId
+                )
+            }
         }
     }
 }
@@ -100,7 +111,7 @@ private fun RenderMovieDetailsDataFromLocalDataBase(
         is RoomAppState.Success -> MovieFavorite(
             movieDetailsViewModel,
             movieId,
-            roomAppState.data[0].movieFavorite ?: false
+            roomAppState.moviesData[0].movieFavorite ?: false
         )
     }
 }
@@ -121,7 +132,7 @@ private fun RenderMovieDetailsDataFromRemoteServer(
     movieId: Int
 ) {
     when (movieDataAppState) {
-        is MovieDataAppState.Error -> movieDataAppState.error.localizedMessage?.let { message ->
+        is MovieDataAppState.Error -> movieDataAppState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) {
                 movieDetailsViewModel.getMovieDetailsFromRemoteSource(
                     movieId,
@@ -131,28 +142,31 @@ private fun RenderMovieDetailsDataFromRemoteServer(
         }
         MovieDataAppState.Loading -> LoadingProgressBar()
         is MovieDataAppState.Success -> {
-            val listOfMovies =
-                movieDataAppState.data
+            val movieDetailsData =
+                movieDataAppState.movieDetailsData
+            HeaderDetailsScreen(movieDetailsData, navController)
             Column(
-                modifier = Modifier
-                    .background(PrimaryColor80)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                modifier = Modifier.padding(
+                    start = 15.dp,
+                    end = 15.dp,
+                    top = 20.dp,
+                    bottom = 20.dp
+                )
             ) {
-                HeaderDetailsScreen(listOfMovies, navController)
-                Column(
-                    modifier = Modifier.padding(
-                        start = 15.dp,
-                        end = 15.dp,
-                        top = 20.dp,
-                        bottom = 20.dp
+                CenterDetailsScreen(
+                    movieDetailsData = movieDetailsData,
+                    movieDetailsViewModel = movieDetailsViewModel
+                )
+                MovieCasts(movieDetailsData = movieDetailsData, navController = navController)
+                if (movieDetailsData.videos?.results?.isNotEmpty() == true) {
+                    MovieTrailer(movieDetailsData = movieDetailsData)
+                }
+                movieDetailsData.id?.let { movieId ->
+                    SimilarMovies(
+                        detailsViewModel = movieDetailsViewModel,
+                        movieId = movieId,
+                        navController = navController
                     )
-                ) {
-                    MovieDetails(listOfMovies, movieDetailsViewModel)
-                    MovieCasts(listOfMovies, navController)
-                    if (listOfMovies.videos?.results?.isNotEmpty() == true) {
-                        MovieTrailer(listOfMovies)
-                    }
                 }
             }
         }
@@ -161,7 +175,7 @@ private fun RenderMovieDetailsDataFromRemoteServer(
 
 /**
  * The method of adding a movie picture in the header of screen
- * @param movieDataTMDB - Movie Data From Remote Server
+ * @param movieDataTMDB - Movie Data has gotten From Remote Server
  * @param navController - To navigate back
  */
 
@@ -184,7 +198,7 @@ private fun HeaderDetailsScreen(movieDataTMDB: MovieDataTMDB, navController: Nav
             }) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Icon to navigate back",
+                contentDescription = Icons.Default.ArrowBack.name,
                 tint = Color.White
             )
         }
@@ -198,10 +212,12 @@ private fun HeaderDetailsScreen(movieDataTMDB: MovieDataTMDB, navController: Nav
  */
 
 @Composable
-private fun MovieDetails(movieDetailsData: MovieDataTMDB, movieDetailsViewModel: DetailsViewModel) {
+private fun CenterDetailsScreen(
+    movieDetailsData: MovieDataTMDB,
+    movieDetailsViewModel: DetailsViewModel
+) {
     val movieFavoriteState = movieDetailsViewModel.movieLocalData.observeAsState().value
     val ratingFormat = DecimalFormat("#.#")
-    val delimiter = ", "
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -224,26 +240,7 @@ private fun MovieDetails(movieDetailsData: MovieDataTMDB, movieDetailsViewModel:
             }
         }
     }
-    LazyRow(
-        modifier = Modifier.padding(
-            top = DETAILS_PRIMARY_PAGING,
-            bottom = DETAILS_PRIMARY_PAGING
-        ), content = {
-            movieDetailsData.genres?.let { genres ->
-                itemsIndexed(genres) { index, item ->
-                    item.name?.let { genre ->
-                        Text(
-                            text = genre,
-                            fontSize = DETAILS_PRIMARY_SIZE,
-                            color = Color.White
-                        )
-                    }
-                    if (index < genres.size - 1) {
-                        Text(text = delimiter, fontSize = DETAILS_PRIMARY_SIZE, color = Color.White)
-                    }
-                }
-            }
-        })
+    MovieGenres(movieDetailsData = movieDetailsData)
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -272,7 +269,48 @@ private fun MovieDetails(movieDetailsData: MovieDataTMDB, movieDetailsViewModel:
             fontSize = DETAILS_PRIMARY_SIZE
         )
     }
-    SetSubCategoryTitle(
+    MovieOverview(movieDetailsData = movieDetailsData)
+}
+
+/**
+ * The method adds a list of movie genres
+ * @param movieDetailsData - Details of movie that comes from remote server
+ */
+
+@Composable
+private fun MovieGenres(movieDetailsData: MovieDataTMDB) {
+    val delimiter = ", "
+    LazyRow(
+        modifier = Modifier.padding(
+            top = DETAILS_PRIMARY_PAGING,
+            bottom = DETAILS_PRIMARY_PAGING
+        )
+    ) {
+        movieDetailsData.genres?.let { genres ->
+            itemsIndexed(genres) { index, item ->
+                item.name?.let { genre ->
+                    Text(
+                        text = genre,
+                        fontSize = DETAILS_PRIMARY_SIZE,
+                        color = Color.White
+                    )
+                }
+                if (index < genres.size - 1) {
+                    Text(text = delimiter, fontSize = DETAILS_PRIMARY_SIZE, color = Color.White)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * The method adds a description of the movie
+ * @param movieDetailsData - Details of movie that comes from remote server
+ */
+
+@Composable
+private fun MovieOverview(movieDetailsData: MovieDataTMDB) {
+    TitleCategoryDetails(
         title = stringResource(id = R.string.overview),
         modifier = Modifier.padding(top = DETAILS_PRIMARY_PAGING, bottom = DETAILS_PRIMARY_PAGING)
     )
@@ -280,10 +318,6 @@ private fun MovieDetails(movieDetailsData: MovieDataTMDB, movieDetailsViewModel:
         text = "${movieDetailsData.overview}",
         modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING),
         color = Color.White
-    )
-    SetSubCategoryTitle(
-        title = stringResource(id = R.string.casts),
-        modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING)
     )
 }
 
@@ -295,6 +329,10 @@ private fun MovieDetails(movieDetailsData: MovieDataTMDB, movieDetailsViewModel:
 
 @Composable
 private fun MovieCasts(movieDetailsData: MovieDataTMDB, navController: NavController) {
+    TitleCategoryDetails(
+        title = stringResource(id = R.string.casts),
+        modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING)
+    )
     LazyRow(content = {
         movieDetailsData.credits?.let { credits ->
             itemsIndexed(credits.cast) { _, item ->
@@ -343,7 +381,7 @@ private fun MovieCasts(movieDetailsData: MovieDataTMDB, navController: NavContro
 @Composable
 private fun MovieTrailer(movieDetailsData: MovieDataTMDB) {
     val context = LocalContext.current
-    SetSubCategoryTitle(
+    TitleCategoryDetails(
         title = stringResource(id = R.string.trailer),
         modifier = Modifier.padding(top = 15.dp, bottom = 15.dp)
     )
@@ -432,7 +470,7 @@ private fun MovieFavorite(
  */
 
 @Composable
-private fun SetSubCategoryTitle(title: String, modifier: Modifier) {
+private fun TitleCategoryDetails(title: String, modifier: Modifier) {
     Text(
         text = title,
         color = Color.White,
@@ -440,4 +478,44 @@ private fun SetSubCategoryTitle(title: String, modifier: Modifier) {
         fontSize = TITLE_SIZE,
         fontWeight = FontWeight.Bold
     )
+}
+
+/**
+ * The method adds an additional list with similar movies to the movie details screen
+ * @param detailsViewModel - Needed to get similar movies
+ * @param movieId - The current ID of the movie that similar movies will be searched for
+ * @param navController - To navigate another details screen
+ */
+
+@Composable
+private fun SimilarMovies(
+    detailsViewModel: DetailsViewModel,
+    movieId: Int,
+    navController: NavController
+) {
+    TitleCategoryDetails(
+        title = stringResource(id = R.string.similar),
+        modifier = Modifier.padding(top = 15.dp)
+    )
+    val lazySimilarMovies = detailsViewModel.getSimilarMoviesFromRemoteSource(movieId = movieId)
+        .collectAsLazyPagingItems()
+    LazyRow(modifier = Modifier.padding(bottom = 20.dp, top = 15.dp)) {
+        itemsIndexed(lazySimilarMovies) { _, movieItem ->
+            movieItem?.let {
+                MovieCard(
+                    modifier = Modifier
+                        .size(width = CARD_WIDTH_SIZE, height = 300.dp)
+                        .padding(end = 10.dp)
+                        .clickable {
+                            val detailsMovieBundle = Bundle()
+                            detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieItem)
+                            navController.navigate(
+                                ScreenState.DetailsScreen.route,
+                                detailsMovieBundle
+                            )
+                        }, movieDataTMDB = it
+                )
+            }
+        }
+    }
 }

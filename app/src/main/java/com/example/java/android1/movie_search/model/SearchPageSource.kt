@@ -7,6 +7,12 @@ import com.example.java.android1.movie_search.view.LanguageQuery
 import retrofit2.HttpException
 import java.io.IOException
 
+/**
+ * Needed to navigate through the pages of the list
+ * @param remoteDataSource - A class with methods for getting data from a remote server
+ * @param query - A request to be found and received from a remote server
+ */
+
 class SearchPageSource(
     private val remoteDataSource: RemoteDataSource,
     private val query: String,

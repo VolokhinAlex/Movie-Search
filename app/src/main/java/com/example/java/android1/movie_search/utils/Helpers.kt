@@ -12,10 +12,10 @@ import java.util.*
  */
 
 fun convertStringFullDateToOnlyYear(stringDate: String): String {
-    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     if (stringDate != "") {
-        val date = formatter.parse(stringDate)
-        val calendar: Calendar = Calendar.getInstance();
+        val date = dateFormat.parse(stringDate)
+        val calendar: Calendar = Calendar.getInstance()
         if (date != null) {
             calendar.time = date
         }
