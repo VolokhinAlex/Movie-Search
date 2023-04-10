@@ -37,8 +37,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.app.MovieDataAppState
-import com.example.java.android1.movie_search.app.RoomAppState
+import com.example.java.android1.movie_search.model.states.MovieDataAppState
+import com.example.java.android1.movie_search.model.states.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
 import com.example.java.android1.movie_search.utils.timeToFormatHoursAndMinutes
@@ -52,6 +52,7 @@ import com.example.java.android1.movie_search.view.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.view.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
+import org.koin.androidx.compose.koinViewModel
 import java.text.DecimalFormat
 
 /**
@@ -65,11 +66,11 @@ import java.text.DecimalFormat
 fun DetailsScreen(
     movieDataTMDB: MovieDataTMDB,
     navController: NavController,
-    movieDetailsViewModel: DetailsViewModel
+    movieDetailsViewModel: DetailsViewModel = koinViewModel()
 ) {
     LaunchedEffect(true) {
         movieDataTMDB.id?.let { movieId ->
-            movieDetailsViewModel.getMovieDetailsFromRemoteSource(
+            movieDetailsViewModel.getMovieDetails(
                 movieId,
                 LanguageQuery.EN.languageQuery
             )
@@ -79,7 +80,8 @@ fun DetailsScreen(
         modifier = Modifier
             .background(PrimaryColor80)
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center
     ) {
         movieDetailsViewModel.detailsMovieData.observeAsState().value?.let { state ->
             movieDataTMDB.id?.let { movieId ->
@@ -134,12 +136,13 @@ private fun RenderMovieDetailsDataFromRemoteServer(
     when (movieDataAppState) {
         is MovieDataAppState.Error -> movieDataAppState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) {
-                movieDetailsViewModel.getMovieDetailsFromRemoteSource(
+                movieDetailsViewModel.getMovieDetails(
                     movieId,
                     LanguageQuery.EN.languageQuery
                 )
             }
         }
+
         MovieDataAppState.Loading -> LoadingProgressBar()
         is MovieDataAppState.Success -> {
             val movieDetailsData =

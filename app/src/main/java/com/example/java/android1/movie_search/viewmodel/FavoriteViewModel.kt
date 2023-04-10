@@ -1,16 +1,18 @@
 package com.example.java.android1.movie_search.viewmodel
 
-import androidx.lifecycle.*
-import com.example.java.android1.movie_search.app.App
-import com.example.java.android1.movie_search.app.RoomAppState
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.java.android1.movie_search.model.MovieDataRoom
-import com.example.java.android1.movie_search.repository.MovieLocalRepository
-import com.example.java.android1.movie_search.repository.MovieLocalRepositoryImpl
+import com.example.java.android1.movie_search.model.states.RoomAppState
+import com.example.java.android1.movie_search.repository.favorite.FavoriteRepository
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(
-    private val movieLocalRepository: MovieLocalRepository
+    private val favoriteRepository: FavoriteRepository
 ) : ViewModel() {
 
     private val _moviesFavoriteData: MutableLiveData<RoomAppState> = MutableLiveData()
@@ -21,22 +23,13 @@ class FavoriteViewModel(
      */
 
     fun getMoviesFromLocalDataBase() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result: List<MovieDataRoom> =
-                movieLocalRepository.getAllFavoritesFromLocalDataBase()
+        _moviesFavoriteData.value = RoomAppState.Loading
+        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, error ->
+            _moviesFavoriteData.postValue(RoomAppState.Error(error))
+        }) {
+            val result: List<MovieDataRoom> = favoriteRepository.getAllFavorites()
             _moviesFavoriteData.postValue(RoomAppState.Success(result))
         }
     }
 
-}
-
-@Suppress("UNCHECKED_CAST")
-class FavoriteViewModelFactory : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)) {
-            FavoriteViewModel(movieLocalRepository = MovieLocalRepositoryImpl(App.movieDao)) as T
-        } else {
-            throw IllegalArgumentException("FavoriteViewModel not found")
-        }
-    }
 }

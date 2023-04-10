@@ -19,10 +19,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.app.CategoryAppState
 import com.example.java.android1.movie_search.app.MovieCategory
 import com.example.java.android1.movie_search.model.CategoryMoviesData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.states.CategoryAppState
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.category_movies.ARG_CATEGORY_NAME_DATA
 import com.example.java.android1.movie_search.view.navigation.ScreenState
@@ -34,6 +34,7 @@ import com.example.java.android1.movie_search.view.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.view.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.MainViewModel
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * The main method for the layout of the home screen methods
@@ -43,7 +44,7 @@ import com.example.java.android1.movie_search.viewmodel.MainViewModel
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun HomeScreen(navController: NavController, homeViewModel: MainViewModel) {
+fun HomeScreen(navController: NavController, homeViewModel: MainViewModel = koinViewModel()) {
     val categoriesMovies = remember { mutableStateOf(mutableSetOf<CategoryMoviesData>()) }
     homeViewModel.popularMoviesData.observeAsState().value?.let { state ->
         ServerResponseStateObserver(state, homeViewModel, categoriesMovies, navController)
@@ -78,6 +79,7 @@ private fun ServerResponseStateObserver(
         is CategoryAppState.Error -> categoryMoviesState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) { homeViewModel.fetchAllCategoriesMovies() }
         }
+
         CategoryAppState.Loading -> LoadingProgressBar()
         is CategoryAppState.Success -> {
             categoriesMoviesList.value.add(categoryMoviesState.categoryMoviesData)

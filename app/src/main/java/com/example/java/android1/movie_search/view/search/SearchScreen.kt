@@ -35,6 +35,7 @@ import com.example.java.android1.movie_search.view.theme.SearchFieldColor
 import com.example.java.android1.movie_search.view.widgets.ListMoviesPagination
 import com.example.java.android1.movie_search.viewmodel.SearchViewModel
 import kotlinx.coroutines.delay
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * The main method for the layout of the search screen methods
@@ -47,7 +48,7 @@ import kotlinx.coroutines.delay
 fun SearchScreen(
     navController: NavController,
     searchState: SearchState = rememberSearchState(),
-    searchViewModel: SearchViewModel
+    searchViewModel: SearchViewModel = koinViewModel()
 ) {
     Box(
         modifier = Modifier

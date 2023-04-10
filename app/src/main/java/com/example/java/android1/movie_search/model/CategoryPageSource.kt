@@ -2,19 +2,19 @@ package com.example.java.android1.movie_search.model
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.java.android1.movie_search.repository.RemoteDataSource
+import com.example.java.android1.movie_search.network.ApiHolder
 import com.example.java.android1.movie_search.view.LanguageQuery
 import retrofit2.HttpException
 import java.io.IOException
 
 /**
  * Needed to navigate through the pages of the list
- * @param remoteDataSource - A class with methods for getting data from a remote server
+ * @param apiHolder - A class with methods for getting data from a remote server
  * @param category - A category movies to be received from a remote server
  */
 
 class CategoryPageSource(
-    private val remoteDataSource: RemoteDataSource,
+    private val apiHolder: ApiHolder,
     private val category: String,
 ) : PagingSource<Int, MovieDataTMDB>() {
 
@@ -31,15 +31,14 @@ class CategoryPageSource(
         val page: Int = params.key ?: 1
         return try {
             val serverResponse =
-                remoteDataSource.getCategoryMovies(
+                apiHolder.moviesApi.getCategoryMovies(
                     category = category,
                     language = LanguageQuery.EN.languageQuery,
                     page = page
                 )
-            val categoryMovies = checkNotNull(serverResponse.body())
-            val nextKey = if (categoryMovies.results.isEmpty()) null else page + 1
+            val nextKey = if (serverResponse.results.isEmpty()) null else page + 1
             val prevKey = if (page == 1) null else page - 1
-            LoadResult.Page(data = categoryMovies.results, prevKey = prevKey, nextKey = nextKey)
+            LoadResult.Page(data = serverResponse.results, prevKey = prevKey, nextKey = nextKey)
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
         } catch (exception: HttpException) {

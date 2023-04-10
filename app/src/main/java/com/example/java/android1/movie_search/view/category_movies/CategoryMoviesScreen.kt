@@ -28,6 +28,7 @@ import com.example.java.android1.movie_search.view.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.widgets.ListMoviesPagination
 import com.example.java.android1.movie_search.viewmodel.CategoryMoviesViewModel
+import org.koin.androidx.compose.koinViewModel
 
 const val ARG_CATEGORY_NAME_DATA = "CategoryMoviesData"
 
@@ -42,7 +43,7 @@ const val ARG_CATEGORY_NAME_DATA = "CategoryMoviesData"
 fun CategoryMoviesScreen(
     categoryName: String,
     navController: NavController,
-    categoryMoviesViewModel: CategoryMoviesViewModel
+    categoryMoviesViewModel: CategoryMoviesViewModel = koinViewModel()
 ) {
     val categoryMoviesData =
         categoryMoviesViewModel.getCategoryMoviesFromRemoteServer(categoryName)
