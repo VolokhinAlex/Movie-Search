@@ -5,7 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.java.android1.movie_search.datasource.category.RemoteCategoryDataSource.Companion.CATEGORY_PAGE_SIZE
 import com.example.java.android1.movie_search.model.MovieDataTMDB
-import com.example.java.android1.movie_search.model.SearchPageSource
+import com.example.java.android1.movie_search.datasource.SearchPageSource
 import com.example.java.android1.movie_search.network.ApiHolder
 import kotlinx.coroutines.flow.Flow
 

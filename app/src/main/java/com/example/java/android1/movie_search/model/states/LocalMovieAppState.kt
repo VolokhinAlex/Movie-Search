@@ -1,6 +1,6 @@
 package com.example.java.android1.movie_search.model.states
 
-import com.example.java.android1.movie_search.model.states.RoomAppState.*
+import com.example.java.android1.movie_search.model.states.LocalMovieAppState.*
 import com.example.java.android1.movie_search.model.MovieDataRoom
 
 /**
@@ -10,8 +10,8 @@ import com.example.java.android1.movie_search.model.MovieDataRoom
  * 3. [Loading] - If the request is still being executed.
  */
 
-sealed class RoomAppState {
-    data class Success(val moviesData: List<MovieDataRoom>) : RoomAppState()
-    data class Error(val errorMessage: Throwable) : RoomAppState()
-    object Loading : RoomAppState()
+sealed class LocalMovieAppState {
+    data class Success(val moviesData: List<MovieDataRoom>) : LocalMovieAppState()
+    data class Error(val errorMessage: Throwable) : LocalMovieAppState()
+    object Loading : LocalMovieAppState()
 }

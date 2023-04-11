@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.java.android1.movie_search.model.MovieDataRoom
-import com.example.java.android1.movie_search.model.states.RoomAppState
+import com.example.java.android1.movie_search.model.states.LocalMovieAppState
 import com.example.java.android1.movie_search.utils.convertMovieRoomToMovieDto
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.navigation.ScreenState
@@ -61,7 +61,7 @@ fun FavoriteScreen(
         HeaderFavoriteScreen()
         favoriteViewModel.moviesFavoriteData.observeAsState().value?.let { state ->
             RenderFavoriteDataFromLocalDataBase(
-                roomAppState = state,
+                localMovieAppState = state,
                 navController = navController,
                 favoriteViewModel = favoriteViewModel
             )
@@ -71,28 +71,28 @@ fun FavoriteScreen(
 
 /**
  * The method processes state from the database
- * @param roomAppState - The state that came from the database. [RoomAppState]
+ * @param localMovieAppState - The state that came from the database. [LocalMovieAppState]
  * @param navController - Needed for the method [FavoriteMoviesList]
  * @param favoriteViewModel - Needed if roomAppState came Error
  */
 
 @Composable
 private fun RenderFavoriteDataFromLocalDataBase(
-    roomAppState: RoomAppState,
+    localMovieAppState: LocalMovieAppState,
     navController: NavController,
     favoriteViewModel: FavoriteViewModel
 ) {
-    when (roomAppState) {
-        is RoomAppState.Error -> roomAppState.errorMessage.localizedMessage?.let { message ->
+    when (localMovieAppState) {
+        is LocalMovieAppState.Error -> localMovieAppState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) { favoriteViewModel.getMoviesFromLocalDataBase() }
         }
 
-        is RoomAppState.Success -> {
-            val favoriteMoviesData = roomAppState.moviesData
+        is LocalMovieAppState.Success -> {
+            val favoriteMoviesData = localMovieAppState.moviesData
             FavoriteMoviesList(favoriteMoviesData, navController)
         }
 
-        RoomAppState.Loading -> LoadingProgressBar()
+        LocalMovieAppState.Loading -> LoadingProgressBar()
     }
 }
 

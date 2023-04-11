@@ -1,7 +1,8 @@
-package com.example.java.android1.movie_search.model
+package com.example.java.android1.movie_search.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.network.ApiHolder
 import com.example.java.android1.movie_search.view.LanguageQuery
 import retrofit2.HttpException
@@ -10,12 +11,12 @@ import java.io.IOException
 /**
  * Needed to navigate through the pages of the list
  * @param apiHolder - A class with methods for getting data from a remote server
- * @param category - A category movies to be received from a remote server
+ * @param movieId - A Movie ID that similar movies will be searched for
  */
 
-class CategoryPageSource(
+class SimilarPageSource(
     private val apiHolder: ApiHolder,
-    private val category: String,
+    private val movieId: Int,
 ) : PagingSource<Int, MovieDataTMDB>() {
 
     override fun getRefreshKey(state: PagingState<Int, MovieDataTMDB>): Int? {
@@ -25,17 +26,13 @@ class CategoryPageSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieDataTMDB> {
-        if (category.isEmpty()) {
-            return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
-        }
         val page: Int = params.key ?: 1
         return try {
-            val serverResponse =
-                apiHolder.moviesApi.getCategoryMovies(
-                    category = category,
-                    language = LanguageQuery.EN.languageQuery,
-                    page = page
-                )
+            val serverResponse = apiHolder.moviesApi.getSimilarMovies(
+                movieId = movieId,
+                language = LanguageQuery.EN.languageQuery,
+                page = page,
+            )
             val nextKey = if (serverResponse.results.isEmpty()) null else page + 1
             val prevKey = if (page == 1) null else page - 1
             LoadResult.Page(data = serverResponse.results, prevKey = prevKey, nextKey = nextKey)
@@ -47,4 +44,3 @@ class CategoryPageSource(
     }
 
 }
-

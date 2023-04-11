@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.java.android1.movie_search.app.MovieCategory
+import com.example.java.android1.movie_search.model.MovieCategory
 import com.example.java.android1.movie_search.model.CategoryMoviesData
 import com.example.java.android1.movie_search.model.states.CategoryAppState
 import com.example.java.android1.movie_search.repository.home.HomeRepository

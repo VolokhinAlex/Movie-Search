@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.app.MovieCategory
+import com.example.java.android1.movie_search.model.MovieCategory
 import com.example.java.android1.movie_search.model.CategoryMoviesData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.model.states.CategoryAppState

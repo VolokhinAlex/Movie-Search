@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.java.android1.movie_search.app.MovieCategory
+import com.example.java.android1.movie_search.model.MovieCategory
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.model.states.MovieDataAppState
-import com.example.java.android1.movie_search.model.states.RoomAppState
+import com.example.java.android1.movie_search.model.states.LocalMovieAppState
 import com.example.java.android1.movie_search.repository.details.DetailsRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -22,8 +22,8 @@ class DetailsViewModel(
 
     private val _detailsMovieData: MutableLiveData<MovieDataAppState> = MutableLiveData()
     val detailsMovieData: LiveData<MovieDataAppState> = _detailsMovieData
-    private val _movieLocalData: MutableLiveData<RoomAppState> = MutableLiveData()
-    val movieLocalData: LiveData<RoomAppState> = _movieLocalData
+    private val _movieLocalData: MutableLiveData<LocalMovieAppState> = MutableLiveData()
+    val movieLocalData: LiveData<LocalMovieAppState> = _movieLocalData
 
     /**
      * The method for checking the completeness of the received data
@@ -76,7 +76,7 @@ class DetailsViewModel(
         if (movieData.id != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 val result = detailsRepository.getMovieFromLocalSource(movieData.id)
-                _movieLocalData.postValue(RoomAppState.Success(listOf(result)))
+                _movieLocalData.postValue(LocalMovieAppState.Success(listOf(result)))
             }
         }
     }

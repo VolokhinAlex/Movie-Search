@@ -1,4 +1,4 @@
-package com.example.java.android1.movie_search.app
+package com.example.java.android1.movie_search.model
 
 import androidx.annotation.StringRes
 import com.example.java.android1.movie_search.R

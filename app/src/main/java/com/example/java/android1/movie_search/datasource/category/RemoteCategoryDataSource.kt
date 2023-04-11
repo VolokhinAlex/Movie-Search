@@ -3,7 +3,7 @@ package com.example.java.android1.movie_search.datasource.category
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.java.android1.movie_search.model.CategoryPageSource
+import com.example.java.android1.movie_search.datasource.CategoryPageSource
 import com.example.java.android1.movie_search.model.MovieDataTMDB
 import com.example.java.android1.movie_search.network.ApiHolder
 import kotlinx.coroutines.flow.Flow
