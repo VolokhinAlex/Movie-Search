@@ -1,4 +1,4 @@
-package com.example.java.android1.movie_search.model
+package com.example.java.android1.movie_search.model.old.remote
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

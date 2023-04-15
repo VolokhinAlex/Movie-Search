@@ -1,7 +1,7 @@
 package com.example.java.android1.movie_search.repository.category
 
 import androidx.paging.PagingData
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.ui.MovieUI
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -9,5 +9,5 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface CategoryRepository {
-    fun getCategoryMovies(categoryMovies: String): Flow<PagingData<MovieDataTMDB>>
+    fun getCategoryMovies(categoryMovies: String): Flow<PagingData<MovieUI>>
 }

@@ -2,7 +2,7 @@ package com.example.java.android1.movie_search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.ui.MovieUI
 import com.example.java.android1.movie_search.repository.category.CategoryRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -15,7 +15,7 @@ class CategoryMoviesViewModel(
      * @param category - The category of films to get
      */
 
-    fun getCategoryMoviesFromRemoteServer(category: String): Flow<PagingData<MovieDataTMDB>> =
+    fun getCategoryMoviesFromRemoteServer(category: String): Flow<PagingData<MovieUI>> =
         categoryRepository.getCategoryMovies(category)
 
 }

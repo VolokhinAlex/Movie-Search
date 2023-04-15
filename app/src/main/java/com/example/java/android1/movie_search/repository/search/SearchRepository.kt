@@ -1,7 +1,7 @@
 package com.example.java.android1.movie_search.repository.search
 
 import androidx.paging.PagingData
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.ui.MovieUI
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -9,5 +9,8 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface SearchRepository {
-    fun getMoviesBySearchFromRemoteServer(query: String): Flow<PagingData<MovieDataTMDB>>
+    fun getMoviesBySearch(
+        query: String,
+        isNetworkAvailable: Boolean
+    ): Flow<PagingData<MovieUI>>
 }

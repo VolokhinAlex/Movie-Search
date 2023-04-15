@@ -1,7 +1,7 @@
 package com.example.java.android1.movie_search.datasource.details
 
-import com.example.java.android1.movie_search.model.MovieDataRoom
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.local.LocalMovieData
+import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
 
 interface LocalDetailsDataSource {
 
@@ -10,7 +10,7 @@ interface LocalDetailsDataSource {
      * @param movieId - Movie Id to get a movie
      */
 
-    suspend fun getMovieFromLocalDataBase(movieId: Int): MovieDataRoom
+    suspend fun getMovieFromLocalDataBase(movieId: Int): LocalMovieData
 
     /**
      * Method for saving a movie to a local database

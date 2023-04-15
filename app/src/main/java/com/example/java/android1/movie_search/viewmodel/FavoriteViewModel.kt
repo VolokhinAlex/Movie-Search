@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.java.android1.movie_search.model.MovieDataRoom
-import com.example.java.android1.movie_search.model.states.LocalMovieAppState
+import com.example.java.android1.movie_search.model.state.MovieState
 import com.example.java.android1.movie_search.repository.favorite.FavoriteRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -15,20 +14,19 @@ class FavoriteViewModel(
     private val favoriteRepository: FavoriteRepository
 ) : ViewModel() {
 
-    private val _moviesFavoriteData: MutableLiveData<LocalMovieAppState> = MutableLiveData()
-    val moviesFavoriteData: LiveData<LocalMovieAppState> = _moviesFavoriteData
+    private val _moviesFavoriteData: MutableLiveData<MovieState> = MutableLiveData()
+    val moviesFavoriteData: LiveData<MovieState> = _moviesFavoriteData
 
     /**
      * The method for getting a list of favorite movies
      */
 
     fun getMoviesFromLocalDataBase() {
-        _moviesFavoriteData.value = LocalMovieAppState.Loading
+        _moviesFavoriteData.value = MovieState.Loading
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, error ->
-            _moviesFavoriteData.postValue(LocalMovieAppState.Error(error))
+            _moviesFavoriteData.postValue(MovieState.Error(error))
         }) {
-            val result: List<MovieDataRoom> = favoriteRepository.getAllFavorites()
-            _moviesFavoriteData.postValue(LocalMovieAppState.Success(result))
+            _moviesFavoriteData.postValue(favoriteRepository.getAllFavorites())
         }
     }
 

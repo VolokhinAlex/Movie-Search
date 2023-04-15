@@ -1,6 +1,6 @@
 package com.example.java.android1.movie_search.datasource.home
 
-import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.old.remote.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.network.ApiHolder
 
 class RemoteHomeDataSource(

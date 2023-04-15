@@ -1,4 +1,6 @@
-package com.example.java.android1.movie_search.model
+package com.example.java.android1.movie_search.model.old.ui
+
+import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
 
 /**
  * A class for storing category movies

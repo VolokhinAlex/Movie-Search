@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.java.android1.movie_search.R
 import com.example.java.android1.movie_search.model.MovieCategory
-import com.example.java.android1.movie_search.model.CategoryMoviesData
-import com.example.java.android1.movie_search.model.MovieDataTMDB
-import com.example.java.android1.movie_search.model.states.CategoryAppState
+import com.example.java.android1.movie_search.model.state.CategoryState
+import com.example.java.android1.movie_search.model.ui.CategoryMovieUI
+import com.example.java.android1.movie_search.model.ui.MovieUI
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.category_movies.ARG_CATEGORY_NAME_DATA
 import com.example.java.android1.movie_search.view.navigation.ScreenState
@@ -44,25 +44,56 @@ import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun HomeScreen(navController: NavController, homeViewModel: MainViewModel = koinViewModel()) {
-    val categoriesMovies = remember { mutableStateOf(mutableSetOf<CategoryMoviesData>()) }
+fun HomeScreen(
+    navController: NavController,
+    networkStatus: Boolean,
+    homeViewModel: MainViewModel = koinViewModel()
+) {
+    LaunchedEffect(key1 = true) {
+        homeViewModel.fetchAllCategoriesMovies(isOnline = networkStatus)
+    }
+    val categoriesMovies = remember { mutableStateOf(mutableSetOf<CategoryMovieUI>()) }
     homeViewModel.popularMoviesData.observeAsState().value?.let { state ->
-        ServerResponseStateObserver(state, homeViewModel, categoriesMovies, navController)
+        ServerResponseStateObserver(
+            state,
+            homeViewModel,
+            categoriesMovies,
+            navController,
+            networkStatus
+        )
     }
     homeViewModel.upcomingMoviesData.observeAsState().value?.let { state ->
-        ServerResponseStateObserver(state, homeViewModel, categoriesMovies, navController)
+        ServerResponseStateObserver(
+            state,
+            homeViewModel,
+            categoriesMovies,
+            navController,
+            networkStatus
+        )
     }
     homeViewModel.topRatedMoviesData.observeAsState().value?.let { state ->
-        ServerResponseStateObserver(state, homeViewModel, categoriesMovies, navController)
+        ServerResponseStateObserver(
+            state,
+            homeViewModel,
+            categoriesMovies,
+            navController,
+            networkStatus
+        )
     }
     homeViewModel.nowPlayingMoviesData.observeAsState().value?.let { state ->
-        ServerResponseStateObserver(state, homeViewModel, categoriesMovies, navController)
+        ServerResponseStateObserver(
+            state,
+            homeViewModel,
+            categoriesMovies,
+            navController,
+            networkStatus
+        )
     }
 }
 
 /**
  * The method processes data received from a remote server
- * @param categoryMoviesState - The status that comes from the remote server
+ * @param categoryState - The status that comes from the remote server
  * @param homeViewModel - Home View Model
  * @param categoriesMoviesList - collection for saving categories without duplicates
  * @param navController - Controller for screen navigation
@@ -70,19 +101,24 @@ fun HomeScreen(navController: NavController, homeViewModel: MainViewModel = koin
 
 @Composable
 private fun ServerResponseStateObserver(
-    categoryMoviesState: CategoryAppState,
+    categoryState: CategoryState,
     homeViewModel: MainViewModel,
-    categoriesMoviesList: MutableState<MutableSet<CategoryMoviesData>>,
-    navController: NavController
+    categoriesMoviesList: MutableState<MutableSet<CategoryMovieUI>>,
+    navController: NavController,
+    networkStatus: Boolean
 ) {
-    when (categoryMoviesState) {
-        is CategoryAppState.Error -> categoryMoviesState.errorMessage.localizedMessage?.let { message ->
-            ErrorMessage(message = message) { homeViewModel.fetchAllCategoriesMovies() }
+    when (categoryState) {
+        is CategoryState.Error -> categoryState.errorMessage.localizedMessage?.let { message ->
+            ErrorMessage(message = message) {
+                homeViewModel.fetchAllCategoriesMovies(
+                    networkStatus
+                )
+            }
         }
 
-        CategoryAppState.Loading -> LoadingProgressBar()
-        is CategoryAppState.Success -> {
-            categoriesMoviesList.value.add(categoryMoviesState.categoryMoviesData)
+        CategoryState.Loading -> LoadingProgressBar()
+        is CategoryState.Success -> {
+            categoriesMoviesList.value.add(categoryState.data)
             CategoriesMoviesList(categoriesMoviesList.value.toList(), navController)
         }
     }
@@ -96,7 +132,7 @@ private fun ServerResponseStateObserver(
 
 @Composable
 fun CategoriesMoviesList(
-    categoriesMoviesList: List<CategoryMoviesData>,
+    categoriesMoviesList: List<CategoryMovieUI>,
     navController: NavController
 ) {
     Box(
@@ -112,11 +148,11 @@ fun CategoriesMoviesList(
             HeaderHomeScreen(R.string.app_name)
             categoriesMoviesList.forEach { categoryMovies ->
                 CategoryMoviesHeader(
-                    categoryMovies = categoryMovies.queryName,
+                    categoryMovies = categoryMovies.category,
                     navController = navController
                 )
                 NestedCategoryMoviesList(
-                    categoryMovies = categoryMovies.categoryMoviesData,
+                    categoryMovies = categoryMovies.movie,
                     navController = navController
                 )
             }
@@ -206,7 +242,7 @@ private fun CategoryMoviesHeader(categoryMovies: String, navController: NavContr
  */
 
 @Composable
-fun NestedCategoryMoviesList(categoryMovies: List<MovieDataTMDB>, navController: NavController) {
+fun NestedCategoryMoviesList(categoryMovies: List<MovieUI>, navController: NavController) {
     LazyRow(modifier = Modifier.padding(start = 20.dp, bottom = 20.dp)) {
         items(
             count = categoryMovies.size,
@@ -228,7 +264,7 @@ fun NestedCategoryMoviesList(categoryMovies: List<MovieDataTMDB>, navController:
                                 ScreenState.DetailsScreen.route,
                                 detailsMovieBundle
                             )
-                        }, movieDataTMDB = categoryMovies[movieItemIndex]
+                        }, movie = categoryMovies[movieItemIndex]
                 )
             }
         )

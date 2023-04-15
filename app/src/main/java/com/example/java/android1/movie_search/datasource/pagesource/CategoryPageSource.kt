@@ -1,8 +1,8 @@
-package com.example.java.android1.movie_search.datasource
+package com.example.java.android1.movie_search.datasource.pagesource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.network.ApiHolder
 import com.example.java.android1.movie_search.view.LanguageQuery
 import retrofit2.HttpException

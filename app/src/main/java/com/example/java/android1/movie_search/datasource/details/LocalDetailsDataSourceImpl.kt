@@ -1,10 +1,11 @@
 package com.example.java.android1.movie_search.datasource.details
 
-import com.example.java.android1.movie_search.model.MovieDataRoom
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.local.ActorEntity
+import com.example.java.android1.movie_search.model.local.LocalMovieData
+import com.example.java.android1.movie_search.model.local.TrailerEntity
+import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.room.MoviesDataBase
-import com.example.java.android1.movie_search.utils.convertMovieDtoToMovieEntity
-import com.example.java.android1.movie_search.utils.convertMovieEntityToMovieDataRoom
+import com.example.java.android1.movie_search.utils.mapMovieEntityToLocalMovieData
 
 class LocalDetailsDataSourceImpl(
     private val localDataRoom: MoviesDataBase
@@ -15,9 +16,11 @@ class LocalDetailsDataSourceImpl(
      * @param movieId - Movie Id to get a movie
      */
 
-    override suspend fun getMovieFromLocalDataBase(movieId: Int): MovieDataRoom {
-        return convertMovieEntityToMovieDataRoom(
-            entity = localDataRoom.moviesDao().getMovieByMovieId(movieId)
+    override suspend fun getMovieFromLocalDataBase(movieId: Int): LocalMovieData {
+        return mapMovieEntityToLocalMovieData(
+            movieEntity = localDataRoom.moviesDao().getMovieByMovieId(movieId),
+            trailers = localDataRoom.trailerDao().getTrailerById(movieId = movieId),
+            actors = localDataRoom.actorDao().getActorsByMovieId(movieId = movieId)
         )
     }
 
@@ -27,7 +30,34 @@ class LocalDetailsDataSourceImpl(
      */
 
     override suspend fun saveMovieToLocalDataBase(movieDataTMDB: MovieDataTMDB) {
-        localDataRoom.moviesDao().insert(entity = convertMovieDtoToMovieEntity(movieDataTMDB))
+        localDataRoom.moviesDao().updateRuntimeAndGenres(
+            movieId = movieDataTMDB.id ?: 0,
+            genres = movieDataTMDB.genres?.joinToString { it.name.orEmpty() }.orEmpty(),
+            runtime = movieDataTMDB.runtime ?: 0
+        )
+        localDataRoom.trailerDao().insert(movieDataTMDB.videos?.results?.map {
+            TrailerEntity(
+                id = movieDataTMDB.id.toString(),
+                name = it.name.orEmpty(),
+                key = it.key,
+                type = it.type
+            )
+        } ?: emptyList())
+        val actors = movieDataTMDB.credits?.cast?.map {
+            ActorEntity(
+                actorId = it.id ?: 0,
+                id = movieDataTMDB.id?.toLong(),
+                name = it.name,
+                character = it.character,
+                biography = null,
+                birthday = null,
+                imdbId = null,
+                placeOfBirth = null,
+                popularity = null,
+                profilePath = it.profile_path
+            )
+        } ?: emptyList()
+        localDataRoom.actorDao().insert(actors)
     }
 
     /**

@@ -1,14 +1,18 @@
 package com.example.java.android1.movie_search.repository.home
 
 import com.example.java.android1.movie_search.datasource.home.HomeDataSource
-import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.datasource.home.LocalHomeDataSource
+import com.example.java.android1.movie_search.model.old.remote.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.state.CategoryState
+import com.example.java.android1.movie_search.utils.mapMovieCategoryMoviesTMDBToCategoryMovieUI
 
 /**
  * Implementation of the interface for getting data from Remote Server
  */
 
 class HomeRepositoryImpl(
-    private val dataSource: HomeDataSource<CategoryMoviesTMDB>
+    private val dataSource: HomeDataSource<CategoryMoviesTMDB>,
+    private val localDataSource: LocalHomeDataSource
 ) : HomeRepository {
 
     /**
@@ -23,11 +27,18 @@ class HomeRepositoryImpl(
         language: String,
         page: Int,
         isNetworkAvailable: Boolean
-    ): CategoryMoviesTMDB {
+    ): CategoryState {
         return if (isNetworkAvailable) {
-            dataSource.getMovies(category = category, language = language, page = page)
+            val movies = dataSource.getMovies(category = category, language = language, page = page)
+            localDataSource.saveMovie(movies, category)
+            CategoryState.Success(mapMovieCategoryMoviesTMDBToCategoryMovieUI(category, movies))
         } else {
-            dataSource.getMovies(category = category, language = language, page = page)
+            CategoryState.Success(
+                mapMovieCategoryMoviesTMDBToCategoryMovieUI(
+                    category,
+                    localDataSource.getMovies(category = category, language = language, page = page)
+                )
+            )
         }
     }
 
