@@ -2,21 +2,22 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
-    id 'kotlin-kapt'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.devtools.ksp'
 }
 
 android {
     namespace 'com.example.java.android1.movie_search'
-    compileSdk 33
+    compileSdk Config.compileSdk
 
     defaultConfig {
-        applicationId "com.example.java.android1.movie_search"
-        minSdk 21
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        applicationId Config.applicationId
+        versionCode Releases.versionCode
+        versionName Releases.versionName
+        minSdk Config.minSdk
+        targetSdk Config.targetSdk
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -30,19 +31,8 @@ android {
         def apiKey = properties.getProperty("movie_tmdb_api_key", "")
         it.buildConfigField "String", "MOVIE_API_KEY", apiKey
     }
-    signingConfigs {
-        release {
-            Properties keystoreProperties = new Properties()
-            keystoreProperties.load(project.rootProject.file("keystore.properties").newDataInputStream())
-            storeFile file("keystore.jks")
-            storePassword keystoreProperties['store_password']
-            keyAlias keystoreProperties['key_alias']
-            keyPassword keystoreProperties['key_password']
-        }
-    }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -61,59 +51,54 @@ android {
 
 dependencies {
     // Paging 3
-    implementation 'androidx.paging:paging-runtime:3.1.1'
-    testImplementation 'androidx.paging:paging-common:3.1.1'
+    implementation Paging.pagingRuntime
+    testImplementation Paging.pagingCommon
 
     // Firebase
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
+    implementation Firebase.firebaseMessaging
+    implementation Firebase.firebaseCrashlytics
+    implementation Firebase.firebaseAnalytics
 
     // Compose
-    implementation("androidx.paging:paging-compose:1.0.0-alpha17")
-    def composeBom = platform('androidx.compose:compose-bom:2022.12.00')
-    implementation composeBom
-    androidTestImplementation composeBom
-    implementation 'androidx.compose.material3:material3'
-    implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'
-    implementation 'androidx.activity:activity-compose:1.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha04'
-    implementation 'androidx.compose.runtime:runtime-livedata'
-    implementation 'androidx.navigation:navigation-compose:2.5.3'
-    implementation 'io.coil-kt:coil-compose:2.2.2'
-
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
-    // Room
-    kapt 'androidx.room:room-compiler:2.5.0'
-    implementation 'androidx.room:room-runtime:2.5.0'
-    implementation 'androidx.room:room-ktx:2.5.0'
-
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
-    implementation 'com.google.code.gson:gson:2.9.0'
-
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation(Compose.composePaging)
+    implementation platform(Compose.composeBom)
+    implementation Compose.composeMaterial3
+    implementation Compose.composeUi
+    implementation Compose.composeUi
+    implementation Compose.composeActivity
+    implementation Compose.composeViewModel
+    implementation Compose.composeLiveData
+    implementation Compose.composeNavigation
+    implementation Compose.composeCoil
 
     // Design
-    implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'com.google.android.material:material:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+    implementation Design.appcompat
+    implementation Design.material
+    implementation Design.constrainLayout
 
     // Lifecycle
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation Lifecycle.livedata
+    implementation Lifecycle.viewModel
 
-    // JUNIT
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+    // Room
+    implementation Room.roomKtx
+    ksp Room.roomCompiler
+    implementation Room.roomRuntime
+
+    // Koin
+    implementation Koin.koinCore
+    implementation Koin.koinAndroid
+    implementation Koin.koinAndroidCompat
+    implementation Koin.composeKoin
+
+    // Retrofit
+    implementation Retrofit.retrofit
+    implementation Retrofit.converterGson
+    implementation Retrofit.loggingOkHttp
+
+    implementation Android.androidCore
+
+    testImplementation Tests.junit
+    androidTestImplementation Tests.extJunit
+    androidTestImplementation Tests.espressoCore
 }

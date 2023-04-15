@@ -3,12 +3,23 @@ package com.example.java.android1.movie_search.view.details
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -37,9 +48,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.app.MovieDataAppState
-import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.states.MovieDataAppState
+import com.example.java.android1.movie_search.model.states.LocalMovieAppState
 import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
 import com.example.java.android1.movie_search.utils.timeToFormatHoursAndMinutes
 import com.example.java.android1.movie_search.view.LanguageQuery
@@ -47,11 +58,17 @@ import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.actor_details.ARG_ACTOR_ID
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
-import com.example.java.android1.movie_search.view.theme.*
+import com.example.java.android1.movie_search.view.theme.CARD_WIDTH_SIZE
+import com.example.java.android1.movie_search.view.theme.DETAILS_PRIMARY_PAGING
+import com.example.java.android1.movie_search.view.theme.DETAILS_PRIMARY_SIZE
+import com.example.java.android1.movie_search.view.theme.PrimaryColor80
+import com.example.java.android1.movie_search.view.theme.TITLE_SIZE
+import com.example.java.android1.movie_search.view.theme.TransparentColor
 import com.example.java.android1.movie_search.view.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.view.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.DetailsViewModel
+import org.koin.androidx.compose.koinViewModel
 import java.text.DecimalFormat
 
 /**
@@ -65,11 +82,11 @@ import java.text.DecimalFormat
 fun DetailsScreen(
     movieDataTMDB: MovieDataTMDB,
     navController: NavController,
-    movieDetailsViewModel: DetailsViewModel
+    movieDetailsViewModel: DetailsViewModel = koinViewModel()
 ) {
     LaunchedEffect(true) {
         movieDataTMDB.id?.let { movieId ->
-            movieDetailsViewModel.getMovieDetailsFromRemoteSource(
+            movieDetailsViewModel.getMovieDetails(
                 movieId,
                 LanguageQuery.EN.languageQuery
             )
@@ -79,7 +96,8 @@ fun DetailsScreen(
         modifier = Modifier
             .background(PrimaryColor80)
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center
     ) {
         movieDetailsViewModel.detailsMovieData.observeAsState().value?.let { state ->
             movieDataTMDB.id?.let { movieId ->
@@ -94,7 +112,7 @@ fun DetailsScreen(
 
 /**
  * The method processes state from the database
- * @param roomAppState - The state that came from the database. [RoomAppState]
+ * @param localMovieAppState - The state that came from the database. [LocalMovieAppState]
  * @param movieDetailsViewModel - ViewModel for logic processing
  * @param movieId - The movie id
  */
@@ -103,15 +121,15 @@ fun DetailsScreen(
 private fun RenderMovieDetailsDataFromLocalDataBase(
     movieDetailsViewModel: DetailsViewModel,
     movieId: Int,
-    roomAppState: RoomAppState
+    localMovieAppState: LocalMovieAppState
 ) {
-    when (roomAppState) {
-        is RoomAppState.Error -> MovieFavorite(movieDetailsViewModel, movieId, false)
-        RoomAppState.Loading -> LoadingProgressBar()
-        is RoomAppState.Success -> MovieFavorite(
+    when (localMovieAppState) {
+        is LocalMovieAppState.Error -> MovieFavorite(movieDetailsViewModel, movieId, false)
+        LocalMovieAppState.Loading -> LoadingProgressBar()
+        is LocalMovieAppState.Success -> MovieFavorite(
             movieDetailsViewModel,
             movieId,
-            roomAppState.moviesData[0].movieFavorite ?: false
+            localMovieAppState.moviesData[0].movieFavorite ?: false
         )
     }
 }
@@ -134,12 +152,13 @@ private fun RenderMovieDetailsDataFromRemoteServer(
     when (movieDataAppState) {
         is MovieDataAppState.Error -> movieDataAppState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) {
-                movieDetailsViewModel.getMovieDetailsFromRemoteSource(
+                movieDetailsViewModel.getMovieDetails(
                     movieId,
                     LanguageQuery.EN.languageQuery
                 )
             }
         }
+
         MovieDataAppState.Loading -> LoadingProgressBar()
         is MovieDataAppState.Success -> {
             val movieDetailsData =
@@ -235,7 +254,7 @@ private fun CenterDetailsScreen(
                 RenderMovieDetailsDataFromLocalDataBase(
                     movieDetailsViewModel = movieDetailsViewModel,
                     movieId = movieId,
-                    roomAppState = favoriteState
+                    localMovieAppState = favoriteState
                 )
             }
         }
@@ -279,27 +298,17 @@ private fun CenterDetailsScreen(
 
 @Composable
 private fun MovieGenres(movieDetailsData: MovieDataTMDB) {
-    val delimiter = ", "
-    LazyRow(
+    Box(
         modifier = Modifier.padding(
             top = DETAILS_PRIMARY_PAGING,
             bottom = DETAILS_PRIMARY_PAGING
         )
     ) {
-        movieDetailsData.genres?.let { genres ->
-            itemsIndexed(genres) { index, item ->
-                item.name?.let { genre ->
-                    Text(
-                        text = genre,
-                        fontSize = DETAILS_PRIMARY_SIZE,
-                        color = Color.White
-                    )
-                }
-                if (index < genres.size - 1) {
-                    Text(text = delimiter, fontSize = DETAILS_PRIMARY_SIZE, color = Color.White)
-                }
-            }
-        }
+        Text(
+            text = movieDetailsData.genres?.joinToString { it.name.orEmpty() } ?: "",
+            fontSize = DETAILS_PRIMARY_SIZE,
+            color = Color.White
+        )
     }
 }
 

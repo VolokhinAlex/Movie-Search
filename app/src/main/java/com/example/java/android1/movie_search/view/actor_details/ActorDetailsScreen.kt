@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.app.MovieActorAppState
+import com.example.java.android1.movie_search.model.states.MovieActorAppState
 import com.example.java.android1.movie_search.model.ActorDTO
 import com.example.java.android1.movie_search.view.LanguageQuery
 import com.example.java.android1.movie_search.view.theme.DETAILS_PRIMARY_SIZE
@@ -33,6 +33,7 @@ import com.example.java.android1.movie_search.view.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.viewmodel.MovieActorViewModel
+import org.koin.androidx.compose.koinViewModel
 
 const val ARG_ACTOR_ID = "ActorID"
 
@@ -47,7 +48,7 @@ const val ARG_ACTOR_ID = "ActorID"
 fun ActorDetailsScreen(
     actorId: Long,
     navController: NavController,
-    actorViewModel: MovieActorViewModel
+    actorViewModel: MovieActorViewModel = koinViewModel()
 ) {
     LaunchedEffect(key1 = true) {
         actorViewModel.getMovieActorData(actorId, LanguageQuery.EN.languageQuery)

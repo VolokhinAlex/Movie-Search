@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.java.android1.movie_search.app.MovieCategory
+import com.example.java.android1.movie_search.model.MovieCategory
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
@@ -28,6 +28,7 @@ import com.example.java.android1.movie_search.view.theme.PrimaryColor80
 import com.example.java.android1.movie_search.view.theme.TITLE_SIZE
 import com.example.java.android1.movie_search.view.widgets.ListMoviesPagination
 import com.example.java.android1.movie_search.viewmodel.CategoryMoviesViewModel
+import org.koin.androidx.compose.koinViewModel
 
 const val ARG_CATEGORY_NAME_DATA = "CategoryMoviesData"
 
@@ -42,7 +43,7 @@ const val ARG_CATEGORY_NAME_DATA = "CategoryMoviesData"
 fun CategoryMoviesScreen(
     categoryName: String,
     navController: NavController,
-    categoryMoviesViewModel: CategoryMoviesViewModel
+    categoryMoviesViewModel: CategoryMoviesViewModel = koinViewModel()
 ) {
     val categoryMoviesData =
         categoryMoviesViewModel.getCategoryMoviesFromRemoteServer(categoryName)

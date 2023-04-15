@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -30,131 +29,118 @@ import com.example.java.android1.movie_search.view.favorite.FavoriteScreen
 import com.example.java.android1.movie_search.view.home.HomeScreen
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.search.SearchScreen
+import com.example.java.android1.movie_search.view.splash.SplashScreen
 import com.example.java.android1.movie_search.view.theme.PrimaryColor70
 import com.example.java.android1.movie_search.viewmodel.*
 
 const val MOVIE_DATA_KEY = "Movie Data"
 
 class MainActivity : ComponentActivity() {
-    private val homeViewModel: MainViewModel by viewModels { MainViewModelFactory() }
-    private val detailsViewModel: DetailsViewModel by viewModels { DetailsViewModelFactory() }
-    private val searchViewModel: SearchViewModel by viewModels { SearchViewModelFactory() }
-    private val favoriteViewModel: FavoriteViewModel by viewModels { FavoriteViewModelFactory() }
-    private val categoryViewModel: CategoryMoviesViewModel by viewModels { CategoryMoviesViewModelFactory() }
-    private val actorDetailsViewModel: MovieActorViewModel by viewModels { MovieActorViewModelFactory() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Navigation(
-                homeViewModel,
-                detailsViewModel,
-                searchViewModel,
-                favoriteViewModel,
-                categoryViewModel,
-                actorDetailsViewModel
-            )
+            Navigation()
         }
     }
-}
-@Composable
-fun Navigation(
-    homeViewModel: MainViewModel,
-    detailsViewModel: DetailsViewModel,
-    searchViewModel: SearchViewModel,
-    favoriteViewModel: FavoriteViewModel,
-    categoryViewModel: CategoryMoviesViewModel,
-    actorDetailsViewModel: MovieActorViewModel
-) {
-    val navController = rememberNavController()
-    BottomNavigationBar(navController) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = ScreenState.HomeScreen.route,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(route = ScreenState.HomeScreen.route) {
-                HomeScreen(navController = navController, homeViewModel = homeViewModel)
-            }
-            composable(route = ScreenState.DetailsScreen.route) {
-                val movieDetailsData = it.arguments?.parcelable<MovieDataTMDB>(MOVIE_DATA_KEY)
-                movieDetailsData?.let { data ->
-                    DetailsScreen(
-                        movieDataTMDB = data,
-                        navController = navController,
-                        movieDetailsViewModel = detailsViewModel
-                    )
-                }
-            }
-            composable(route = ScreenState.SearchScreen.route) {
-                SearchScreen(navController = navController, searchViewModel = searchViewModel)
-            }
-            composable(route = ScreenState.FavoriteScreen.route) {
-                FavoriteScreen(navController = navController, favoriteViewModel = favoriteViewModel)
-            }
-            composable(route = ScreenState.CategoryMoviesScreen.route) {
-                val categoryName = it.arguments?.getString(ARG_CATEGORY_NAME_DATA)
-                categoryName?.let {
-                    CategoryMoviesScreen(
-                        categoryName = categoryName,
-                        navController = navController,
-                        categoryMoviesViewModel = categoryViewModel
-                    )
-                }
-            }
-            composable(route = ScreenState.ActorDetailsScreen.route) {
-                val actorId = it.arguments?.getLong(ARG_ACTOR_ID)
-                actorId?.let {
-                    ActorDetailsScreen(
-                        actorId = actorId,
-                        navController = navController,
-                        actorViewModel = actorDetailsViewModel
-                    )
-                }
-            }
-        }
-    }
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun BottomNavigationBar(
-    navController: NavController,
-    content: @Composable (PaddingValues) -> Unit
-) {
-    val bottomNavItems =
-        listOf(ScreenState.HomeScreen, ScreenState.SearchScreen, ScreenState.FavoriteScreen)
-    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    Scaffold(
-        bottomBar = {
-            if (ScreenState.DetailsScreen.route != currentRoute && ScreenState.CategoryMoviesScreen
-                    .route != currentRoute && ScreenState.ActorDetailsScreen.route != currentRoute
+
+    @Composable
+    fun Navigation() {
+        val navController = rememberNavController()
+        BottomNavigationBar(navController) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = ScreenState.SplashScreen.route,
+                modifier = Modifier.padding(innerPadding)
             ) {
-                NavigationBar(containerColor = PrimaryColor70) {
-                    bottomNavItems.forEach { item ->
-                        val selected = item.route == currentRoute
-                        NavigationBarItem(
-                            selected = selected,
-                            onClick = { navController.navigate(item.route) },
-                            label = {
-                                Text(
-                                    text = stringResource(id = item.name),
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = if (selected) Color.White else Color.Unspecified
-                                )
-                            },
-                            icon = {
-                                item.icon?.let {
-                                    Icon(
-                                        imageVector = it,
-                                        contentDescription = stringResource(id = item.name),
-                                    )
-                                }
-                            }
+                composable(route = ScreenState.SplashScreen.route) {
+                    SplashScreen(navController = navController)
+                }
+                composable(route = ScreenState.HomeScreen.route) {
+                    HomeScreen(navController = navController)
+                }
+                composable(route = ScreenState.DetailsScreen.route) {
+                    val movieDetailsData = it.arguments?.parcelable<MovieDataTMDB>(MOVIE_DATA_KEY)
+                    movieDetailsData?.let { data ->
+                        DetailsScreen(
+                            movieDataTMDB = data,
+                            navController = navController
+                        )
+                    }
+                }
+                composable(route = ScreenState.SearchScreen.route) {
+                    SearchScreen(navController = navController)
+                }
+                composable(route = ScreenState.FavoriteScreen.route) {
+                    FavoriteScreen(
+                        navController = navController
+                    )
+                }
+                composable(route = ScreenState.CategoryMoviesScreen.route) {
+                    val categoryName = it.arguments?.getString(ARG_CATEGORY_NAME_DATA)
+                    categoryName?.let {
+                        CategoryMoviesScreen(
+                            categoryName = categoryName,
+                            navController = navController
+                        )
+                    }
+                }
+                composable(route = ScreenState.ActorDetailsScreen.route) {
+                    val actorId = it.arguments?.getLong(ARG_ACTOR_ID)
+                    actorId?.let {
+                        ActorDetailsScreen(
+                            actorId = actorId,
+                            navController = navController
                         )
                     }
                 }
             }
-        },
-        content = content
-    )
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    @Composable
+    fun BottomNavigationBar(
+        navController: NavController,
+        content: @Composable (PaddingValues) -> Unit
+    ) {
+        val bottomNavItems =
+            listOf(ScreenState.HomeScreen, ScreenState.SearchScreen, ScreenState.FavoriteScreen)
+        val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+        Scaffold(
+            bottomBar = {
+                if (ScreenState.DetailsScreen.route != currentRoute && ScreenState.CategoryMoviesScreen
+                        .route != currentRoute && ScreenState.ActorDetailsScreen.route != currentRoute
+                        && ScreenState.SplashScreen.route != currentRoute
+                ) {
+                    NavigationBar(containerColor = PrimaryColor70) {
+                        bottomNavItems.forEach { item ->
+                            val selected = item.route == currentRoute
+                            NavigationBarItem(
+                                selected = selected,
+                                onClick = { navController.navigate(item.route) },
+                                label = {
+                                    Text(
+                                        text = stringResource(id = item.name),
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = if (selected) Color.White else Color.Unspecified
+                                    )
+                                },
+                                icon = {
+                                    item.icon?.let {
+                                        Icon(
+                                            imageVector = it,
+                                            contentDescription = stringResource(id = item.name),
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            },
+            content = content
+        )
+    }
 }

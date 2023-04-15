@@ -16,6 +16,13 @@ import com.example.java.android1.movie_search.R
  */
 
 sealed class ScreenState(val route: String, @StringRes val name: Int, val icon: ImageVector?) {
+
+    object SplashScreen : ScreenState(
+        route = "splash_screen",
+        name = R.string.splash,
+        icon = null
+    )
+
     object HomeScreen : ScreenState(
         route = "home_screen",
         name = R.string.home,

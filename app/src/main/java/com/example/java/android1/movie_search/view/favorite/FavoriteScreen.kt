@@ -3,7 +3,13 @@ package com.example.java.android1.movie_search.view.favorite
 import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
@@ -19,8 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.java.android1.movie_search.app.RoomAppState
 import com.example.java.android1.movie_search.model.MovieDataRoom
+import com.example.java.android1.movie_search.model.states.LocalMovieAppState
 import com.example.java.android1.movie_search.utils.convertMovieRoomToMovieDto
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.navigation.ScreenState
@@ -33,6 +39,7 @@ import com.example.java.android1.movie_search.view.widgets.ErrorMessage
 import com.example.java.android1.movie_search.view.widgets.LoadingProgressBar
 import com.example.java.android1.movie_search.view.widgets.MovieCard
 import com.example.java.android1.movie_search.viewmodel.FavoriteViewModel
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * The main method [FavoriteScreen] that combines all the necessary methods for this screen
@@ -41,7 +48,10 @@ import com.example.java.android1.movie_search.viewmodel.FavoriteViewModel
  */
 
 @Composable
-fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteViewModel) {
+fun FavoriteScreen(
+    navController: NavController,
+    favoriteViewModel: FavoriteViewModel = koinViewModel()
+) {
     LaunchedEffect(true) { favoriteViewModel.getMoviesFromLocalDataBase() }
     Column(
         modifier = Modifier
@@ -51,7 +61,7 @@ fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteView
         HeaderFavoriteScreen()
         favoriteViewModel.moviesFavoriteData.observeAsState().value?.let { state ->
             RenderFavoriteDataFromLocalDataBase(
-                roomAppState = state,
+                localMovieAppState = state,
                 navController = navController,
                 favoriteViewModel = favoriteViewModel
             )
@@ -61,26 +71,28 @@ fun FavoriteScreen(navController: NavController, favoriteViewModel: FavoriteView
 
 /**
  * The method processes state from the database
- * @param roomAppState - The state that came from the database. [RoomAppState]
+ * @param localMovieAppState - The state that came from the database. [LocalMovieAppState]
  * @param navController - Needed for the method [FavoriteMoviesList]
  * @param favoriteViewModel - Needed if roomAppState came Error
  */
 
 @Composable
 private fun RenderFavoriteDataFromLocalDataBase(
-    roomAppState: RoomAppState,
+    localMovieAppState: LocalMovieAppState,
     navController: NavController,
     favoriteViewModel: FavoriteViewModel
 ) {
-    when (roomAppState) {
-        is RoomAppState.Error -> roomAppState.errorMessage.localizedMessage?.let { message ->
+    when (localMovieAppState) {
+        is LocalMovieAppState.Error -> localMovieAppState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) { favoriteViewModel.getMoviesFromLocalDataBase() }
         }
-        is RoomAppState.Success -> {
-            val favoriteMoviesData = roomAppState.moviesData
+
+        is LocalMovieAppState.Success -> {
+            val favoriteMoviesData = localMovieAppState.moviesData
             FavoriteMoviesList(favoriteMoviesData, navController)
         }
-        RoomAppState.Loading -> LoadingProgressBar()
+
+        LocalMovieAppState.Loading -> LoadingProgressBar()
     }
 }
 
