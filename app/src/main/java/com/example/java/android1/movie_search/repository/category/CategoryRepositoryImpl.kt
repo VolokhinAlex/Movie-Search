@@ -4,7 +4,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.example.java.android1.movie_search.datasource.category.CategoryDataSource
 import com.example.java.android1.movie_search.datasource.category.LocalCategoryDataSource
-import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
+import com.example.java.android1.movie_search.model.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.model.ui.MovieUI
 import com.example.java.android1.movie_search.utils.mapMovieDataTMDBToLocalMovieData
 import com.example.java.android1.movie_search.utils.mapMovieDataTMDBToMovieUI
@@ -28,7 +28,12 @@ class CategoryRepositoryImpl(
     override fun getCategoryMovies(categoryMovies: String): Flow<PagingData<MovieUI>> {
         return remoteDataSource.getCategoryMovies(categoryMovies = categoryMovies).map {
             it.map { movie ->
-                localDataSource.saveMovie(mapMovieDataTMDBToLocalMovieData(movie, categoryMovies))
+                localDataSource.saveMovie(
+                    mapMovieDataTMDBToLocalMovieData(
+                        movie,
+                        categoryMovies
+                    )
+                )
                 mapMovieDataTMDBToMovieUI(movie, categoryMovies)
             }
         }

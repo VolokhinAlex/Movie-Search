@@ -1,9 +1,9 @@
 package com.example.java.android1.movie_search.network
 
 import com.example.java.android1.movie_search.BuildConfig
-import com.example.java.android1.movie_search.model.old.remote.ActorDTO
-import com.example.java.android1.movie_search.model.old.remote.CategoryMoviesTMDB
-import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
+import com.example.java.android1.movie_search.model.remote.ActorDTO
+import com.example.java.android1.movie_search.model.remote.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.remote.MovieDataTMDB
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

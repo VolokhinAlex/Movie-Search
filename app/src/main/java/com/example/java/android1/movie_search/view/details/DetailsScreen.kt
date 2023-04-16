@@ -48,8 +48,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.model.old.states.LocalMovieAppState
-import com.example.java.android1.movie_search.model.old.states.MovieDataAppState
 import com.example.java.android1.movie_search.model.state.MovieState
 import com.example.java.android1.movie_search.model.ui.MovieUI
 import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
@@ -114,7 +112,7 @@ fun DetailsScreen(
 
 /**
  * The method processes state from the database
- * @param localMovieAppState - The state that came from the database. [LocalMovieAppState]
+ * @param localMovieAppState - The state that came from the database. [MovieState]
  * @param movieDetailsViewModel - ViewModel for logic processing
  * @param movieId - The movie id
  */
@@ -138,7 +136,7 @@ private fun RenderMovieDetailsDataFromLocalDataBase(
 
 /**
  * The method processes state from the remote server
- * @param movieState - The state that came from the remote server. [MovieDataAppState]
+ * @param movieState - The state that came from the remote server. [MovieState]
  * @param movieDetailsViewModel - ViewModel for logic processing
  * @param navController - To navigate back
  * @param movieId - The movie id

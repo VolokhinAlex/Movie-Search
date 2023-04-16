@@ -99,7 +99,8 @@ class MainActivity : ComponentActivity() {
                     actorId?.let {
                         ActorDetailsScreen(
                             actorId = actorId,
-                            navController = navController
+                            navController = navController,
+                            networkStatus = networkStatus
                         )
                     }
                 }

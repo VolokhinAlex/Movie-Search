@@ -1,14 +1,15 @@
 package com.example.java.android1.movie_search.datasource.details
 
-import com.example.java.android1.movie_search.model.local.ActorEntity
 import com.example.java.android1.movie_search.model.local.LocalMovieData
-import com.example.java.android1.movie_search.model.local.TrailerEntity
-import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
+import com.example.java.android1.movie_search.model.local.SimilarMovieEntity
 import com.example.java.android1.movie_search.room.MoviesDataBase
+import com.example.java.android1.movie_search.utils.mapLocalActorDataToActorEntity
+import com.example.java.android1.movie_search.utils.mapLocalMovieToMovieEntity
+import com.example.java.android1.movie_search.utils.mapLocalMovieTrailerToTrailerEntity
 import com.example.java.android1.movie_search.utils.mapMovieEntityToLocalMovieData
 
 class LocalDetailsDataSourceImpl(
-    private val localDataRoom: MoviesDataBase
+    private val db: MoviesDataBase
 ) : LocalDetailsDataSource {
 
     /**
@@ -18,46 +19,32 @@ class LocalDetailsDataSourceImpl(
 
     override suspend fun getMovieFromLocalDataBase(movieId: Int): LocalMovieData {
         return mapMovieEntityToLocalMovieData(
-            movieEntity = localDataRoom.moviesDao().getMovieByMovieId(movieId),
-            trailers = localDataRoom.trailerDao().getTrailerById(movieId = movieId),
-            actors = localDataRoom.actorDao().getActorsByMovieId(movieId = movieId)
+            movieEntity = db.moviesDao().getMovieByMovieId(movieId = movieId),
+            trailers = db.trailerDao().getTrailerById(movieId = movieId),
+            actors = db.actorDao().getActorsByMovieId(movieId = movieId)
         )
     }
 
     /**
      * Method for saving a movie to a local database
-     * @param movieDataTMDB - The movie to save
+     * @param localMovieData - The movie to save
      */
 
-    override suspend fun saveMovieToLocalDataBase(movieDataTMDB: MovieDataTMDB) {
-        localDataRoom.moviesDao().updateRuntimeAndGenres(
-            movieId = movieDataTMDB.id ?: 0,
-            genres = movieDataTMDB.genres?.joinToString { it.name.orEmpty() }.orEmpty(),
-            runtime = movieDataTMDB.runtime ?: 0
+    override suspend fun saveMovieDetailsToLocalDataBase(localMovieData: LocalMovieData) {
+        db.moviesDao().updateRuntimeAndGenres(
+            movieId = localMovieData.movieId ?: 0,
+            genres = localMovieData.genres,
+            runtime = localMovieData.runtime ?: 0
         )
-        localDataRoom.trailerDao().insert(movieDataTMDB.videos?.results?.map {
-            TrailerEntity(
-                id = movieDataTMDB.id.toString(),
-                name = it.name.orEmpty(),
-                key = it.key,
-                type = it.type
-            )
-        } ?: emptyList())
-        val actors = movieDataTMDB.credits?.cast?.map {
-            ActorEntity(
-                actorId = it.id ?: 0,
-                id = movieDataTMDB.id?.toLong(),
-                name = it.name,
-                character = it.character,
-                biography = null,
-                birthday = null,
-                imdbId = null,
-                placeOfBirth = null,
-                popularity = null,
-                profilePath = it.profile_path
-            )
-        } ?: emptyList()
-        localDataRoom.actorDao().insert(actors)
+        db.trailerDao()
+            .insert(localMovieData.video.map {
+                mapLocalMovieTrailerToTrailerEntity(
+                    localTrailerData = it,
+                    movieId = localMovieData.movieId.toString()
+                )
+            })
+        db.actorDao()
+            .insert(localMovieData.actor.map { mapLocalActorDataToActorEntity(it) })
     }
 
     /**
@@ -67,7 +54,22 @@ class LocalDetailsDataSourceImpl(
      */
 
     override suspend fun updateMovieFavoriteInLocalDataBase(movieId: Int, favorite: Boolean) {
-        localDataRoom.moviesDao().updateFavorite(movieId = movieId, favorite = favorite)
+        db.moviesDao().updateFavorite(movieId = movieId, favorite = favorite)
     }
+
+    override suspend fun saveSimilarMovies(localMovieData: LocalMovieData, movieId: Int) {
+        db.similarMovieDao().insert(
+            SimilarMovieEntity(
+                similarMovieId = localMovieData.movieId?.toLong() ?: 0,
+                movieId = movieId.toLong(),
+                name = localMovieData.movieTitle.orEmpty()
+            )
+        )
+    }
+
+    override suspend fun saveMovie(localMovieData: LocalMovieData) {
+        db.moviesDao().insert(mapLocalMovieToMovieEntity(localMovieData))
+    }
+
 
 }

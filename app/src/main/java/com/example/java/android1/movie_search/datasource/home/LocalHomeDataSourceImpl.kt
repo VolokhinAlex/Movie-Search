@@ -1,6 +1,6 @@
 package com.example.java.android1.movie_search.datasource.home
 
-import com.example.java.android1.movie_search.model.old.remote.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.remote.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.room.MoviesDataBase
 import com.example.java.android1.movie_search.utils.convertMovieDtoToMovieEntity
 import com.example.java.android1.movie_search.utils.convertMovieEntityToMovieDto

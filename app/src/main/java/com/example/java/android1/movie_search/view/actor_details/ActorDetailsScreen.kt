@@ -30,8 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.model.old.remote.ActorDTO
-import com.example.java.android1.movie_search.model.old.states.MovieActorAppState
 import com.example.java.android1.movie_search.model.state.ActorState
 import com.example.java.android1.movie_search.model.ui.ActorUI
 import com.example.java.android1.movie_search.view.LanguageQuery
@@ -56,24 +54,30 @@ const val ARG_ACTOR_ID = "ActorID"
 fun ActorDetailsScreen(
     actorId: Long,
     navController: NavController,
-    actorViewModel: MovieActorViewModel = koinViewModel()
+    actorViewModel: MovieActorViewModel = koinViewModel(),
+    networkStatus: Boolean
 ) {
     LaunchedEffect(key1 = true) {
-        actorViewModel.getMovieActorData(actorId, LanguageQuery.EN.languageQuery)
+        actorViewModel.getMovieActorData(
+            personId = actorId,
+            language = LanguageQuery.EN.languageQuery,
+            isOnline = networkStatus
+        )
     }
     actorViewModel.movieActorData.observeAsState().value?.let { actorState ->
         RenderActorDataFromRemoteServer(
             actorState = actorState,
             navController = navController,
             actorViewModel = actorViewModel,
-            actorId = actorId
+            actorId = actorId,
+            networkStatus = networkStatus
         )
     }
 }
 
 /**
  * The method processes state from the remote server
- * @param actorState - The state that came from the remote server. [MovieActorAppState]
+ * @param actorState - The state that came from the remote server. [ActorState]
  * @param navController - To navigate back
  * @param actorViewModel - Actor View Model [MovieActorViewModel]
  * @param actorId - actor id has gotten from remote server
@@ -84,14 +88,16 @@ fun RenderActorDataFromRemoteServer(
     actorState: ActorState,
     navController: NavController,
     actorViewModel: MovieActorViewModel,
-    actorId: Long
+    actorId: Long,
+    networkStatus: Boolean
 ) {
     when (actorState) {
         is ActorState.Error -> actorState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) {
                 actorViewModel.getMovieActorData(
-                    actorId,
-                    LanguageQuery.EN.languageQuery
+                    personId = actorId,
+                    language = LanguageQuery.EN.languageQuery,
+                    isOnline = networkStatus
                 )
             }
         }
@@ -176,7 +182,7 @@ fun ActorDetails(actorDetailsData: ActorUI) {
  * The method sets the title and details about actor from remote server
  * of the section in actor details screen
  * @param title - Title of information about the actor
- * @param details - Specific information about the actor. see [ActorDTO]
+ * @param details - Specific information about the actor. see [ActorUI]
  */
 
 @Composable

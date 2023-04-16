@@ -2,7 +2,7 @@ package com.example.java.android1.movie_search.repository.home
 
 import com.example.java.android1.movie_search.datasource.home.HomeDataSource
 import com.example.java.android1.movie_search.datasource.home.LocalHomeDataSource
-import com.example.java.android1.movie_search.model.old.remote.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.remote.CategoryMoviesTMDB
 import com.example.java.android1.movie_search.model.state.CategoryState
 import com.example.java.android1.movie_search.utils.mapMovieCategoryMoviesTMDBToCategoryMovieUI
 

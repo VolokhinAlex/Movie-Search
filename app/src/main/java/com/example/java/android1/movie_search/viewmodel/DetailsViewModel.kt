@@ -1,5 +1,6 @@
 package com.example.java.android1.movie_search.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,6 +34,7 @@ class DetailsViewModel(
         _detailsMovieData.value = MovieState.Loading
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, error ->
             _detailsMovieData.postValue(MovieState.Error(error))
+            Log.e("error", "", error)
         }) {
             val response = detailsRepository.getMovieDetails(
                 movieId = movieId, language = language, isNetworkAvailable = isOnline, category = ""

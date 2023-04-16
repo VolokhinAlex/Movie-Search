@@ -1,16 +1,20 @@
 package com.example.java.android1.movie_search.repository.actor
 
 import com.example.java.android1.movie_search.datasource.actor.ActorDataSource
-import com.example.java.android1.movie_search.model.old.remote.ActorDTO
+import com.example.java.android1.movie_search.datasource.actor.LocalActorDataSource
+import com.example.java.android1.movie_search.model.remote.ActorDTO
 import com.example.java.android1.movie_search.model.state.ActorState
 import com.example.java.android1.movie_search.utils.mapActorDtoToActorUI
+import com.example.java.android1.movie_search.utils.mapActorUIToLocalActorData
+import com.example.java.android1.movie_search.utils.mapLocalActorDataToActorUI
 
 /**
  * Implementation of the interface for getting data from Remote Server
  */
 
 class MovieActorRepositoryImpl(
-    private val remoteDataSource: ActorDataSource<ActorDTO>
+    private val remoteDataSource: ActorDataSource<ActorDTO>,
+    private val localDataSource: LocalActorDataSource
 ) : MovieActorRepository {
 
     /**
@@ -22,17 +26,31 @@ class MovieActorRepositoryImpl(
 
     override suspend fun getMovieActorDetails(
         personId: Long,
-        language: String
+        language: String,
+        isNetworkAvailable: Boolean
     ): ActorState {
-        return ActorState.Success(
-            listOf(
-                mapActorDtoToActorUI(
-                    remoteDataSource.getMovieActorDetails(
-                        personId = personId,
-                        language = language
+        return if (isNetworkAvailable) {
+            val actor = mapActorDtoToActorUI(
+                remoteDataSource.getMovieActorDetails(
+                    personId = personId,
+                    language = language
+                )
+            )
+            localDataSource.saveActorData(mapActorUIToLocalActorData(actor))
+            ActorState.Success(
+                listOf(actor)
+            )
+        } else {
+            ActorState.Success(
+                listOf(
+                    mapLocalActorDataToActorUI(
+                        localDataSource.getMovieActorDetails(
+                            personId = personId,
+                            language = language
+                        )
                     )
                 )
             )
-        )
+        }
     }
 }

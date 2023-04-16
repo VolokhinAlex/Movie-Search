@@ -1,8 +1,5 @@
 package com.example.java.android1.movie_search.model.local
 
-import com.example.java.android1.movie_search.model.ui.ActorUI
-import com.example.java.android1.movie_search.model.ui.TrailerUI
-
 /**
  * This class is for sqlite local database with using Room
  * @param movieId - movie ID
@@ -23,8 +20,8 @@ data class LocalMovieData(
     val runtime: Int?,
     val genres: String,
     val overview: String?,
-    val video: List<TrailerUI>,
-    val actor: List<ActorUI>,
+    val video: List<LocalTrailerData>,
+    val actor: List<LocalActorData>,
     val category: String,
     val imdbId: String?,
     val adult: Boolean?,

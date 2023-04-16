@@ -3,7 +3,7 @@ package com.example.java.android1.movie_search.datasource.category
 import com.example.java.android1.movie_search.model.local.LocalMovieData
 import com.example.java.android1.movie_search.room.MoviesDataBase
 import com.example.java.android1.movie_search.utils.mapLocalMovieToMovieEntity
-import kotlinx.coroutines.flow.Flow
+import com.example.java.android1.movie_search.utils.mapMovieEntityToLocalMovieData
 
 class LocalCategoryDataSourceImpl(
     private val db: MoviesDataBase
@@ -12,7 +12,14 @@ class LocalCategoryDataSourceImpl(
         db.moviesDao().insert(mapLocalMovieToMovieEntity(movie))
     }
 
-    override fun getCategoryMovies(categoryMovies: String): Flow<List<LocalMovieData>> {
-        TODO("Not yet implemented")
+    override suspend fun getMoviesByCategory(category: String): List<LocalMovieData> {
+        return db.moviesDao().getMoviesByCategory(category = category).map {
+            mapMovieEntityToLocalMovieData(
+                movieEntity = it,
+                actors = emptyList(),
+                trailers = emptyList()
+            )
+        }
     }
+
 }

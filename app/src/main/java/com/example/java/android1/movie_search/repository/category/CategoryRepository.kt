@@ -9,5 +9,7 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface CategoryRepository {
-    fun getCategoryMovies(categoryMovies: String): Flow<PagingData<MovieUI>>
+    fun getCategoryMovies(
+        categoryMovies: String
+    ): Flow<PagingData<MovieUI>>
 }

@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.java.android1.movie_search.model.old.states.LocalMovieAppState
 import com.example.java.android1.movie_search.model.state.MovieState
 import com.example.java.android1.movie_search.model.ui.MovieUI
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
@@ -71,7 +70,7 @@ fun FavoriteScreen(
 
 /**
  * The method processes state from the database
- * @param movieState - The state that came from the database. [LocalMovieAppState]
+ * @param movieState - The state that came from the database. [MovieState]
  * @param navController - Needed for the method [FavoriteMoviesList]
  * @param favoriteViewModel - Needed if roomAppState came Error
  */

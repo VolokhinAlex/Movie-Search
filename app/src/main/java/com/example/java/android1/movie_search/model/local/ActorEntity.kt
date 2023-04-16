@@ -10,13 +10,14 @@ import androidx.room.PrimaryKey
         ForeignKey(
             entity = MovieEntity::class,
             parentColumns = ["movie_id"],
-            childColumns = ["id"]
+            childColumns = ["movie_id"]
         )]
 )
 data class ActorEntity(
     @PrimaryKey
     val actorId: Long,
-    val id: Long?,
+    @ColumnInfo(name = "movie_id")
+    val movieId: Long?,
     val biography: String?,
     val birthday: String?,
     @ColumnInfo(name = "imdb_id")

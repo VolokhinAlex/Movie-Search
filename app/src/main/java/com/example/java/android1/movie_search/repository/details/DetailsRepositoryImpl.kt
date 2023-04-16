@@ -4,11 +4,11 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.example.java.android1.movie_search.datasource.details.DetailsDataSource
 import com.example.java.android1.movie_search.datasource.details.LocalDetailsDataSource
-import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
+import com.example.java.android1.movie_search.model.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.model.state.MovieState
 import com.example.java.android1.movie_search.model.ui.MovieUI
-import com.example.java.android1.movie_search.utils.convertMovieRoomToMovieDto
 import com.example.java.android1.movie_search.utils.mapLocalMovieToMovieUI
+import com.example.java.android1.movie_search.utils.mapMovieDataTMDBToLocalMovieData
 import com.example.java.android1.movie_search.utils.mapMovieDataTMDBToMovieUI
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -39,15 +39,26 @@ class DetailsRepositoryImpl(
                 movieId = movieId,
                 language = language
             )
-            localDataSource.saveMovieToLocalDataBase(movie)
-            MovieState.Success(listOf(mapMovieDataTMDBToMovieUI(movie, category)))
-        } else {
+            localDataSource.saveMovieDetailsToLocalDataBase(
+                localMovieData = mapMovieDataTMDBToLocalMovieData(
+                    movieTMDB = movie
+                )
+            )
             MovieState.Success(
                 listOf(
                     mapMovieDataTMDBToMovieUI(
-                        convertMovieRoomToMovieDto(
-                            localDataSource.getMovieFromLocalDataBase(movieId = movieId)
-                        ), category
+                        moviesTMDB = movie,
+                        category = category
+                    )
+                )
+            )
+        } else {
+            MovieState.Success(
+                listOf(
+                    mapLocalMovieToMovieUI(
+                        localMovieData = localDataSource.getMovieFromLocalDataBase(
+                            movieId = movieId
+                        )
                     )
                 )
             )
@@ -61,7 +72,14 @@ class DetailsRepositoryImpl(
 
     override fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieUI>> {
         return remoteDataSource.getSimilarMovies(movieId = movieId).map {
-            it.map { movie -> mapMovieDataTMDBToMovieUI(movie, "similar") }
+            it.map { movie ->
+                localDataSource.saveMovie(mapMovieDataTMDBToLocalMovieData(movie))
+                localDataSource.saveSimilarMovies(
+                    localMovieData = mapMovieDataTMDBToLocalMovieData(movie),
+                    movieId = movieId
+                )
+                mapMovieDataTMDBToMovieUI(moviesTMDB = movie, category = "similar")
+            }
         }
     }
 
