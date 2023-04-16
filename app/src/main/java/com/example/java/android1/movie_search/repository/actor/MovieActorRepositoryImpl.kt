@@ -27,7 +27,7 @@ class MovieActorRepositoryImpl(
     override suspend fun getMovieActorDetails(
         personId: Long,
         language: String,
-        isNetworkAvailable: Boolean
+        isNetworkAvailable: Boolean,
     ): ActorState {
         return if (isNetworkAvailable) {
             val actor = mapActorDtoToActorUI(
@@ -37,9 +37,7 @@ class MovieActorRepositoryImpl(
                 )
             )
             localDataSource.saveActorData(mapActorUIToLocalActorData(actor))
-            ActorState.Success(
-                listOf(actor)
-            )
+            ActorState.Success(listOf(actor))
         } else {
             ActorState.Success(
                 listOf(

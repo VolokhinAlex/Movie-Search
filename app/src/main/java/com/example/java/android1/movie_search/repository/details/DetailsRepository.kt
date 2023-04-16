@@ -17,9 +17,7 @@ interface DetailsRepository {
         category: String
     ): MovieState
 
-    fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieUI>>
-
-    suspend fun getMovieFromLocalSource(movieId: Int): MovieUI
+    fun getSimilarMovies(movieId: Int, isNetworkAvailable: Boolean): Flow<PagingData<MovieUI>>
 
     suspend fun updateMovie(movieId: Int, favorite: Boolean)
 

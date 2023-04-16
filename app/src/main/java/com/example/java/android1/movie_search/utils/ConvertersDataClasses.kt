@@ -61,6 +61,33 @@ fun mapMovieDataTMDBToMovieUI(moviesTMDB: MovieDataTMDB, category: String): Movi
     )
 }
 
+fun mapMovieDataTMDBToMovieUI(
+    moviesTMDB: MovieDataTMDB,
+    category: String,
+    favorite: Boolean
+): MovieUI {
+    return MovieUI(
+        adult = moviesTMDB.adult ?: false,
+        backdropPath = moviesTMDB.backdrop_path.orEmpty(),
+        posterPath = moviesTMDB.poster_path.orEmpty(),
+        budget = moviesTMDB.budget ?: 0,
+        id = moviesTMDB.id ?: 0,
+        imdbId = moviesTMDB.imdb_id.orEmpty(),
+        genres = moviesTMDB.genres?.map { mapGenreDtoToGenreUI(it) } ?: emptyList(),
+        originalLanguage = moviesTMDB.original_language.orEmpty(),
+        overview = moviesTMDB.overview.orEmpty(),
+        title = moviesTMDB.title.orEmpty(),
+        voteCount = moviesTMDB.vote_count ?: 0,
+        voteAverage = moviesTMDB.vote_average ?: 0.0,
+        releaseDate = moviesTMDB.release_date.orEmpty(),
+        runtime = moviesTMDB.runtime ?: 0,
+        actors = moviesTMDB.credits?.cast?.map { mapCastDtoToActorUI(it) } ?: emptyList(),
+        videos = moviesTMDB.videos?.results?.map { mapTrailerDtoToTrailerUI(it) } ?: emptyList(),
+        category = category,
+        favorite = favorite
+    )
+}
+
 fun mapMovieDataTMDBToMovieUI(moviesTMDB: MovieDataTMDB): MovieUI {
     return MovieUI(
         adult = moviesTMDB.adult ?: false,
@@ -369,7 +396,10 @@ fun mapActorUIToLocalActorData(actorUI: ActorUI): LocalActorData {
     )
 }
 
-fun mapLocalMovieTrailerToTrailerEntity(localTrailerData: LocalTrailerData, movieId: String): TrailerEntity {
+fun mapLocalMovieTrailerToTrailerEntity(
+    localTrailerData: LocalTrailerData,
+    movieId: String
+): TrailerEntity {
     return TrailerEntity(
         id = movieId,
         name = localTrailerData.name.orEmpty(),

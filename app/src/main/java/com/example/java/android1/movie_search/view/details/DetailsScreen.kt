@@ -111,30 +111,6 @@ fun DetailsScreen(
 }
 
 /**
- * The method processes state from the database
- * @param localMovieAppState - The state that came from the database. [MovieState]
- * @param movieDetailsViewModel - ViewModel for logic processing
- * @param movieId - The movie id
- */
-
-@Composable
-private fun RenderMovieDetailsDataFromLocalDataBase(
-    movieDetailsViewModel: DetailsViewModel,
-    movieId: Int,
-    localMovieAppState: MovieState
-) {
-    when (localMovieAppState) {
-        is MovieState.Error -> MovieFavorite(movieDetailsViewModel, movieId, false)
-        MovieState.Loading -> LoadingProgressBar()
-        is MovieState.Success -> MovieFavorite(
-            movieDetailsViewModel,
-            movieId,
-            localMovieAppState.data[0].favorite
-        )
-    }
-}
-
-/**
  * The method processes state from the remote server
  * @param movieState - The state that came from the remote server. [MovieState]
  * @param movieDetailsViewModel - ViewModel for logic processing
@@ -184,7 +160,8 @@ private fun RenderMovieDetailsDataFromRemoteServer(
                 SimilarMovies(
                     detailsViewModel = movieDetailsViewModel,
                     movieId = movieDetailsData.id,
-                    navController = navController
+                    navController = navController,
+                    networkStatus = networkStatus
                 )
             }
         }
@@ -234,7 +211,6 @@ private fun CenterDetailsScreen(
     movie: MovieUI,
     movieDetailsViewModel: DetailsViewModel
 ) {
-    val movieFavoriteState = movieDetailsViewModel.movieLocalData.observeAsState().value
     val ratingFormat = DecimalFormat("#.#")
     Row(
         modifier = Modifier
@@ -248,13 +224,11 @@ private fun CenterDetailsScreen(
             fontSize = TITLE_SIZE,
             fontWeight = FontWeight.Bold,
         )
-        movieFavoriteState?.let { favoriteState ->
-            RenderMovieDetailsDataFromLocalDataBase(
-                movieDetailsViewModel = movieDetailsViewModel,
-                movieId = movie.id,
-                localMovieAppState = favoriteState
-            )
-        }
+        MovieFavorite(
+            movieDetailsViewModel = movieDetailsViewModel,
+            movieId = movie.id,
+            movieFavorite = movie.favorite
+        )
     }
     MovieGenres(movie = movie)
     Row(
@@ -491,14 +465,16 @@ private fun TitleCategoryDetails(title: String, modifier: Modifier) {
 private fun SimilarMovies(
     detailsViewModel: DetailsViewModel,
     movieId: Int,
-    navController: NavController
+    navController: NavController,
+    networkStatus: Boolean
 ) {
     TitleCategoryDetails(
         title = stringResource(id = R.string.similar),
         modifier = Modifier.padding(top = 15.dp)
     )
-    val lazySimilarMovies = detailsViewModel.getSimilarMoviesFromRemoteSource(movieId = movieId)
-        .collectAsLazyPagingItems()
+    val lazySimilarMovies =
+        detailsViewModel.getSimilarMovies(movieId = movieId, isOnline = networkStatus)
+            .collectAsLazyPagingItems()
     LazyRow(modifier = Modifier.padding(bottom = 20.dp, top = 15.dp)) {
         itemsIndexed(lazySimilarMovies) { _, movieItem ->
             movieItem?.let {

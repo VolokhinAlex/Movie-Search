@@ -11,12 +11,12 @@ import java.io.IOException
 /**
  * Needed to navigate through the pages of the list
  * @param apiHolder - A class with methods for getting data from a remote server
- * @param query - A request to be found and received from a remote server
+ * @param category - A category movies to be received from a remote server
  */
 
-class SearchPageSource(
+class RemoteCategoryPageSource(
     private val apiHolder: ApiHolder,
-    private val query: String,
+    private val category: String,
 ) : PagingSource<Int, MovieDataTMDB>() {
 
     override fun getRefreshKey(state: PagingState<Int, MovieDataTMDB>): Int? {
@@ -26,17 +26,17 @@ class SearchPageSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieDataTMDB> {
-        if (query.isEmpty()) {
+        if (category.isEmpty()) {
             return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
         }
         val page: Int = params.key ?: 1
         return try {
-            val serverResponse = apiHolder.moviesApi.getMoviesBySearch(
-                language = LanguageQuery.EN.languageQuery,
-                page = page,
-                adult = false,
-                query = query
-            )
+            val serverResponse =
+                apiHolder.moviesApi.getCategoryMovies(
+                    category = category,
+                    language = LanguageQuery.EN.languageQuery,
+                    page = page
+                )
             val nextKey = if (serverResponse.results.isEmpty()) null else page + 1
             val prevKey = if (page == 1) null else page - 1
             LoadResult.Page(data = serverResponse.results, prevKey = prevKey, nextKey = nextKey)
@@ -48,3 +48,4 @@ class SearchPageSource(
     }
 
 }
+

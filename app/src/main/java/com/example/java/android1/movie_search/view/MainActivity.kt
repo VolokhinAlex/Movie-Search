@@ -80,7 +80,10 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 composable(route = ScreenState.SearchScreen.route) {
-                    SearchScreen(navController = navController)
+                    SearchScreen(
+                        navController = navController,
+                        networkStatus = networkStatus
+                    )
                 }
                 composable(route = ScreenState.FavoriteScreen.route) {
                     FavoriteScreen(navController = navController)
@@ -90,7 +93,8 @@ class MainActivity : ComponentActivity() {
                     categoryName?.let {
                         CategoryMoviesScreen(
                             categoryName = categoryName,
-                            navController = navController
+                            navController = navController,
+                            networkStatus = networkStatus
                         )
                     }
                 }
