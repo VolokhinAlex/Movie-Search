@@ -1,7 +1,6 @@
 package com.example.java.android1.movie_search.datasource.details
 
 import com.example.java.android1.movie_search.model.local.LocalMovieData
-import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
 
 interface LocalDetailsDataSource {
 
@@ -14,10 +13,10 @@ interface LocalDetailsDataSource {
 
     /**
      * Method for saving a movie to a local database
-     * @param movieDataTMDB - The movie to save
+     * @param localMovieData - The movie to save
      */
 
-    suspend fun saveMovieToLocalDataBase(movieDataTMDB: MovieDataTMDB)
+    suspend fun saveMovieDetailsToLocalDataBase(localMovieData: LocalMovieData)
 
     /**
      * Method for adding or removing a movie from the favorites list
@@ -27,4 +26,7 @@ interface LocalDetailsDataSource {
 
     suspend fun updateMovieFavoriteInLocalDataBase(movieId: Int, favorite: Boolean)
 
+    suspend fun saveSimilarMovies(localMovieData: LocalMovieData, movieId: Int)
+
+    suspend fun saveMovie(localMovieData: LocalMovieData)
 }

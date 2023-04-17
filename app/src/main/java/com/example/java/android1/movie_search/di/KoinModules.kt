@@ -3,6 +3,8 @@ package com.example.java.android1.movie_search.di
 import androidx.paging.PagingData
 import androidx.room.Room
 import com.example.java.android1.movie_search.datasource.actor.ActorDataSource
+import com.example.java.android1.movie_search.datasource.actor.LocalActorDataSource
+import com.example.java.android1.movie_search.datasource.actor.LocalActorDataSourceImpl
 import com.example.java.android1.movie_search.datasource.actor.RemoteActorDataSource
 import com.example.java.android1.movie_search.datasource.category.CategoryDataSource
 import com.example.java.android1.movie_search.datasource.category.LocalCategoryDataSource
@@ -23,9 +25,9 @@ import com.example.java.android1.movie_search.datasource.search.LocalSearchDataS
 import com.example.java.android1.movie_search.datasource.search.RemoteSearchDataSource
 import com.example.java.android1.movie_search.datasource.search.SearchDataSource
 import com.example.java.android1.movie_search.model.local.LocalMovieData
-import com.example.java.android1.movie_search.model.old.remote.ActorDTO
-import com.example.java.android1.movie_search.model.old.remote.CategoryMoviesTMDB
-import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
+import com.example.java.android1.movie_search.model.remote.ActorDTO
+import com.example.java.android1.movie_search.model.remote.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.network.ApiHolder
 import com.example.java.android1.movie_search.network.MovieTMBDHolder
 import com.example.java.android1.movie_search.network.MovieTMDBAPI
@@ -138,8 +140,9 @@ val favoriteScreen = module {
 }
 
 val actorScreen = module {
+    factory<LocalActorDataSource> { LocalActorDataSourceImpl(get()) }
     factory<ActorDataSource<ActorDTO>> { RemoteActorDataSource(get()) }
-    factory<MovieActorRepository> { MovieActorRepositoryImpl(get()) }
+    factory<MovieActorRepository> { MovieActorRepositoryImpl(get(), get()) }
     viewModel { MovieActorViewModel(get()) }
 }
 

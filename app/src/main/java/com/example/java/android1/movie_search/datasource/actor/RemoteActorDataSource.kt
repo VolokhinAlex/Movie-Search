@@ -1,6 +1,6 @@
 package com.example.java.android1.movie_search.datasource.actor
 
-import com.example.java.android1.movie_search.model.old.remote.ActorDTO
+import com.example.java.android1.movie_search.model.remote.ActorDTO
 import com.example.java.android1.movie_search.network.ApiHolder
 
 class RemoteActorDataSource(

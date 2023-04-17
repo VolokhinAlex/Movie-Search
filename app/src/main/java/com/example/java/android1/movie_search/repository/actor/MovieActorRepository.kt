@@ -10,7 +10,8 @@ interface MovieActorRepository {
 
     suspend fun getMovieActorDetails(
         personId: Long,
-        language: String
+        language: String,
+        isNetworkAvailable: Boolean
     ): ActorState
 
 }

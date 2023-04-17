@@ -1,17 +1,19 @@
 package com.example.java.android1.movie_search.utils
 
-import com.example.java.android1.movie_search.model.local.LocalMovieData
 import com.example.java.android1.movie_search.model.local.ActorEntity
+import com.example.java.android1.movie_search.model.local.LocalActorData
+import com.example.java.android1.movie_search.model.local.LocalMovieData
+import com.example.java.android1.movie_search.model.local.LocalTrailerData
 import com.example.java.android1.movie_search.model.local.MovieEntity
 import com.example.java.android1.movie_search.model.local.TrailerEntity
-import com.example.java.android1.movie_search.model.old.remote.ActorDTO
-import com.example.java.android1.movie_search.model.old.remote.CastDTO
-import com.example.java.android1.movie_search.model.old.remote.CategoryMoviesTMDB
-import com.example.java.android1.movie_search.model.old.remote.CreditsDTO
-import com.example.java.android1.movie_search.model.old.remote.GenresDTO
-import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
-import com.example.java.android1.movie_search.model.old.remote.TrailerDTO
-import com.example.java.android1.movie_search.model.old.remote.VideosDTO
+import com.example.java.android1.movie_search.model.remote.ActorDTO
+import com.example.java.android1.movie_search.model.remote.CastDTO
+import com.example.java.android1.movie_search.model.remote.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.remote.CreditsDTO
+import com.example.java.android1.movie_search.model.remote.GenresDTO
+import com.example.java.android1.movie_search.model.remote.MovieDataTMDB
+import com.example.java.android1.movie_search.model.remote.TrailerDTO
+import com.example.java.android1.movie_search.model.remote.VideosDTO
 import com.example.java.android1.movie_search.model.ui.ActorUI
 import com.example.java.android1.movie_search.model.ui.CategoryMovieUI
 import com.example.java.android1.movie_search.model.ui.GenreUI
@@ -100,7 +102,7 @@ fun mapCastDtoToActorUI(castDTO: CastDTO): ActorUI {
 fun mapActorDtoToActorUI(actorDTO: ActorDTO): ActorUI {
     return ActorUI(
         actorId = actorDTO.id ?: 0,
-        id = actorDTO.id ?: 0,
+        movieId = actorDTO.id ?: 0,
         biography = actorDTO.biography.orEmpty(),
         imdbId = actorDTO.imdb_id.orEmpty(),
         birthday = actorDTO.birthday.orEmpty(),
@@ -120,6 +122,45 @@ fun mapTrailerDtoToTrailerUI(trailerDTO: TrailerDTO): TrailerUI {
     )
 }
 
+fun mapTrailerDTOToLocalTrailerData(trailer: TrailerDTO): LocalTrailerData {
+    return LocalTrailerData(
+        id = trailer.id,
+        name = trailer.name,
+        key = trailer.key,
+        type = trailer.type
+    )
+}
+
+fun mapActorDTOToLocalActorData(actor: ActorDTO, movieId: Long): LocalActorData {
+    return LocalActorData(
+        actorId = actor.id ?: 0,
+        movieId = movieId,
+        biography = actor.biography,
+        birthday = actor.birthday,
+        imdbId = actor.imdb_id,
+        name = actor.name,
+        placeOfBirth = actor.place_of_birth,
+        popularity = actor.popularity,
+        profilePath = actor.profile_path,
+        character = ""
+    )
+}
+
+fun mapCastDtoToLocalActorData(actor: CastDTO, movieId: Long): LocalActorData {
+    return LocalActorData(
+        actorId = actor.id ?: 0,
+        movieId = movieId,
+        biography = null,
+        birthday = null,
+        imdbId = null,
+        name = actor.name,
+        placeOfBirth = null,
+        popularity = null,
+        profilePath = actor.profile_path,
+        character = actor.character
+    )
+}
+
 fun mapMovieEntityToLocalMovieData(
     movieEntity: MovieEntity,
     actors: List<ActorEntity>,
@@ -135,8 +176,8 @@ fun mapMovieEntityToLocalMovieData(
         runtime = movieEntity.runtime,
         genres = movieEntity.genres,
         overview = movieEntity.overview,
-        video = trailers.map { mapTrailerEntityToTrailerUI(it) },
-        actor = actors.map { mapActorEntityToActorUI(it) },
+        video = trailers.map { mapTrailerEntityToLocalMovieTrailer(it) },
+        actor = actors.map { mapActorEntityToLocalActorData(it) },
         category = movieEntity.category,
         imdbId = movieEntity.imdbId,
         adult = movieEntity.adult,
@@ -169,7 +210,7 @@ fun mapLocalMovieToMovieEntity(movie: LocalMovieData): MovieEntity {
 fun mapActorEntityToActorUI(actorEntity: ActorEntity): ActorUI {
     return ActorUI(
         actorId = actorEntity.actorId,
-        id = actorEntity.id ?: 0,
+        movieId = actorEntity.movieId ?: 0,
         birthday = actorEntity.birthday.orEmpty(),
         biography = actorEntity.biography.orEmpty(),
         imdbId = actorEntity.imdbId.orEmpty(),
@@ -205,8 +246,8 @@ fun mapLocalMovieToMovieUI(localMovieData: LocalMovieData): MovieUI {
         voteAverage = localMovieData.movieRating ?: 0.0,
         releaseDate = localMovieData.movieReleaseDate.orEmpty(),
         runtime = localMovieData.runtime ?: 0,
-        actors = localMovieData.actor,
-        videos = localMovieData.video,
+        actors = localMovieData.actor.map { mapLocalActorDataToActorUI(it) },
+        videos = localMovieData.video.map { mapLocalMovieTrailerToTrailerUI(it) },
         category = localMovieData.category,
         favorite = localMovieData.movieFavorite ?: false
     )
@@ -223,8 +264,14 @@ fun mapMovieDataTMDBToLocalMovieData(movieTMDB: MovieDataTMDB): LocalMovieData {
         runtime = movieTMDB.runtime,
         genres = movieTMDB.genres?.joinToString { it.name.orEmpty() } ?: "",
         overview = movieTMDB.overview,
-        video = movieTMDB.videos?.results?.map { mapTrailerDtoToTrailerUI(it) } ?: emptyList(),
-        actor = movieTMDB.credits?.cast?.map { mapCastDtoToActorUI(it) } ?: emptyList(),
+        video = movieTMDB.videos?.results?.map { mapTrailerDTOToLocalTrailerData(it) }
+            ?: emptyList(),
+        actor = movieTMDB.credits?.cast?.map {
+            mapCastDtoToLocalActorData(
+                actor = it,
+                movieId = movieTMDB.id?.toLong() ?: 0
+            )
+        } ?: emptyList(),
         category = "search",
         imdbId = movieTMDB.imdb_id,
         adult = movieTMDB.adult,
@@ -245,8 +292,14 @@ fun mapMovieDataTMDBToLocalMovieData(movieTMDB: MovieDataTMDB, category: String)
         runtime = movieTMDB.runtime,
         genres = movieTMDB.genres?.joinToString { it.name.orEmpty() } ?: "",
         overview = movieTMDB.overview,
-        video = movieTMDB.videos?.results?.map { mapTrailerDtoToTrailerUI(it) } ?: emptyList(),
-        actor = movieTMDB.credits?.cast?.map { mapCastDtoToActorUI(it) } ?: emptyList(),
+        video = movieTMDB.videos?.results?.map { mapTrailerDTOToLocalTrailerData(it) }
+            ?: emptyList(),
+        actor = movieTMDB.credits?.cast?.map {
+            mapCastDtoToLocalActorData(
+                actor = it,
+                movieId = movieTMDB.id?.toLong() ?: 0
+            )
+        } ?: emptyList(),
         category = category,
         imdbId = movieTMDB.imdb_id,
         adult = movieTMDB.adult,
@@ -256,51 +309,93 @@ fun mapMovieDataTMDBToLocalMovieData(movieTMDB: MovieDataTMDB, category: String)
     )
 }
 
-//fun convertMovieEntityToMovieDataRoom(
-//    movieEntity: MovieEntity?,
-//    trailerEntity: List<TrailerEntity>,
-//    actorEntity: List<ActorEntity>
-//): MovieDataRoom =
-//    MovieDataRoom(
-//        movieId = movieEntity?.movieId,
-//        movieTitle = movieEntity?.movieTitle,
-//        movieNote = movieEntity?.movieNote,
-//        movieFavorite = movieEntity?.movieFavorite,
-//        moviePoster = movieEntity?.moviePoster,
-//        movieReleaseDate = movieEntity?.movieReleaseDate,
-//        movieRating = movieEntity?.movieRating,
-//        runtime = movieEntity?.runtime,
-//        genres = movieEntity?.genres.orEmpty(),
-//        overview = movieEntity?.overview,
-//        video = trailerEntity.map {
-//            TrailerUI(
-//                id = it.id,
-//                name = it.name,
-//                key = it.key.orEmpty(),
-//                type = it.type.orEmpty()
-//            )
-//        },
-//        actor = actorEntity.map {
-//            ActorUI(
-//                actorId = it.actorId,
-//                id = it.id ?: 0,
-//                biography = it.biography.orEmpty(),
-//                birthday = it.birthday.orEmpty(),
-//                imdbId = it.imdbId.orEmpty(),
-//                name = it.name.orEmpty(),
-//                placeOfBirth = it.placeOfBirth.orEmpty(),
-//                popularity = it.popularity ?: 0.0,
-//                profilePath = it.profilePath.orEmpty(),
-//                character = it.character.orEmpty()
-//            )
-//        },
-//        category = movieEntity?.category.orEmpty(),
-//        imdbId = movieEntity?.imdbId,
-//        adult = movieEntity?.adult,
-//        backdropPath = movieEntity?.backdropPath,
-//        originalLanguage = movieEntity?.originalLanguage,
-//        voteCount = movieEntity?.voteCount
-//    )
+fun mapLocalActorDataToActorEntity(localActorData: LocalActorData): ActorEntity {
+    return ActorEntity(
+        actorId = localActorData.actorId,
+        movieId = localActorData.movieId,
+        biography = localActorData.biography,
+        birthday = localActorData.birthday,
+        imdbId = localActorData.imdbId,
+        name = localActorData.name,
+        placeOfBirth = localActorData.placeOfBirth,
+        popularity = localActorData.popularity,
+        profilePath = localActorData.profilePath,
+        character = localActorData.character
+    )
+}
+
+fun mapActorEntityToLocalActorData(actorEntity: ActorEntity): LocalActorData {
+    return LocalActorData(
+        actorId = actorEntity.actorId,
+        movieId = actorEntity.movieId,
+        biography = actorEntity.biography,
+        birthday = actorEntity.birthday,
+        imdbId = actorEntity.imdbId,
+        name = actorEntity.name,
+        placeOfBirth = actorEntity.placeOfBirth,
+        popularity = actorEntity.popularity,
+        profilePath = actorEntity.profilePath,
+        character = actorEntity.character
+    )
+}
+
+fun mapLocalActorDataToActorUI(localActorData: LocalActorData): ActorUI {
+    return ActorUI(
+        actorId = localActorData.actorId,
+        movieId = localActorData.movieId ?: 0,
+        biography = localActorData.biography.orEmpty(),
+        birthday = localActorData.birthday.orEmpty(),
+        imdbId = localActorData.imdbId.orEmpty(),
+        name = localActorData.name.orEmpty(),
+        placeOfBirth = localActorData.placeOfBirth.orEmpty(),
+        popularity = localActorData.popularity ?: 0.0,
+        profilePath = localActorData.profilePath.orEmpty(),
+        character = localActorData.character.orEmpty()
+    )
+}
+
+fun mapActorUIToLocalActorData(actorUI: ActorUI): LocalActorData {
+    return LocalActorData(
+        actorId = actorUI.actorId,
+        movieId = actorUI.movieId,
+        biography = actorUI.biography,
+        birthday = actorUI.birthday,
+        imdbId = actorUI.imdbId,
+        name = actorUI.name,
+        placeOfBirth = actorUI.placeOfBirth,
+        popularity = actorUI.popularity,
+        profilePath = actorUI.profilePath,
+        character = actorUI.character
+    )
+}
+
+fun mapLocalMovieTrailerToTrailerEntity(localTrailerData: LocalTrailerData, movieId: String): TrailerEntity {
+    return TrailerEntity(
+        id = movieId,
+        name = localTrailerData.name.orEmpty(),
+        key = localTrailerData.key,
+        type = localTrailerData.type
+    )
+}
+
+fun mapTrailerEntityToLocalMovieTrailer(trailerEntity: TrailerEntity): LocalTrailerData {
+    return LocalTrailerData(
+        id = trailerEntity.id,
+        name = trailerEntity.name,
+        key = trailerEntity.key,
+        type = trailerEntity.type
+    )
+}
+
+fun mapLocalMovieTrailerToTrailerUI(trailer: LocalTrailerData): TrailerUI {
+    return TrailerUI(
+        id = trailer.id.orEmpty(),
+        name = trailer.name.orEmpty(),
+        key = trailer.key.orEmpty(),
+        type = trailer.type.orEmpty()
+    )
+}
+
 
 fun convertMovieEntityToListMovieDataRoom(entity: List<MovieEntity>): List<LocalMovieData> =
     entity.map {
@@ -367,7 +462,7 @@ fun convertMovieEntityToMovieDto(
         runtime = movie.runtime,
         credits = CreditsDTO(cast = actors.map {
             CastDTO(
-                id = it.id,
+                id = it.movieId,
                 name = it.name,
                 profile_path = it.profilePath,
                 character = it.character

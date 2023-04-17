@@ -11,11 +11,17 @@ import com.example.java.android1.movie_search.model.local.ActorEntity
 @Dao
 interface ActorDao {
 
-    @Query("SELECT * FROM actor WHERE id LIKE :movieId")
+    @Query("SELECT * FROM actor WHERE movie_id LIKE :movieId")
     suspend fun getActorsByMovieId(movieId: Int): List<ActorEntity>
+
+    @Query("SELECT * FROM actor WHERE actorId LIKE :actorId")
+    suspend fun getActorById(actorId: Int): ActorEntity
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(entity: List<ActorEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(entity: ActorEntity)
 
     @Update
     suspend fun update(entity: ActorEntity)

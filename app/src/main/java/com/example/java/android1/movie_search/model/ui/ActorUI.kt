@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ActorUI(
     val actorId: Long = 0,
-    val id: Long = 0,
+    val movieId: Long = 0,
     val biography: String = "",
     val birthday: String = "",
     val imdbId: String = "",

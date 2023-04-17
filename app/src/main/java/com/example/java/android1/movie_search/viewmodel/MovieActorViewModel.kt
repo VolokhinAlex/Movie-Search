@@ -23,7 +23,7 @@ class MovieActorViewModel(
      * @param language - Language to display translated data for the fields that support it.
      */
 
-    fun getMovieActorData(personId: Long, language: String) {
+    fun getMovieActorData(personId: Long, language: String, isOnline: Boolean) {
         _movieActorData.value = ActorState.Loading
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, error ->
             _movieActorData.postValue(ActorState.Error(error))
@@ -31,7 +31,8 @@ class MovieActorViewModel(
             _movieActorData.postValue(
                 movieActorRepository.getMovieActorDetails(
                     personId = personId,
-                    language = language
+                    language = language,
+                    isNetworkAvailable = isOnline
                 )
             )
         }
