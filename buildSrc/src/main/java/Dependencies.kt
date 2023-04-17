@@ -55,7 +55,7 @@ object Versions {
 
 object Config {
     const val applicationId = "com.example.java.android1.movie_search"
-    const val minSdk = 21
+    const val minSdk = 24
     const val targetSdk = 33
     const val compileSdk = 33
     val javaVersion = JavaVersion.VERSION_1_8

@@ -1,6 +1,6 @@
 package com.example.java.android1.movie_search.repository.home
 
-import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.state.CategoryState
 
 /**
  * The remote repository to get the categories of movies from Remote Server
@@ -13,6 +13,6 @@ interface HomeRepository {
         language: String,
         page: Int,
         isNetworkAvailable: Boolean
-    ): CategoryMoviesTMDB
+    ): CategoryState
 
 }

@@ -17,7 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.ui.MovieUI
+import com.example.java.android1.movie_search.network.utils.NetworkStatus
 import com.example.java.android1.movie_search.repository.*
 import com.example.java.android1.movie_search.utils.parcelable
 import com.example.java.android1.movie_search.view.actor_details.ARG_ACTOR_ID
@@ -32,20 +33,29 @@ import com.example.java.android1.movie_search.view.search.SearchScreen
 import com.example.java.android1.movie_search.view.splash.SplashScreen
 import com.example.java.android1.movie_search.view.theme.PrimaryColor70
 import com.example.java.android1.movie_search.viewmodel.*
+import org.koin.android.ext.android.inject
 
 const val MOVIE_DATA_KEY = "Movie Data"
 
 class MainActivity : ComponentActivity() {
 
+    private val networkStatus: NetworkStatus by inject()
+    private val isNetworkAvailable = mutableStateOf(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Navigation()
+            LaunchedEffect(key1 = true) {
+                networkStatus.networkObserve().collect {
+                    isNetworkAvailable.value = it
+                }
+            }
+            Navigation(isNetworkAvailable.value)
         }
     }
 
     @Composable
-    fun Navigation() {
+    fun Navigation(networkStatus: Boolean) {
         val navController = rememberNavController()
         BottomNavigationBar(navController) { innerPadding ->
             NavHost(
@@ -57,14 +67,15 @@ class MainActivity : ComponentActivity() {
                     SplashScreen(navController = navController)
                 }
                 composable(route = ScreenState.HomeScreen.route) {
-                    HomeScreen(navController = navController)
+                    HomeScreen(navController = navController, networkStatus = networkStatus)
                 }
                 composable(route = ScreenState.DetailsScreen.route) {
-                    val movieDetailsData = it.arguments?.parcelable<MovieDataTMDB>(MOVIE_DATA_KEY)
+                    val movieDetailsData = it.arguments?.parcelable<MovieUI>(MOVIE_DATA_KEY)
                     movieDetailsData?.let { data ->
                         DetailsScreen(
-                            movieDataTMDB = data,
-                            navController = navController
+                            movie = data,
+                            navController = navController,
+                            networkStatus = networkStatus
                         )
                     }
                 }
@@ -72,9 +83,7 @@ class MainActivity : ComponentActivity() {
                     SearchScreen(navController = navController)
                 }
                 composable(route = ScreenState.FavoriteScreen.route) {
-                    FavoriteScreen(
-                        navController = navController
-                    )
+                    FavoriteScreen(navController = navController)
                 }
                 composable(route = ScreenState.CategoryMoviesScreen.route) {
                     val categoryName = it.arguments?.getString(ARG_CATEGORY_NAME_DATA)
@@ -112,7 +121,7 @@ class MainActivity : ComponentActivity() {
             bottomBar = {
                 if (ScreenState.DetailsScreen.route != currentRoute && ScreenState.CategoryMoviesScreen
                         .route != currentRoute && ScreenState.ActorDetailsScreen.route != currentRoute
-                        && ScreenState.SplashScreen.route != currentRoute
+                    && ScreenState.SplashScreen.route != currentRoute
                 ) {
                     NavigationBar(containerColor = PrimaryColor70) {
                         bottomNavItems.forEach { item ->

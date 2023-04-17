@@ -1,7 +1,13 @@
 package com.example.java.android1.movie_search.view.widgets
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.ui.MovieUI
 import com.example.java.android1.movie_search.utils.convertStringFullDateToOnlyYear
 import com.example.java.android1.movie_search.view.theme.CARD_TEXT_SIZE
 import com.example.java.android1.movie_search.view.theme.PrimaryColor70
@@ -31,7 +37,7 @@ import java.text.DecimalFormat
 @Composable
 fun MovieCard(
     modifier: Modifier = Modifier,
-    movieDataTMDB: MovieDataTMDB
+    movie: MovieUI
 ) {
     val ratingFormat = DecimalFormat("#.#")
     Card(
@@ -46,14 +52,14 @@ fun MovieCard(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://image.tmdb.org/t/p/w500${movieDataTMDB.poster_path}")
+                    .data("https://image.tmdb.org/t/p/w500${movie.posterPath}")
                     .build(), contentDescription = "movie_poster",
                 modifier = Modifier
                     .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                     .fillMaxWidth()
             )
             Text(
-                text = movieDataTMDB.title ?: "",
+                text = movie.title,
                 color = Color.White,
                 fontSize = CARD_TEXT_SIZE,
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp),
@@ -67,7 +73,7 @@ fun MovieCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "${movieDataTMDB.release_date?.let { convertStringFullDateToOnlyYear(it) }}",
+                    text = convertStringFullDateToOnlyYear(movie.releaseDate),
                     color = Color.White,
                     fontSize = CARD_TEXT_SIZE
                 )
@@ -75,7 +81,7 @@ fun MovieCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = ratingFormat.format(movieDataTMDB.vote_average),
+                        text = ratingFormat.format(movie.voteAverage),
                         modifier = Modifier.padding(end = 5.dp),
                         color = Color.White,
                         fontSize = CARD_TEXT_SIZE

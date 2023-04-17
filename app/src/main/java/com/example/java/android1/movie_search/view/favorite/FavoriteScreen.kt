@@ -25,9 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.java.android1.movie_search.model.MovieDataRoom
-import com.example.java.android1.movie_search.model.states.LocalMovieAppState
-import com.example.java.android1.movie_search.utils.convertMovieRoomToMovieDto
+import com.example.java.android1.movie_search.model.old.states.LocalMovieAppState
+import com.example.java.android1.movie_search.model.state.MovieState
+import com.example.java.android1.movie_search.model.ui.MovieUI
 import com.example.java.android1.movie_search.view.MOVIE_DATA_KEY
 import com.example.java.android1.movie_search.view.navigation.ScreenState
 import com.example.java.android1.movie_search.view.navigation.navigate
@@ -61,7 +61,7 @@ fun FavoriteScreen(
         HeaderFavoriteScreen()
         favoriteViewModel.moviesFavoriteData.observeAsState().value?.let { state ->
             RenderFavoriteDataFromLocalDataBase(
-                localMovieAppState = state,
+                movieState = state,
                 navController = navController,
                 favoriteViewModel = favoriteViewModel
             )
@@ -71,28 +71,28 @@ fun FavoriteScreen(
 
 /**
  * The method processes state from the database
- * @param localMovieAppState - The state that came from the database. [LocalMovieAppState]
+ * @param movieState - The state that came from the database. [LocalMovieAppState]
  * @param navController - Needed for the method [FavoriteMoviesList]
  * @param favoriteViewModel - Needed if roomAppState came Error
  */
 
 @Composable
 private fun RenderFavoriteDataFromLocalDataBase(
-    localMovieAppState: LocalMovieAppState,
+    movieState: MovieState,
     navController: NavController,
     favoriteViewModel: FavoriteViewModel
 ) {
-    when (localMovieAppState) {
-        is LocalMovieAppState.Error -> localMovieAppState.errorMessage.localizedMessage?.let { message ->
+    when (movieState) {
+        is MovieState.Error -> movieState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) { favoriteViewModel.getMoviesFromLocalDataBase() }
         }
 
-        is LocalMovieAppState.Success -> {
-            val favoriteMoviesData = localMovieAppState.moviesData
+        is MovieState.Success -> {
+            val favoriteMoviesData = movieState.data
             FavoriteMoviesList(favoriteMoviesData, navController)
         }
 
-        LocalMovieAppState.Loading -> LoadingProgressBar()
+        MovieState.Loading -> LoadingProgressBar()
     }
 }
 
@@ -104,7 +104,7 @@ private fun RenderFavoriteDataFromLocalDataBase(
 
 @Composable
 private fun FavoriteMoviesList(
-    favoriteMoviesData: List<MovieDataRoom>,
+    favoriteMoviesData: List<MovieUI>,
     navController: NavController,
 ) {
     LazyVerticalGrid(
@@ -121,11 +121,10 @@ private fun FavoriteMoviesList(
                     .padding(bottom = 10.dp)
                     .clickable {
                         val detailsMovieBundle = Bundle()
-                        val movieDataTMDB = convertMovieRoomToMovieDto(item)
-                        detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieDataTMDB)
+                        detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, item)
                         navController.navigate(ScreenState.DetailsScreen.route, detailsMovieBundle)
                     },
-                movieDataTMDB = convertMovieRoomToMovieDto(item)
+                movie = item
             )
         }
     }

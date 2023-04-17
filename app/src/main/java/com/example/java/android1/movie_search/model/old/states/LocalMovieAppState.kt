@@ -1,7 +1,7 @@
-package com.example.java.android1.movie_search.model.states
+package com.example.java.android1.movie_search.model.old.states
 
-import com.example.java.android1.movie_search.model.states.LocalMovieAppState.*
-import com.example.java.android1.movie_search.model.MovieDataRoom
+import com.example.java.android1.movie_search.model.old.states.LocalMovieAppState.*
+import com.example.java.android1.movie_search.model.local.LocalMovieData
 
 /**
  * States that come from the local ROOM database. Total 3 states
@@ -11,7 +11,7 @@ import com.example.java.android1.movie_search.model.MovieDataRoom
  */
 
 sealed class LocalMovieAppState {
-    data class Success(val moviesData: List<MovieDataRoom>) : LocalMovieAppState()
+    data class Success(val moviesData: List<LocalMovieData>) : LocalMovieAppState()
     data class Error(val errorMessage: Throwable) : LocalMovieAppState()
     object Loading : LocalMovieAppState()
 }

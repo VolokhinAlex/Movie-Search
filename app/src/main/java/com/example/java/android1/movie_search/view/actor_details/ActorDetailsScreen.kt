@@ -2,7 +2,13 @@ package com.example.java.android1.movie_search.view.actor_details
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -24,8 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import com.example.java.android1.movie_search.R
-import com.example.java.android1.movie_search.model.states.MovieActorAppState
-import com.example.java.android1.movie_search.model.ActorDTO
+import com.example.java.android1.movie_search.model.old.remote.ActorDTO
+import com.example.java.android1.movie_search.model.old.states.MovieActorAppState
+import com.example.java.android1.movie_search.model.state.ActorState
+import com.example.java.android1.movie_search.model.ui.ActorUI
 import com.example.java.android1.movie_search.view.LanguageQuery
 import com.example.java.android1.movie_search.view.theme.DETAILS_PRIMARY_SIZE
 import com.example.java.android1.movie_search.view.theme.PrimaryColor80
@@ -55,7 +63,7 @@ fun ActorDetailsScreen(
     }
     actorViewModel.movieActorData.observeAsState().value?.let { actorState ->
         RenderActorDataFromRemoteServer(
-            movieActorAppState = actorState,
+            actorState = actorState,
             navController = navController,
             actorViewModel = actorViewModel,
             actorId = actorId
@@ -65,7 +73,7 @@ fun ActorDetailsScreen(
 
 /**
  * The method processes state from the remote server
- * @param movieActorAppState - The state that came from the remote server. [MovieActorAppState]
+ * @param actorState - The state that came from the remote server. [MovieActorAppState]
  * @param navController - To navigate back
  * @param actorViewModel - Actor View Model [MovieActorViewModel]
  * @param actorId - actor id has gotten from remote server
@@ -73,13 +81,13 @@ fun ActorDetailsScreen(
 
 @Composable
 fun RenderActorDataFromRemoteServer(
-    movieActorAppState: MovieActorAppState,
+    actorState: ActorState,
     navController: NavController,
     actorViewModel: MovieActorViewModel,
     actorId: Long
 ) {
-    when (movieActorAppState) {
-        is MovieActorAppState.Error -> movieActorAppState.errorMessage.localizedMessage?.let { message ->
+    when (actorState) {
+        is ActorState.Error -> actorState.errorMessage.localizedMessage?.let { message ->
             ErrorMessage(message = message) {
                 actorViewModel.getMovieActorData(
                     actorId,
@@ -87,9 +95,10 @@ fun RenderActorDataFromRemoteServer(
                 )
             }
         }
-        MovieActorAppState.Loading -> LoadingProgressBar()
-        is MovieActorAppState.Success -> {
-            val actorDetailsData = movieActorAppState.detailsActor
+
+        ActorState.Loading -> LoadingProgressBar()
+        is ActorState.Success -> {
+            val actorDetailsData = actorState.data[0]
             Column(
                 modifier = Modifier
                     .background(PrimaryColor80)
@@ -134,7 +143,7 @@ fun ToolbarActorDetailsScreen(navController: NavController) {
  */
 
 @Composable
-fun ActorDetails(actorDetailsData: ActorDTO) {
+fun ActorDetails(actorDetailsData: ActorUI) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -144,7 +153,7 @@ fun ActorDetails(actorDetailsData: ActorDTO) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SubcomposeAsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${actorDetailsData.profile_path}",
+            model = "https://image.tmdb.org/t/p/w500${actorDetailsData.profilePath}",
             loading = { LoadingProgressBar() },
             contentDescription = "actor_photo",
             modifier = Modifier
@@ -152,20 +161,14 @@ fun ActorDetails(actorDetailsData: ActorDTO) {
                 .size(100.dp),
             contentScale = ContentScale.Crop
         )
-        actorDetailsData.name?.let { name ->
-            Text(
-                text = name,
-                modifier = Modifier.padding(top = 10.dp),
-                fontSize = TITLE_SIZE,
-                color = Color.White
-            )
-        }
-        actorDetailsData.birthday?.let { birthday ->
-            ActorDetailsTitleCategory(title = R.string.birthday, details = birthday)
-        }
-        actorDetailsData.biography?.let { biography ->
-            ActorDetailsTitleCategory(title = R.string.biography, details = biography)
-        }
+        Text(
+            text = actorDetailsData.name,
+            modifier = Modifier.padding(top = 10.dp),
+            fontSize = TITLE_SIZE,
+            color = Color.White
+        )
+        ActorDetailsTitleCategory(title = R.string.birthday, details = actorDetailsData.birthday)
+        ActorDetailsTitleCategory(title = R.string.birthday, details = actorDetailsData.biography)
     }
 }
 

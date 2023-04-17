@@ -1,7 +1,7 @@
-package com.example.java.android1.movie_search.model.states
+package com.example.java.android1.movie_search.model.old.states
 
-import com.example.java.android1.movie_search.model.states.MovieActorAppState.*
-import com.example.java.android1.movie_search.model.ActorDTO
+import com.example.java.android1.movie_search.model.old.states.MovieActorAppState.*
+import com.example.java.android1.movie_search.model.old.remote.ActorDTO
 
 /**
  * States that come from the remote server. Total 3 states

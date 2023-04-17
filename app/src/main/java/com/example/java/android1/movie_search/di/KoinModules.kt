@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.example.java.android1.movie_search.datasource.actor.ActorDataSource
 import com.example.java.android1.movie_search.datasource.actor.RemoteActorDataSource
 import com.example.java.android1.movie_search.datasource.category.CategoryDataSource
+import com.example.java.android1.movie_search.datasource.category.LocalCategoryDataSource
+import com.example.java.android1.movie_search.datasource.category.LocalCategoryDataSourceImpl
 import com.example.java.android1.movie_search.datasource.category.RemoteCategoryDataSource
 import com.example.java.android1.movie_search.datasource.details.DetailsDataSource
 import com.example.java.android1.movie_search.datasource.details.LocalDetailsDataSource
@@ -13,15 +15,22 @@ import com.example.java.android1.movie_search.datasource.details.RemoteDetailsDa
 import com.example.java.android1.movie_search.datasource.favorite.FavoriteDataSource
 import com.example.java.android1.movie_search.datasource.favorite.LocalFavoriteDataSource
 import com.example.java.android1.movie_search.datasource.home.HomeDataSource
+import com.example.java.android1.movie_search.datasource.home.LocalHomeDataSource
+import com.example.java.android1.movie_search.datasource.home.LocalHomeDataSourceImpl
 import com.example.java.android1.movie_search.datasource.home.RemoteHomeDataSource
+import com.example.java.android1.movie_search.datasource.search.LocalSearchDataSource
+import com.example.java.android1.movie_search.datasource.search.LocalSearchDataSourceImpl
 import com.example.java.android1.movie_search.datasource.search.RemoteSearchDataSource
 import com.example.java.android1.movie_search.datasource.search.SearchDataSource
-import com.example.java.android1.movie_search.model.CategoryMoviesTMDB
-import com.example.java.android1.movie_search.model.MovieDataRoom
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.local.LocalMovieData
+import com.example.java.android1.movie_search.model.old.remote.ActorDTO
+import com.example.java.android1.movie_search.model.old.remote.CategoryMoviesTMDB
+import com.example.java.android1.movie_search.model.old.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.network.ApiHolder
 import com.example.java.android1.movie_search.network.MovieTMBDHolder
 import com.example.java.android1.movie_search.network.MovieTMDBAPI
+import com.example.java.android1.movie_search.network.utils.AndroidNetworkStatus
+import com.example.java.android1.movie_search.network.utils.NetworkStatus
 import com.example.java.android1.movie_search.repository.actor.MovieActorRepository
 import com.example.java.android1.movie_search.repository.actor.MovieActorRepositoryImpl
 import com.example.java.android1.movie_search.repository.category.CategoryRepository
@@ -57,6 +66,7 @@ val database = module {
     single {
         Room
             .databaseBuilder(get(), MoviesDataBase::class.java, DB_NAME)
+            .fallbackToDestructiveMigration()
             .build()
     }
 }
@@ -101,41 +111,48 @@ val network = module {
             .build()
             .create(MovieTMDBAPI::class.java)
     }
+
+    single<NetworkStatus> {
+        AndroidNetworkStatus(get())
+    }
 }
 
 val homeScreen = module {
     factory<HomeDataSource<CategoryMoviesTMDB>> { RemoteHomeDataSource(get()) }
-    factory<HomeRepository> { HomeRepositoryImpl(get()) }
+    factory<LocalHomeDataSource> { LocalHomeDataSourceImpl(get()) }
+    factory<HomeRepository> { HomeRepositoryImpl(get(), get()) }
     viewModel { MainViewModel(get()) }
 }
 
 val detailsScreen = module {
     factory<LocalDetailsDataSource> { LocalDetailsDataSourceImpl(get()) }
-    factory<DetailsDataSource> { RemoteDetailsDataSource(get()) }
+    factory<DetailsDataSource<MovieDataTMDB>> { RemoteDetailsDataSource(get()) }
     factory<DetailsRepository> { DetailsRepositoryImpl(get(), get()) }
     viewModel { DetailsViewModel(get()) }
 }
 
 val favoriteScreen = module {
-    factory<FavoriteDataSource<MovieDataRoom>> { LocalFavoriteDataSource(get()) }
+    factory<FavoriteDataSource<LocalMovieData>> { LocalFavoriteDataSource(get()) }
     factory<FavoriteRepository> { FavoriteRepositoryImpl(get()) }
     viewModel { FavoriteViewModel(get()) }
 }
 
 val actorScreen = module {
-    factory<ActorDataSource> { RemoteActorDataSource(get()) }
+    factory<ActorDataSource<ActorDTO>> { RemoteActorDataSource(get()) }
     factory<MovieActorRepository> { MovieActorRepositoryImpl(get()) }
     viewModel { MovieActorViewModel(get()) }
 }
 
 val searchScreen = module {
+    factory<LocalSearchDataSource> { LocalSearchDataSourceImpl(get()) }
     factory<SearchDataSource<PagingData<MovieDataTMDB>>> { RemoteSearchDataSource(get()) }
-    factory<SearchRepository> { SearchRepositoryImpl(get()) }
+    factory<SearchRepository> { SearchRepositoryImpl(get(), get()) }
     viewModel { SearchViewModel(get()) }
 }
 
 val categoryScreen = module {
+    factory<LocalCategoryDataSource> { LocalCategoryDataSourceImpl(get()) }
     factory<CategoryDataSource<PagingData<MovieDataTMDB>>> { RemoteCategoryDataSource(get()) }
-    factory<CategoryRepository> { CategoryRepositoryImpl(get()) }
+    factory<CategoryRepository> { CategoryRepositoryImpl(get(), get()) }
     viewModel { CategoryMoviesViewModel(get()) }
 }

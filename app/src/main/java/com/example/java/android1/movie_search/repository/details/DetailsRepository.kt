@@ -1,8 +1,8 @@
 package com.example.java.android1.movie_search.repository.details
 
 import androidx.paging.PagingData
-import com.example.java.android1.movie_search.model.MovieDataRoom
-import com.example.java.android1.movie_search.model.MovieDataTMDB
+import com.example.java.android1.movie_search.model.state.MovieState
+import com.example.java.android1.movie_search.model.ui.MovieUI
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.Flow
 interface DetailsRepository {
     suspend fun getMovieDetails(
         movieId: Int,
-        language: String
-    ): MovieDataTMDB
+        language: String,
+        isNetworkAvailable: Boolean,
+        category: String
+    ): MovieState
 
-    fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieDataTMDB>>
+    fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieUI>>
 
-    suspend fun getMovieFromLocalSource(movieId: Int): MovieDataRoom
-
-    suspend fun saveMovie(movieDataTMDB: MovieDataTMDB)
+    suspend fun getMovieFromLocalSource(movieId: Int): MovieUI
 
     suspend fun updateMovie(movieId: Int, favorite: Boolean)
 

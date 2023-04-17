@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.java.android1.movie_search.model.local.MovieEntity
 
 /**
  * The Interface for interacting with local movie table
@@ -15,16 +16,25 @@ interface MovieDao {
     @Query("SELECT * FROM movies_table WHERE movie_favorite = 1")
     suspend fun getAllFavorites(): List<MovieEntity>
 
+    @Query("SELECT * FROM movies_table WHERE category LIKE :category")
+    suspend fun getMoviesByCategory(category: String): List<MovieEntity>
+
     @Query("SELECT * FROM movies_table WHERE movie_id LIKE :movieId")
     suspend fun getMovieByMovieId(movieId: Int): MovieEntity
+
+    @Query("SELECT * FROM movies_table WHERE LOWER(movie_title) LIKE '%' || :query || '%' ")
+    suspend fun getMoviesByQuery(query: String): List<MovieEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(entity: MovieEntity)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(entity: List<MovieEntity>)
+
     @Query("UPDATE movies_table SET movie_favorite=:favorite WHERE movie_id = :movieId")
     suspend fun updateFavorite(movieId: Int, favorite: Boolean)
 
-    @Query("UPDATE movies_table SET movie_note=:note WHERE movie_id = :movieId")
-    suspend fun updateNote(movieId: Int, note: String)
+    @Query("UPDATE movies_table SET genres=:genres,runtime=:runtime WHERE movie_id = :movieId")
+    suspend fun updateRuntimeAndGenres(movieId: Int, genres: String, runtime: Int)
 
 }
