@@ -20,7 +20,7 @@ interface ActorDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(entity: List<ActorEntity>)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entity: ActorEntity)
 
     @Update

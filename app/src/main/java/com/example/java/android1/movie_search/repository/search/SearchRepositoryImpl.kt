@@ -6,6 +6,7 @@ import com.example.java.android1.movie_search.datasource.search.LocalSearchDataS
 import com.example.java.android1.movie_search.datasource.search.SearchDataSource
 import com.example.java.android1.movie_search.model.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.model.ui.MovieUI
+import com.example.java.android1.movie_search.utils.mapLocalMovieToMovieUI
 import com.example.java.android1.movie_search.utils.mapMovieDataTMDBToLocalMovieData
 import com.example.java.android1.movie_search.utils.mapMovieDataTMDBToMovieUI
 import kotlinx.coroutines.flow.Flow
@@ -29,10 +30,19 @@ class SearchRepositoryImpl(
         query: String,
         isNetworkAvailable: Boolean
     ): Flow<PagingData<MovieUI>> {
-        return remoteDataSource.getMoviesByQuery(query = query).map {
-            it.map { movie ->
-                localDataSource.saveMovie(movie = mapMovieDataTMDBToLocalMovieData(movie))
-                mapMovieDataTMDBToMovieUI(movie)
+        return if (isNetworkAvailable) {
+            remoteDataSource.getMoviesByQuery(query = query).map {
+                it.map { movie ->
+                    localDataSource.saveMovie(movie = mapMovieDataTMDBToLocalMovieData(movie))
+                    mapMovieDataTMDBToMovieUI(movie)
+                }
+            }
+        } else {
+            localDataSource.getMoviesByQuery(query = query).map {
+                it.map { movie ->
+                    localDataSource.saveMovie(movie = movie)
+                    mapLocalMovieToMovieUI(localMovieData = movie)
+                }
             }
         }
     }

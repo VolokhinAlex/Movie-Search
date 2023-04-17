@@ -48,7 +48,8 @@ import org.koin.androidx.compose.koinViewModel
 fun SearchScreen(
     navController: NavController,
     searchState: SearchState = rememberSearchState(),
-    searchViewModel: SearchViewModel = koinViewModel()
+    searchViewModel: SearchViewModel = koinViewModel(),
+    networkStatus: Boolean
 ) {
     Box(
         modifier = Modifier
@@ -60,7 +61,8 @@ fun SearchScreen(
                 modifier = Modifier,
                 searchViewModel = searchViewModel,
                 searchState = searchState,
-                navController = navController
+                navController = navController,
+                networkStatus = networkStatus
             )
         }
     }
@@ -79,7 +81,8 @@ private fun SearchField(
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel,
     searchState: SearchState,
-    navController: NavController
+    navController: NavController,
+    networkStatus: Boolean
 ) {
     SearchBar(
         query = searchState.query,
@@ -99,7 +102,10 @@ private fun SearchField(
     }
     if (searchState.query.text != "") {
         val listMoviesBySearch =
-            searchViewModel.getMoviesBySearchFromRemoteServer(searchState.query.text)
+            searchViewModel.getMoviesBySearch(
+                query = searchState.query.text,
+                isOnline = networkStatus
+            )
                 .collectAsLazyPagingItems()
         ListMoviesPagination(listMoviesBySearch) { movieData ->
             val detailsMovieBundle = Bundle()

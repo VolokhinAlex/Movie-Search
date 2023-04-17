@@ -14,7 +14,7 @@ import java.io.IOException
  * @param movieId - A Movie ID that similar movies will be searched for
  */
 
-class SimilarPageSource(
+class RemoteSimilarPageSource(
     private val apiHolder: ApiHolder,
     private val movieId: Int,
 ) : PagingSource<Int, MovieDataTMDB>() {

@@ -43,28 +43,31 @@ const val ARG_CATEGORY_NAME_DATA = "CategoryMoviesData"
 fun CategoryMoviesScreen(
     categoryName: String,
     navController: NavController,
-    categoryMoviesViewModel: CategoryMoviesViewModel = koinViewModel()
+    categoryMoviesViewModel: CategoryMoviesViewModel = koinViewModel(),
+    networkStatus: Boolean
 ) {
     val categoryMoviesData =
-        categoryMoviesViewModel.getCategoryMoviesFromRemoteServer(categoryName)
-            .collectAsLazyPagingItems()
+        categoryMoviesViewModel.getCategoryMoviesFromRemoteServer(
+            category = categoryName,
+            isOnline = networkStatus
+        ).collectAsLazyPagingItems()
     Column(modifier = Modifier.background(PrimaryColor80)) {
         when (categoryName) {
             MovieCategory.NowPlaying.queryName -> HeaderCategoryMoviesScreen(
-                MovieCategory.NowPlaying.title,
-                navController
+                title = MovieCategory.NowPlaying.title,
+                navController = navController
             )
             MovieCategory.TopRated.queryName -> HeaderCategoryMoviesScreen(
-                MovieCategory.TopRated.title,
-                navController
+                title = MovieCategory.TopRated.title,
+                navController = navController
             )
             MovieCategory.Upcoming.queryName -> HeaderCategoryMoviesScreen(
-                MovieCategory.Upcoming.title,
-                navController
+                title = MovieCategory.Upcoming.title,
+                navController = navController
             )
             MovieCategory.Popular.queryName -> HeaderCategoryMoviesScreen(
-                MovieCategory.Popular.title,
-                navController
+                title = MovieCategory.Popular.title,
+                navController = navController
             )
         }
         ListMoviesPagination(categoryMoviesData) { movieData ->

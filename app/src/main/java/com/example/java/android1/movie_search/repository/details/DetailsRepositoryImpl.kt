@@ -44,11 +44,16 @@ class DetailsRepositoryImpl(
                     movieTMDB = movie
                 )
             )
+            val movieDataFromLocalSource = localDataSource.getMovieDetails(
+                movieId = movieId,
+                language = language
+            )
             MovieState.Success(
                 listOf(
                     mapMovieDataTMDBToMovieUI(
                         moviesTMDB = movie,
-                        category = category
+                        category = category,
+                        favorite = movieDataFromLocalSource.movieFavorite ?: false
                     )
                 )
             )
@@ -56,8 +61,9 @@ class DetailsRepositoryImpl(
             MovieState.Success(
                 listOf(
                     mapLocalMovieToMovieUI(
-                        localMovieData = localDataSource.getMovieFromLocalDataBase(
-                            movieId = movieId
+                        localMovieData = localDataSource.getMovieDetails(
+                            movieId = movieId,
+                            language = language
                         )
                     )
                 )
@@ -70,21 +76,30 @@ class DetailsRepositoryImpl(
      * @param movieId - The current ID of the movie that similar movies will be searched for
      */
 
-    override fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieUI>> {
-        return remoteDataSource.getSimilarMovies(movieId = movieId).map {
-            it.map { movie ->
-                localDataSource.saveMovie(mapMovieDataTMDBToLocalMovieData(movie))
-                localDataSource.saveSimilarMovies(
-                    localMovieData = mapMovieDataTMDBToLocalMovieData(movie),
-                    movieId = movieId
-                )
-                mapMovieDataTMDBToMovieUI(moviesTMDB = movie, category = "similar")
+    override fun getSimilarMovies(
+        movieId: Int,
+        isNetworkAvailable: Boolean
+    ): Flow<PagingData<MovieUI>> {
+        return if (isNetworkAvailable) {
+            remoteDataSource.getSimilarMovies(movieId = movieId).map {
+                it.map { movie ->
+                    localDataSource.saveMovie(mapMovieDataTMDBToLocalMovieData(movie))
+                    localDataSource.saveSimilarMovies(
+                        localMovieData = mapMovieDataTMDBToLocalMovieData(movie),
+                        movieId = movieId
+                    )
+                    mapMovieDataTMDBToMovieUI(moviesTMDB = movie, category = "similar")
+                }
+            }
+        } else {
+            localDataSource.getSimilarMovies(movieId = movieId).map {
+                it.map { movie ->
+                    localDataSource.saveMovie(movie)
+                    localDataSource.saveSimilarMovies(localMovieData = movie, movieId = movieId)
+                    mapLocalMovieToMovieUI(movie)
+                }
             }
         }
-    }
-
-    override suspend fun getMovieFromLocalSource(movieId: Int): MovieUI {
-        return mapLocalMovieToMovieUI(localDataSource.getMovieFromLocalDataBase(movieId))
     }
 
     override suspend fun updateMovie(movieId: Int, favorite: Boolean) {

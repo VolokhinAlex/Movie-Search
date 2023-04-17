@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.java.android1.movie_search.datasource.category.RemoteCategoryDataSource.Companion.CATEGORY_PAGE_SIZE
-import com.example.java.android1.movie_search.datasource.pagesource.SimilarPageSource
+import com.example.java.android1.movie_search.datasource.pagesource.RemoteSimilarPageSource
 import com.example.java.android1.movie_search.model.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.network.ApiHolder
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +27,7 @@ class RemoteDetailsDataSource(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                SimilarPageSource(
+                RemoteSimilarPageSource(
                     apiHolder = apiHolder,
                     movieId = movieId
                 )

@@ -6,6 +6,7 @@ import com.example.java.android1.movie_search.datasource.category.CategoryDataSo
 import com.example.java.android1.movie_search.datasource.category.LocalCategoryDataSource
 import com.example.java.android1.movie_search.model.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.model.ui.MovieUI
+import com.example.java.android1.movie_search.utils.mapLocalMovieToMovieUI
 import com.example.java.android1.movie_search.utils.mapMovieDataTMDBToLocalMovieData
 import com.example.java.android1.movie_search.utils.mapMovieDataTMDBToMovieUI
 import kotlinx.coroutines.flow.Flow
@@ -25,17 +26,30 @@ class CategoryRepositoryImpl(
      * @param categoryMovies - The category of movies to get
      */
 
-    override fun getCategoryMovies(categoryMovies: String): Flow<PagingData<MovieUI>> {
-        return remoteDataSource.getCategoryMovies(categoryMovies = categoryMovies).map {
-            it.map { movie ->
-                localDataSource.saveMovie(
-                    mapMovieDataTMDBToLocalMovieData(
-                        movie,
-                        categoryMovies
+    override fun getCategoryMovies(
+        categoryMovies: String,
+        isNetworkAvailable: Boolean
+    ): Flow<PagingData<MovieUI>> {
+        return if (isNetworkAvailable) {
+            remoteDataSource.getCategoryMovies(categoryMovies = categoryMovies).map {
+                it.map { movie ->
+                    localDataSource.saveMovie(
+                        mapMovieDataTMDBToLocalMovieData(
+                            movie,
+                            categoryMovies
+                        )
                     )
-                )
-                mapMovieDataTMDBToMovieUI(movie, categoryMovies)
+                    mapMovieDataTMDBToMovieUI(movie, categoryMovies)
+                }
+            }
+        } else {
+            localDataSource.getCategoryMovies(categoryMovies = categoryMovies).map {
+                it.map { movie ->
+                    localDataSource.saveMovie(movie)
+                    mapLocalMovieToMovieUI(movie)
+                }
             }
         }
     }
+
 }

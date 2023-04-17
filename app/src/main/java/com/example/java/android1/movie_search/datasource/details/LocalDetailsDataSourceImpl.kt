@@ -1,5 +1,9 @@
 package com.example.java.android1.movie_search.datasource.details
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.example.java.android1.movie_search.datasource.pagesource.LocalSimilarPageSource
 import com.example.java.android1.movie_search.model.local.LocalMovieData
 import com.example.java.android1.movie_search.model.local.SimilarMovieEntity
 import com.example.java.android1.movie_search.room.MoviesDataBase
@@ -7,23 +11,11 @@ import com.example.java.android1.movie_search.utils.mapLocalActorDataToActorEnti
 import com.example.java.android1.movie_search.utils.mapLocalMovieToMovieEntity
 import com.example.java.android1.movie_search.utils.mapLocalMovieTrailerToTrailerEntity
 import com.example.java.android1.movie_search.utils.mapMovieEntityToLocalMovieData
+import kotlinx.coroutines.flow.Flow
 
 class LocalDetailsDataSourceImpl(
     private val db: MoviesDataBase
 ) : LocalDetailsDataSource {
-
-    /**
-     * Method for requesting a movie by id from a local database
-     * @param movieId - Movie Id to get a movie
-     */
-
-    override suspend fun getMovieFromLocalDataBase(movieId: Int): LocalMovieData {
-        return mapMovieEntityToLocalMovieData(
-            movieEntity = db.moviesDao().getMovieByMovieId(movieId = movieId),
-            trailers = db.trailerDao().getTrailerById(movieId = movieId),
-            actors = db.actorDao().getActorsByMovieId(movieId = movieId)
-        )
-    }
 
     /**
      * Method for saving a movie to a local database
@@ -71,5 +63,31 @@ class LocalDetailsDataSourceImpl(
         db.moviesDao().insert(mapLocalMovieToMovieEntity(localMovieData))
     }
 
+    override suspend fun getMovieDetails(movieId: Int, language: String): LocalMovieData {
+        return mapMovieEntityToLocalMovieData(
+            movieEntity = db.moviesDao().getMovieByMovieId(movieId = movieId),
+            trailers = db.trailerDao().getTrailerById(movieId = movieId),
+            actors = db.actorDao().getActorsByMovieId(movieId = movieId)
+        )
+    }
+
+    override fun getSimilarMovies(movieId: Int): Flow<PagingData<LocalMovieData>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                LocalSimilarPageSource(
+                    db = db,
+                    movieId = movieId
+                )
+            }
+        ).flow
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
+    }
 
 }

@@ -3,7 +3,7 @@ package com.example.java.android1.movie_search.datasource.category
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.java.android1.movie_search.datasource.pagesource.CategoryPageSource
+import com.example.java.android1.movie_search.datasource.pagesource.RemoteCategoryPageSource
 import com.example.java.android1.movie_search.model.remote.MovieDataTMDB
 import com.example.java.android1.movie_search.network.ApiHolder
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +19,7 @@ class RemoteCategoryDataSource(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                CategoryPageSource(
+                RemoteCategoryPageSource(
                     apiHolder = apiHolder,
                     category = categoryMovies
                 )

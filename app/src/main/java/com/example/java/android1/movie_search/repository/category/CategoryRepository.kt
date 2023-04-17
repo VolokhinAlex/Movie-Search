@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CategoryRepository {
     fun getCategoryMovies(
-        categoryMovies: String
+        categoryMovies: String,
+        isNetworkAvailable: Boolean
     ): Flow<PagingData<MovieUI>>
 }
