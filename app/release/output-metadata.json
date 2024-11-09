@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.java.android1.movie_search",
+  "applicationId": "com.volokhinaleksey.movie_club",
   "variantName": "release",
   "elements": [
     {
