@@ -17,37 +17,37 @@ import com.volokhinaleksey.movie_club.R
 
 sealed class ScreenState(val route: String, @StringRes val name: Int, val icon: ImageVector?) {
 
-    object SplashScreen : ScreenState(
+    data object SplashScreen : ScreenState(
         route = "splash_screen",
         name = R.string.splash,
         icon = null
     )
 
-    object HomeScreen : ScreenState(
+    data object HomeScreen : ScreenState(
         route = "home_screen",
         name = R.string.home,
         icon = Icons.Rounded.Home
     )
 
-    object DetailsScreen :
+    data object DetailsScreen :
         ScreenState(route = "details_screen", name = R.string.details_movie, icon = null)
 
-    object SearchScreen : ScreenState(
+    data object SearchScreen : ScreenState(
         route = "search_screen",
         name = R.string.search,
         icon = Icons.Rounded.Search
     )
 
-    object FavoriteScreen :
+    data object FavoriteScreen :
         ScreenState(
             route = "favorite_screen",
             name = R.string.favorite,
             icon = Icons.Rounded.Favorite
         )
 
-    object CategoryMoviesScreen :
+    data object CategoryMoviesScreen :
         ScreenState(route = "category_movies_screen", name = R.string.category_movies, icon = null)
 
-    object ActorDetailsScreen :
+    data object ActorDetailsScreen :
         ScreenState(route = "actor_details_screen", name = R.string.actor_details, icon = null)
 }

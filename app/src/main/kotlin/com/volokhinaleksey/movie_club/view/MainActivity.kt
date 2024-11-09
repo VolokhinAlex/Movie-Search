@@ -6,8 +6,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -19,7 +26,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.network.utils.NetworkStatus
-import com.volokhinaleksey.movie_club.repository.*
 import com.volokhinaleksey.movie_club.utils.parcelable
 import com.volokhinaleksey.movie_club.view.actor_details.ARG_ACTOR_ID
 import com.volokhinaleksey.movie_club.view.actor_details.ActorDetailsScreen
@@ -32,7 +38,6 @@ import com.volokhinaleksey.movie_club.view.navigation.ScreenState
 import com.volokhinaleksey.movie_club.view.search.SearchScreen
 import com.volokhinaleksey.movie_club.view.splash.SplashScreen
 import com.volokhinaleksey.movie_club.view.theme.PrimaryColor70
-import com.volokhinaleksey.movie_club.viewmodel.*
 import org.koin.android.ext.android.inject
 
 const val MOVIE_DATA_KEY = "Movie Data"

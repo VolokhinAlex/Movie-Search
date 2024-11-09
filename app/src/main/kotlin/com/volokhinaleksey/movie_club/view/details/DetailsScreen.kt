@@ -477,8 +477,7 @@ private fun SimilarMovies(
     LazyRow(modifier = Modifier.padding(bottom = 20.dp, top = 15.dp)) {
 
         items(
-            count = lazySimilarMovies.itemCount,
-            key = {},
+            count = lazySimilarMovies.itemCount
         ) { index ->
             lazySimilarMovies[index]?.let {
                 MovieCard(
