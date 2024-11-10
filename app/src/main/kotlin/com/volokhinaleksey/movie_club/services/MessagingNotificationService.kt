@@ -7,9 +7,9 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.volokhinaleksey.movie_club.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.volokhinaleksey.movie_club.R
 
 /**
  * The class for receiving messages from Firebase Cloud Messaging.

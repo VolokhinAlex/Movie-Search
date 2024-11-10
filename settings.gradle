@@ -15,3 +15,12 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Movie-Search"
 include ':app'
+include ':feature'
+include ':feature:home'
+include ':core'
+include ':core:model'
+include ':core:movies-api'
+include ':core:database'
+include ':core:uikit'
+include ':core:data'
+include ':core:domain'

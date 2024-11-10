@@ -6,11 +6,11 @@ import androidx.paging.PagingData
 import com.volokhinaleksey.movie_club.datasource.category.RemoteCategoryDataSource.Companion.CATEGORY_PAGE_SIZE
 import com.volokhinaleksey.movie_club.datasource.pagesource.RemoteSimilarPageSource
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
-import com.volokhinaleksey.movie_club.network.ApiHolder
+import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import kotlinx.coroutines.flow.Flow
 
 class RemoteDetailsDataSource(
-    private val apiHolder: ApiHolder
+    private val apiHolder: CoreApi
 ) : DetailsDataSource<MovieDataTMDB> {
     override suspend fun getMovieDetails(movieId: Int, language: String): MovieDataTMDB {
         return apiHolder.moviesApi.getMovieDetails(

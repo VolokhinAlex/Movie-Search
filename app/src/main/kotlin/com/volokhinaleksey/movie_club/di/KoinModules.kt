@@ -2,6 +2,10 @@ package com.volokhinaleksey.movie_club.di
 
 import androidx.paging.PagingData
 import androidx.room.Room
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.volokhinaleksey.movie_club.database.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.datasource.actor.ActorDataSource
 import com.volokhinaleksey.movie_club.datasource.actor.LocalActorDataSource
 import com.volokhinaleksey.movie_club.datasource.actor.LocalActorDataSourceImpl
@@ -16,21 +20,19 @@ import com.volokhinaleksey.movie_club.datasource.details.LocalDetailsDataSourceI
 import com.volokhinaleksey.movie_club.datasource.details.RemoteDetailsDataSource
 import com.volokhinaleksey.movie_club.datasource.favorite.FavoriteDataSource
 import com.volokhinaleksey.movie_club.datasource.favorite.LocalFavoriteDataSource
-import com.volokhinaleksey.movie_club.datasource.home.HomeDataSource
-import com.volokhinaleksey.movie_club.datasource.home.LocalHomeDataSource
-import com.volokhinaleksey.movie_club.datasource.home.LocalHomeDataSourceImpl
-import com.volokhinaleksey.movie_club.datasource.home.RemoteHomeDataSource
 import com.volokhinaleksey.movie_club.datasource.search.LocalSearchDataSource
 import com.volokhinaleksey.movie_club.datasource.search.LocalSearchDataSourceImpl
 import com.volokhinaleksey.movie_club.datasource.search.RemoteSearchDataSource
 import com.volokhinaleksey.movie_club.datasource.search.SearchDataSource
+import com.volokhinaleksey.movie_club.domain.HomeInteractor
+import com.volokhinaleksey.movie_club.domain.HomeInteractorImpl
+import com.volokhinaleksey.movie_club.home.viewmodel.HomeViewModel
 import com.volokhinaleksey.movie_club.model.local.LocalMovieData
 import com.volokhinaleksey.movie_club.model.remote.ActorDTO
-import com.volokhinaleksey.movie_club.model.remote.CategoryMoviesTMDB
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
-import com.volokhinaleksey.movie_club.network.ApiHolder
-import com.volokhinaleksey.movie_club.network.MovieTMBDHolder
-import com.volokhinaleksey.movie_club.network.MovieTMDBAPI
+import com.volokhinaleksey.movie_club.moviesapi.CoreApi
+import com.volokhinaleksey.movie_club.moviesapi.MovieTMBDCore
+import com.volokhinaleksey.movie_club.moviesapi.MovieTMDBAPI
 import com.volokhinaleksey.movie_club.network.utils.AndroidNetworkStatus
 import com.volokhinaleksey.movie_club.network.utils.NetworkStatus
 import com.volokhinaleksey.movie_club.repository.actor.MovieActorRepository
@@ -41,20 +43,13 @@ import com.volokhinaleksey.movie_club.repository.details.DetailsRepository
 import com.volokhinaleksey.movie_club.repository.details.DetailsRepositoryImpl
 import com.volokhinaleksey.movie_club.repository.favorite.FavoriteRepository
 import com.volokhinaleksey.movie_club.repository.favorite.FavoriteRepositoryImpl
-import com.volokhinaleksey.movie_club.repository.home.HomeRepository
-import com.volokhinaleksey.movie_club.repository.home.HomeRepositoryImpl
 import com.volokhinaleksey.movie_club.repository.search.SearchRepository
 import com.volokhinaleksey.movie_club.repository.search.SearchRepositoryImpl
-import com.volokhinaleksey.movie_club.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.viewmodel.CategoryMoviesViewModel
 import com.volokhinaleksey.movie_club.viewmodel.DetailsViewModel
 import com.volokhinaleksey.movie_club.viewmodel.FavoriteViewModel
-import com.volokhinaleksey.movie_club.viewmodel.MainViewModel
 import com.volokhinaleksey.movie_club.viewmodel.MovieActorViewModel
 import com.volokhinaleksey.movie_club.viewmodel.SearchViewModel
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -78,7 +73,7 @@ val network = module {
      * Providing a dependency for ApiHolder
      */
 
-    single<ApiHolder> { MovieTMBDHolder(get()) }
+    single<CoreApi> { MovieTMBDCore(get()) }
 
     /**
      * Providing a dependency for the gson converter
@@ -120,10 +115,18 @@ val network = module {
 }
 
 val homeScreen = module {
-    factory<HomeDataSource<CategoryMoviesTMDB>> { RemoteHomeDataSource(get()) }
-    factory<LocalHomeDataSource> { LocalHomeDataSourceImpl(get()) }
-    factory<HomeRepository> { HomeRepositoryImpl(get(), get()) }
-    viewModel { MainViewModel(get()) }
+    factory<com.volokhinaleksey.movie_club.data.repository.HomeRepository> {
+        com.volokhinaleksey.movie_club.data.repository.HomeRepositoryImpl(
+            get()
+        )
+    }
+    factory<com.volokhinaleksey.movie_club.data.repository.HomeDatabaseRepository> {
+        com.volokhinaleksey.movie_club.data.repository.HomeDatabaseRepositoryImpl(
+            get()
+        )
+    }
+    factory<HomeInteractor> { HomeInteractorImpl(get(), get()) }
+    viewModel { HomeViewModel(get()) }
 }
 
 val detailsScreen = module {

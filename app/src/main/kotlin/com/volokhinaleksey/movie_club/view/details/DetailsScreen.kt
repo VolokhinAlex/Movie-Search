@@ -22,6 +22,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -37,7 +41,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,6 +52,13 @@ import coil.compose.SubcomposeAsyncImage
 import com.volokhinaleksey.movie_club.R
 import com.volokhinaleksey.movie_club.model.state.MovieState
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.uikit.theme.CARD_WIDTH_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_PAGING
+import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.TransparentColor
+import com.volokhinaleksey.movie_club.uikit.widgets.MovieCard
 import com.volokhinaleksey.movie_club.utils.convertStringFullDateToOnlyYear
 import com.volokhinaleksey.movie_club.utils.timeToFormatHoursAndMinutes
 import com.volokhinaleksey.movie_club.view.LanguageQuery
@@ -56,15 +66,8 @@ import com.volokhinaleksey.movie_club.view.MOVIE_DATA_KEY
 import com.volokhinaleksey.movie_club.view.actor_details.ARG_ACTOR_ID
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
 import com.volokhinaleksey.movie_club.view.navigation.navigate
-import com.volokhinaleksey.movie_club.view.theme.CARD_WIDTH_SIZE
-import com.volokhinaleksey.movie_club.view.theme.DETAILS_PRIMARY_PAGING
-import com.volokhinaleksey.movie_club.view.theme.DETAILS_PRIMARY_SIZE
-import com.volokhinaleksey.movie_club.view.theme.PrimaryColor80
-import com.volokhinaleksey.movie_club.view.theme.TITLE_SIZE
-import com.volokhinaleksey.movie_club.view.theme.TransparentColor
 import com.volokhinaleksey.movie_club.view.widgets.ErrorMessage
 import com.volokhinaleksey.movie_club.view.widgets.LoadingProgressBar
-import com.volokhinaleksey.movie_club.view.widgets.MovieCard
 import com.volokhinaleksey.movie_club.viewmodel.DetailsViewModel
 import org.koin.androidx.compose.koinViewModel
 import java.text.DecimalFormat
@@ -239,9 +242,10 @@ private fun CenterDetailsScreen(
             modifier = Modifier.padding(end = 5.dp),
             color = Color.White, fontSize = DETAILS_PRIMARY_SIZE
         )
-        Image(
-            painter = painterResource(id = R.drawable.ic_baseline_star_rate_24),
+        Icon(
+            imageVector = Icons.Default.Star,
             contentDescription = "icon_rating",
+            tint = Color(0xFFFFC006),
             modifier = Modifier
                 .padding(end = 15.dp)
                 .size(22.dp)
@@ -387,7 +391,7 @@ private fun MovieTrailer(movieDetailsData: MovieUI) {
                     startActivity(context, trailerIntent, null)
                 }) {
             Image(
-                painter = painterResource(id = R.drawable.play_video),
+                imageVector = Icons.Default.PlayArrow,
                 contentDescription = "Play Video",
                 modifier = Modifier
                     .align(Center)
@@ -424,14 +428,16 @@ private fun MovieFavorite(
         contentAlignment = Center
     ) {
         if (isFavorite.value) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_baseline_favorite_24),
-                contentDescription = ""
+            Icon(
+                imageVector = Icons.Default.Favorite,
+                contentDescription = "",
+                tint = Color(0xFFDA3C3C)
             )
         } else {
-            Image(
-                painter = painterResource(id = R.drawable.ic_baseline_favorite_border_24),
-                contentDescription = ""
+            Icon(
+                imageVector = Icons.Default.FavoriteBorder,
+                contentDescription = "",
+                tint = Color(0xFFDA3C3C)
             )
         }
     }
@@ -486,7 +492,10 @@ private fun SimilarMovies(
                         .padding(end = 10.dp)
                         .clickable {
                             val detailsMovieBundle = Bundle()
-                            detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, lazySimilarMovies[index])
+                            detailsMovieBundle.putParcelable(
+                                MOVIE_DATA_KEY,
+                                lazySimilarMovies[index]
+                            )
                             navController.navigate(
                                 ScreenState.DetailsScreen.route,
                                 detailsMovieBundle

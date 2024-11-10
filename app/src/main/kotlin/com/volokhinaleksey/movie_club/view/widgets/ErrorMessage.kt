@@ -14,10 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.volokhinaleksey.movie_club.R
-import com.volokhinaleksey.movie_club.view.theme.ERROR_MESSAGE_BUTTON_SIZE
-import com.volokhinaleksey.movie_club.view.theme.ERROR_MESSAGE_TITLE_SIZE
-import com.volokhinaleksey.movie_club.view.theme.PrimaryColor80
-import com.volokhinaleksey.movie_club.view.theme.RedDark40
+import com.volokhinaleksey.movie_club.uikit.theme.ERROR_MESSAGE_BUTTON_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.ERROR_MESSAGE_TITLE_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.RedDark40
 
 /**
  * The widget is for show an error message

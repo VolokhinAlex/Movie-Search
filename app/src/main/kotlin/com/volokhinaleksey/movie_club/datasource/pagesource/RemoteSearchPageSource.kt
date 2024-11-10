@@ -3,7 +3,7 @@ package com.volokhinaleksey.movie_club.datasource.pagesource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
-import com.volokhinaleksey.movie_club.network.ApiHolder
+import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import com.volokhinaleksey.movie_club.view.LanguageQuery
 import retrofit2.HttpException
 import java.io.IOException
@@ -15,7 +15,7 @@ import java.io.IOException
  */
 
 class RemoteSearchPageSource(
-    private val apiHolder: ApiHolder,
+    private val apiHolder: CoreApi,
     private val query: String,
 ) : PagingSource<Int, MovieDataTMDB>() {
 

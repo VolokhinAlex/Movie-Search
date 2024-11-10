@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
-import com.volokhinaleksey.movie_club.view.theme.CARD_HEIGHT_SIZE
-import com.volokhinaleksey.movie_club.view.theme.CARD_WIDTH_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.CARD_HEIGHT_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.CARD_WIDTH_SIZE
 
 /**
  * The method creates a list in the form of a grid, which is filled with movies
@@ -38,7 +38,7 @@ fun ListMoviesPagination(
     ) {
         items(lazyMovieItems.itemCount) { item ->
             lazyMovieItems[item]?.let { movieData ->
-                MovieCard(
+                com.volokhinaleksey.movie_club.uikit.widgets.MovieCard(
                     modifier = Modifier
                         .size(width = CARD_WIDTH_SIZE, height = CARD_HEIGHT_SIZE)
                         .padding(bottom = 10.dp)

@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -19,13 +18,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.volokhinaleksey.movie_club.home.ui.screen.HomeScreen
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.network.utils.NetworkStatus
+import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor70
 import com.volokhinaleksey.movie_club.utils.parcelable
 import com.volokhinaleksey.movie_club.view.actor_details.ARG_ACTOR_ID
 import com.volokhinaleksey.movie_club.view.actor_details.ActorDetailsScreen
@@ -33,11 +35,10 @@ import com.volokhinaleksey.movie_club.view.category_movies.ARG_CATEGORY_NAME_DAT
 import com.volokhinaleksey.movie_club.view.category_movies.CategoryMoviesScreen
 import com.volokhinaleksey.movie_club.view.details.DetailsScreen
 import com.volokhinaleksey.movie_club.view.favorite.FavoriteScreen
-import com.volokhinaleksey.movie_club.view.home.HomeScreen
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
+import com.volokhinaleksey.movie_club.view.navigation.navigate
 import com.volokhinaleksey.movie_club.view.search.SearchScreen
 import com.volokhinaleksey.movie_club.view.splash.SplashScreen
-import com.volokhinaleksey.movie_club.view.theme.PrimaryColor70
 import org.koin.android.ext.android.inject
 
 const val MOVIE_DATA_KEY = "Movie Data"
@@ -72,7 +73,20 @@ class MainActivity : ComponentActivity() {
                     SplashScreen(navController = navController)
                 }
                 composable(route = ScreenState.HomeScreen.route) {
-                    HomeScreen(navController = navController, networkStatus = networkStatus)
+                    HomeScreen(
+                        showMovieDetails = {
+                            navController.navigate(
+                                ScreenState.DetailsScreen.route,
+                                bundleOf(MOVIE_DATA_KEY to it)
+                            )
+                        },
+                        showMoreMovies = {
+                            navController.navigate(
+                                ScreenState.CategoryMoviesScreen.route,
+                                bundleOf(ARG_CATEGORY_NAME_DATA to it)
+                            )
+                        }
+                    )
                 }
                 composable(route = ScreenState.DetailsScreen.route) {
                     val movieDetailsData = it.arguments?.parcelable<MovieUI>(MOVIE_DATA_KEY)
@@ -117,7 +131,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun BottomNavigationBar(

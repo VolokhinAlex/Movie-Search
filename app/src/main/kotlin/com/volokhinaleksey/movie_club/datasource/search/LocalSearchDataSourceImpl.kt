@@ -3,9 +3,9 @@ package com.volokhinaleksey.movie_club.datasource.search
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.volokhinaleksey.movie_club.database.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.datasource.pagesource.LocalSearchPageSource
 import com.volokhinaleksey.movie_club.model.local.LocalMovieData
-import com.volokhinaleksey.movie_club.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.utils.mapLocalMovieToMovieEntity
 import kotlinx.coroutines.flow.Flow
 

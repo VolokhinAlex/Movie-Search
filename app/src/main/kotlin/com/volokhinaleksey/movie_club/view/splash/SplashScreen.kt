@@ -22,8 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.volokhinaleksey.movie_club.R
+import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
-import com.volokhinaleksey.movie_club.view.theme.PrimaryColor80
 import kotlinx.coroutines.delay
 
 /**
@@ -58,23 +58,20 @@ fun SplashScreen(navController: NavController) {
 
 @Composable
 fun Splash(alpha: Float) {
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(PrimaryColor80),
         contentAlignment = Alignment.Center
     ) {
-
-        Icon(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Application logotype",
-            modifier = Modifier
-                .size(200.dp)
-                .alpha(alpha = alpha),
-            tint = Color.White
-        )
-
+//        Icon(
+//            painter = painterResource(id = R.drawable.logo),
+//            contentDescription = "Application logotype",
+//            modifier = Modifier
+//                .size(200.dp)
+//                .alpha(alpha = alpha),
+//            tint = Color.White
+//        )
     }
 
 }

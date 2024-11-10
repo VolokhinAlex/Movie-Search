@@ -2,8 +2,8 @@ package com.volokhinaleksey.movie_club.datasource.pagesource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.volokhinaleksey.movie_club.database.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.model.local.LocalMovieData
-import com.volokhinaleksey.movie_club.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.utils.mapMovieEntityToLocalMovieData
 import kotlinx.coroutines.delay
 

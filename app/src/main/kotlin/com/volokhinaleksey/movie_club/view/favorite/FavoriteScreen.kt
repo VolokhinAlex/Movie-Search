@@ -27,16 +27,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.volokhinaleksey.movie_club.model.state.MovieState
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.uikit.theme.CARD_HEIGHT_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.CARD_WIDTH_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
+import com.volokhinaleksey.movie_club.uikit.widgets.MovieCard
 import com.volokhinaleksey.movie_club.view.MOVIE_DATA_KEY
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
 import com.volokhinaleksey.movie_club.view.navigation.navigate
-import com.volokhinaleksey.movie_club.view.theme.CARD_HEIGHT_SIZE
-import com.volokhinaleksey.movie_club.view.theme.CARD_WIDTH_SIZE
-import com.volokhinaleksey.movie_club.view.theme.PrimaryColor80
-import com.volokhinaleksey.movie_club.view.theme.TITLE_SIZE
 import com.volokhinaleksey.movie_club.view.widgets.ErrorMessage
 import com.volokhinaleksey.movie_club.view.widgets.LoadingProgressBar
-import com.volokhinaleksey.movie_club.view.widgets.MovieCard
 import com.volokhinaleksey.movie_club.viewmodel.FavoriteViewModel
 import org.koin.androidx.compose.koinViewModel
 

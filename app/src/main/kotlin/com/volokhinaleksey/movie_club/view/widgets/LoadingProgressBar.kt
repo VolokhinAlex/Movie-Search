@@ -7,8 +7,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.volokhinaleksey.movie_club.view.theme.BlueDark40
-import com.volokhinaleksey.movie_club.view.theme.PrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.BlueDark40
+import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
 
 @Composable
 fun LoadingProgressBar() {

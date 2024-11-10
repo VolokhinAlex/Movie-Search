@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -20,18 +18,11 @@ android {
         versionName = "1.0"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildFeatures.compose = true
     buildFeatures.buildConfig = true
-
-    buildTypes.forEach {
-        val properties = Properties().apply {
-            load(project.rootProject.file("apikey.properties").inputStream())
-        }
-        val apiKey = properties.getProperty("movie_tmdb_api_key", "")
-        it.buildConfigField("String", "MOVIE_API_KEY", "\"$apiKey\"")
-    }
 
     buildTypes {
         getByName("release") {
@@ -51,6 +42,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:model"))
+    implementation(project(":feature:home"))
+    implementation(project(":core:movies-api"))
+    implementation(project(":core:database"))
+    implementation(project(":core:uikit"))
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
+
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.common)
 

@@ -5,11 +5,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.volokhinaleksey.movie_club.datasource.pagesource.RemoteCategoryPageSource
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
-import com.volokhinaleksey.movie_club.network.ApiHolder
+import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import kotlinx.coroutines.flow.Flow
 
 class RemoteCategoryDataSource(
-    private val apiHolder: ApiHolder
+    private val apiHolder: CoreApi
 ) : CategoryDataSource<PagingData<MovieDataTMDB>> {
 
     override fun getCategoryMovies(categoryMovies: String): Flow<PagingData<MovieDataTMDB>> {

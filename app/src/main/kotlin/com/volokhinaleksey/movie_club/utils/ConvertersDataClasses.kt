@@ -1,43 +1,21 @@
 package com.volokhinaleksey.movie_club.utils
 
-import com.volokhinaleksey.movie_club.model.local.ActorEntity
+import com.volokhinaleksey.movie_club.database.room.entity.ActorEntity
+import com.volokhinaleksey.movie_club.database.room.entity.MovieEntity
+import com.volokhinaleksey.movie_club.database.room.entity.TrailerEntity
 import com.volokhinaleksey.movie_club.model.local.LocalActorData
 import com.volokhinaleksey.movie_club.model.local.LocalMovieData
 import com.volokhinaleksey.movie_club.model.local.LocalTrailerData
-import com.volokhinaleksey.movie_club.model.local.MovieEntity
-import com.volokhinaleksey.movie_club.model.local.TrailerEntity
 import com.volokhinaleksey.movie_club.model.remote.ActorDTO
 import com.volokhinaleksey.movie_club.model.remote.CastDTO
-import com.volokhinaleksey.movie_club.model.remote.CategoryMoviesTMDB
 import com.volokhinaleksey.movie_club.model.remote.CreditsDTO
 import com.volokhinaleksey.movie_club.model.remote.GenresDTO
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.model.remote.TrailerDTO
-import com.volokhinaleksey.movie_club.model.remote.VideosDTO
 import com.volokhinaleksey.movie_club.model.ui.ActorUI
-import com.volokhinaleksey.movie_club.model.ui.CategoryMovieUI
 import com.volokhinaleksey.movie_club.model.ui.GenreUI
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.model.ui.TrailerUI
-
-/**
- * Auxiliary methods for convenient conversion of one data type to another
- */
-
-
-fun mapMovieCategoryMoviesTMDBToCategoryMovieUI(
-    category: String,
-    categoryMoviesTMDB: CategoryMoviesTMDB
-): CategoryMovieUI {
-    return CategoryMovieUI(
-        category = category,
-        movie = categoryMoviesTMDB.results.map {
-            mapMovieDataTMDBToMovieUI(
-                moviesTMDB = it,
-                category = category
-            )
-        })
-}
 
 fun mapMovieDataTMDBToMovieUI(moviesTMDB: MovieDataTMDB, category: String): MovieUI {
     return MovieUI(
@@ -449,64 +427,6 @@ fun convertMovieEntityToListMovieDataRoom(entity: List<MovieEntity>): List<Local
             voteCount = it.voteCount
         )
     }
-
-fun convertMovieDtoToMovieEntity(moviesTMDB: MovieDataTMDB, category: String): MovieEntity =
-    MovieEntity(
-        movieId = moviesTMDB.id,
-        movieTitle = moviesTMDB.title,
-        movieFavorite = false,
-        moviePoster = moviesTMDB.poster_path,
-        movieReleaseDate = moviesTMDB.release_date,
-        movieRating = moviesTMDB.vote_average,
-        runtime = moviesTMDB.runtime,
-        genres = moviesTMDB.genres?.joinToString { it.name.orEmpty() } ?: "",
-        overview = moviesTMDB.overview,
-        category = category,
-        adult = moviesTMDB.adult,
-        imdbId = moviesTMDB.imdb_id,
-        backdropPath = moviesTMDB.backdrop_path,
-        originalLanguage = moviesTMDB.original_language,
-        voteCount = moviesTMDB.vote_count
-    )
-
-fun convertMovieEntityToMovieDto(
-    movie: LocalMovieData,
-    actors: List<ActorEntity>,
-    trailer: List<TrailerEntity>
-): MovieDataTMDB =
-    MovieDataTMDB(
-        adult = movie.adult,
-        backdrop_path = movie.backdropPath,
-        poster_path = movie.moviePoster,
-        budget = null,
-        id = movie.movieId,
-        imdb_id = movie.imdbId,
-        genres = movie.genres.split(",").map { GenresDTO(id = 0, name = it) },
-        original_language = movie.originalLanguage,
-        overview = movie.overview,
-        title = movie.movieTitle,
-        vote_count = movie.voteCount,
-        vote_average = movie.movieRating,
-        release_date = movie.movieReleaseDate,
-        production_countries = null,
-        runtime = movie.runtime,
-        credits = CreditsDTO(cast = actors.map {
-            CastDTO(
-                id = it.movieId,
-                name = it.name,
-                profile_path = it.profilePath,
-                character = it.character
-            )
-        }),
-        videos = VideosDTO(results = trailer.map {
-            TrailerDTO(
-                id = it.id,
-                name = it.name,
-                key = it.key,
-                type = it.type
-            )
-        })
-    )
 
 fun convertMovieRoomToMovieDto(localMovieData: LocalMovieData): MovieDataTMDB {
     return MovieDataTMDB(

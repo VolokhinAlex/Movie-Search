@@ -1,14 +1,14 @@
 package com.volokhinaleksey.movie_club.datasource.actor
 
 import com.volokhinaleksey.movie_club.model.remote.ActorDTO
-import com.volokhinaleksey.movie_club.network.ApiHolder
+import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 
 class RemoteActorDataSource(
-    private val apiHolder: ApiHolder
+    private val coreApi: CoreApi
 ) : ActorDataSource<ActorDTO> {
 
     override suspend fun getMovieActorDetails(personId: Long, language: String): ActorDTO {
-        return apiHolder.moviesApi.getActorData(personId = personId, language = language)
+        return coreApi.moviesApi.getActorData(personId = personId, language = language)
     }
 
 }

@@ -1,7 +1,7 @@
 package com.volokhinaleksey.movie_club.datasource.actor
 
+import com.volokhinaleksey.movie_club.database.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.model.local.LocalActorData
-import com.volokhinaleksey.movie_club.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.utils.mapActorEntityToLocalActorData
 import com.volokhinaleksey.movie_club.utils.mapLocalActorDataToActorEntity
 
