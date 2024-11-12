@@ -8,7 +8,7 @@ import com.volokhinaleksey.movie_club.moviesapi.CoreApi
  * Implementation of the interface for getting data from Remote Server
  */
 
-class HomeRepositoryImpl(
+class HomeApiRepository(
     private val apiHolder: CoreApi
 ) : HomeRepository {
 

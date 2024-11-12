@@ -1,29 +1,29 @@
-package com.volokhinaleksey.movie_club.datasource.details
+package com.volokhinaleksey.movie_club.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.volokhinaleksey.movie_club.datasource.category.RemoteCategoryDataSource.Companion.CATEGORY_PAGE_SIZE
-import com.volokhinaleksey.movie_club.datasource.pagesource.RemoteSimilarPageSource
-import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
+import com.volokhinaleksey.movie_club.data.RemoteSimilarPageSource
+import com.volokhinaleksey.movie_club.data.mappers.toMovieUI
+import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import kotlinx.coroutines.flow.Flow
 
-class RemoteDetailsDataSource(
+class DetailsApiRepository(
     private val apiHolder: CoreApi
-) : DetailsDataSource<MovieDataTMDB> {
-    override suspend fun getMovieDetails(movieId: Int, language: String): MovieDataTMDB {
+) : DetailsRepository {
+    override suspend fun getMovieDetails(movieId: Int, language: String): MovieUI {
         return apiHolder.moviesApi.getMovieDetails(
             movieId = movieId,
             language = language,
             extraRequests = "credits,videos"
-        )
+        ).toMovieUI()
     }
 
-    override fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieDataTMDB>> {
+    override fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieUI>> {
         return Pager(
             config = PagingConfig(
-                pageSize = CATEGORY_PAGE_SIZE,
+                pageSize = 5,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {

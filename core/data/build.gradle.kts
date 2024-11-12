@@ -33,4 +33,8 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:movies-api"))
     implementation(project(":core:database"))
+
+    implementation(libs.kotlinx.coroutines.core)
+
+    implementation(libs.androidx.paging.runtime)
 }

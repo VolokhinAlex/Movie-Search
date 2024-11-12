@@ -43,12 +43,14 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
-    implementation(project(":feature:home"))
     implementation(project(":core:movies-api"))
     implementation(project(":core:database"))
     implementation(project(":core:uikit"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
+
+    implementation(project(":feature:home"))
+    implementation(project(":feature:details"))
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.common)

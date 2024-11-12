@@ -53,4 +53,6 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.viewmodel)
     implementation(libs.compose.coil)
+
+    implementation(libs.kotlinx.coroutines.core)
 }

@@ -17,6 +17,8 @@ import androidx.paging.compose.LazyPagingItems
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_HEIGHT_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_WIDTH_SIZE
+import com.volokhinaleksey.movie_club.uikit.widgets.ErrorMessage
+import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 
 /**
  * The method creates a list in the form of a grid, which is filled with movies

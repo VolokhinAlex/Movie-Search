@@ -1,4 +1,4 @@
-package com.volokhinaleksey.movie_club.view.widgets
+package com.volokhinaleksey.movie_club.uikit.widgets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

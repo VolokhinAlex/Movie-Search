@@ -30,13 +30,13 @@ class HomeViewModel(
     fun loadAllCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             val language = "en-EN"
-            val isOnline = true
+            val isLocalSource = false
             launch {
                 val result = homeInteractor.getMovies(
                     categoryId = MovieCategory.Popular.id,
                     language = language,
                     page = 1,
-                    isLocalSource = isOnline
+                    isLocalSource = isLocalSource
                 )
                 if (result is MovieCategoryState.Success) { _popularMovies.emit(result.data) }
             }
@@ -46,7 +46,7 @@ class HomeViewModel(
                     categoryId = MovieCategory.NowPlaying.id,
                     language = language,
                     page = 1,
-                    isLocalSource = isOnline
+                    isLocalSource = isLocalSource
                 )
                 if (result is MovieCategoryState.Success) { _nowPlayingMovies.emit(result.data) }
             }
@@ -56,7 +56,7 @@ class HomeViewModel(
                     categoryId = MovieCategory.Upcoming.id,
                     language = language,
                     page = 1,
-                    isLocalSource = isOnline
+                    isLocalSource = isLocalSource
                 )
                 if (result is MovieCategoryState.Success) { _topRatedMovies.emit(result.data) }
             }
@@ -66,7 +66,7 @@ class HomeViewModel(
                     categoryId = MovieCategory.TopRated.id,
                     language = language,
                     page = 1,
-                    isLocalSource = isOnline
+                    isLocalSource = isLocalSource
                 )
                 if (result is MovieCategoryState.Success) { _upcomingMovies.emit(result.data) }
             }

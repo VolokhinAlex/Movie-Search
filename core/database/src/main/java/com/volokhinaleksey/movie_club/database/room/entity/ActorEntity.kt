@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.volokhinaleksey.movie_club.model.remote.CastDTO
 import com.volokhinaleksey.movie_club.model.ui.ActorUI
 
 @Entity(
@@ -33,11 +32,17 @@ data class ActorEntity(
     val character: String?
 )
 
-fun ActorEntity.toCastDTO(): CastDTO {
-    return CastDTO(
-        id = movieId,
+fun ActorUI.asEntity(): ActorEntity {
+    return ActorEntity(
+        actorId = actorId,
+        movieId = movieId,
+        biography = biography,
+        birthday = birthday,
+        imdbId = imdbId,
         name = name,
-        profile_path = profilePath,
+        placeOfBirth = placeOfBirth,
+        popularity = popularity,
+        profilePath = profilePath,
         character = character
     )
 }

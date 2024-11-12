@@ -24,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.volokhinaleksey.movie_club.details.ui.DetailsScreen
 import com.volokhinaleksey.movie_club.home.ui.screen.HomeScreen
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.network.utils.NetworkStatus
@@ -33,7 +34,6 @@ import com.volokhinaleksey.movie_club.view.actor_details.ARG_ACTOR_ID
 import com.volokhinaleksey.movie_club.view.actor_details.ActorDetailsScreen
 import com.volokhinaleksey.movie_club.view.category_movies.ARG_CATEGORY_NAME_DATA
 import com.volokhinaleksey.movie_club.view.category_movies.CategoryMoviesScreen
-import com.volokhinaleksey.movie_club.view.details.DetailsScreen
 import com.volokhinaleksey.movie_club.view.favorite.FavoriteScreen
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
 import com.volokhinaleksey.movie_club.view.navigation.navigate
@@ -92,9 +92,20 @@ class MainActivity : ComponentActivity() {
                     val movieDetailsData = it.arguments?.parcelable<MovieUI>(MOVIE_DATA_KEY)
                     movieDetailsData?.let { data ->
                         DetailsScreen(
-                            movie = data,
-                            navController = navController,
-                            networkStatus = networkStatus
+                            movieUI = data,
+                            onSimilarMovieDetails = {
+                                navController.navigate(
+                                    ScreenState.DetailsScreen.route,
+                                    bundleOf(MOVIE_DATA_KEY to it)
+                                )
+                            },
+                            onActorDetails = {
+                                navController.navigate(
+                                    ScreenState.ActorDetailsScreen.route,
+                                    bundleOf(ARG_ACTOR_ID to it)
+                                )
+                            },
+                            onClosePage = { navController.popBackStack() }
                         )
                     }
                 }

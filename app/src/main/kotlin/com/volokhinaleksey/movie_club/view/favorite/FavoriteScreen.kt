@@ -35,8 +35,8 @@ import com.volokhinaleksey.movie_club.uikit.widgets.MovieCard
 import com.volokhinaleksey.movie_club.view.MOVIE_DATA_KEY
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
 import com.volokhinaleksey.movie_club.view.navigation.navigate
-import com.volokhinaleksey.movie_club.view.widgets.ErrorMessage
-import com.volokhinaleksey.movie_club.view.widgets.LoadingProgressBar
+import com.volokhinaleksey.movie_club.uikit.widgets.ErrorMessage
+import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 import com.volokhinaleksey.movie_club.viewmodel.FavoriteViewModel
 import org.koin.androidx.compose.koinViewModel
 

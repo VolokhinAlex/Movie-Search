@@ -18,7 +18,7 @@ data class MovieUI(
     val voteCount: Int = 0,
     val voteAverage: Double = 0.0,
     val releaseDate: String = "",
-    val runtime: Int = 0,
+    val runtime: String = "",
     val actors: List<ActorUI> = emptyList(),
     val videos: List<TrailerUI> = emptyList(),
     val favorite: Boolean = false,

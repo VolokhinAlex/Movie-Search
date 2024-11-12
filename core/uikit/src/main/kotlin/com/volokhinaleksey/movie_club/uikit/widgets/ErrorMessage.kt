@@ -1,4 +1,4 @@
-package com.volokhinaleksey.movie_club.view.widgets
+package com.volokhinaleksey.movie_club.uikit.widgets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.volokhinaleksey.movie_club.R
+import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.ERROR_MESSAGE_BUTTON_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.ERROR_MESSAGE_TITLE_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80

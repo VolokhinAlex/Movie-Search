@@ -36,8 +36,8 @@ import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
 import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
 import com.volokhinaleksey.movie_club.view.LanguageQuery
-import com.volokhinaleksey.movie_club.view.widgets.ErrorMessage
-import com.volokhinaleksey.movie_club.view.widgets.LoadingProgressBar
+import com.volokhinaleksey.movie_club.uikit.widgets.ErrorMessage
+import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 import com.volokhinaleksey.movie_club.viewmodel.MovieActorViewModel
 import org.koin.androidx.compose.koinViewModel
 

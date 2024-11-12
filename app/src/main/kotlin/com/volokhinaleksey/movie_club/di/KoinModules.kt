@@ -5,6 +5,10 @@ import androidx.room.Room
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.volokhinaleksey.movie_club.data.repository.DetailsApiRepository
+import com.volokhinaleksey.movie_club.data.repository.DetailsDatabaseRepository
+import com.volokhinaleksey.movie_club.data.repository.DetailsDatabaseRepositoryImpl
+import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
 import com.volokhinaleksey.movie_club.database.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.datasource.actor.ActorDataSource
 import com.volokhinaleksey.movie_club.datasource.actor.LocalActorDataSource
@@ -14,16 +18,15 @@ import com.volokhinaleksey.movie_club.datasource.category.CategoryDataSource
 import com.volokhinaleksey.movie_club.datasource.category.LocalCategoryDataSource
 import com.volokhinaleksey.movie_club.datasource.category.LocalCategoryDataSourceImpl
 import com.volokhinaleksey.movie_club.datasource.category.RemoteCategoryDataSource
-import com.volokhinaleksey.movie_club.datasource.details.DetailsDataSource
-import com.volokhinaleksey.movie_club.datasource.details.LocalDetailsDataSource
-import com.volokhinaleksey.movie_club.datasource.details.LocalDetailsDataSourceImpl
-import com.volokhinaleksey.movie_club.datasource.details.RemoteDetailsDataSource
 import com.volokhinaleksey.movie_club.datasource.favorite.FavoriteDataSource
 import com.volokhinaleksey.movie_club.datasource.favorite.LocalFavoriteDataSource
 import com.volokhinaleksey.movie_club.datasource.search.LocalSearchDataSource
 import com.volokhinaleksey.movie_club.datasource.search.LocalSearchDataSourceImpl
 import com.volokhinaleksey.movie_club.datasource.search.RemoteSearchDataSource
 import com.volokhinaleksey.movie_club.datasource.search.SearchDataSource
+import com.volokhinaleksey.movie_club.details.viewmodel.DetailsViewModel
+import com.volokhinaleksey.movie_club.domain.DetailsInteractor
+import com.volokhinaleksey.movie_club.domain.DetailsInteractorImpl
 import com.volokhinaleksey.movie_club.domain.HomeInteractor
 import com.volokhinaleksey.movie_club.domain.HomeInteractorImpl
 import com.volokhinaleksey.movie_club.home.viewmodel.HomeViewModel
@@ -39,14 +42,11 @@ import com.volokhinaleksey.movie_club.repository.actor.MovieActorRepository
 import com.volokhinaleksey.movie_club.repository.actor.MovieActorRepositoryImpl
 import com.volokhinaleksey.movie_club.repository.category.CategoryRepository
 import com.volokhinaleksey.movie_club.repository.category.CategoryRepositoryImpl
-import com.volokhinaleksey.movie_club.repository.details.DetailsRepository
-import com.volokhinaleksey.movie_club.repository.details.DetailsRepositoryImpl
 import com.volokhinaleksey.movie_club.repository.favorite.FavoriteRepository
 import com.volokhinaleksey.movie_club.repository.favorite.FavoriteRepositoryImpl
 import com.volokhinaleksey.movie_club.repository.search.SearchRepository
 import com.volokhinaleksey.movie_club.repository.search.SearchRepositoryImpl
 import com.volokhinaleksey.movie_club.viewmodel.CategoryMoviesViewModel
-import com.volokhinaleksey.movie_club.viewmodel.DetailsViewModel
 import com.volokhinaleksey.movie_club.viewmodel.FavoriteViewModel
 import com.volokhinaleksey.movie_club.viewmodel.MovieActorViewModel
 import com.volokhinaleksey.movie_club.viewmodel.SearchViewModel
@@ -116,7 +116,7 @@ val network = module {
 
 val homeScreen = module {
     factory<com.volokhinaleksey.movie_club.data.repository.HomeRepository> {
-        com.volokhinaleksey.movie_club.data.repository.HomeRepositoryImpl(
+        com.volokhinaleksey.movie_club.data.repository.HomeApiRepository(
             get()
         )
     }
@@ -130,9 +130,9 @@ val homeScreen = module {
 }
 
 val detailsScreen = module {
-    factory<LocalDetailsDataSource> { LocalDetailsDataSourceImpl(get()) }
-    factory<DetailsDataSource<MovieDataTMDB>> { RemoteDetailsDataSource(get()) }
-    factory<DetailsRepository> { DetailsRepositoryImpl(get(), get()) }
+    factory<DetailsDatabaseRepository> { DetailsDatabaseRepositoryImpl(get()) }
+    factory<DetailsRepository> { DetailsApiRepository(get()) }
+    factory<DetailsInteractor> { DetailsInteractorImpl(get(), get()) }
     viewModel { DetailsViewModel(get()) }
 }
 

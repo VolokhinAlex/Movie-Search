@@ -31,7 +31,7 @@ data class MovieEntity(
     val movieReleaseDate: String?,
     @ColumnInfo(name = "movie_rating")
     val movieRating: Double?,
-    val runtime: Int?,
+    val runtime: String,
     val genres: String,
     val overview: String?,
     val category: String,
@@ -84,7 +84,7 @@ fun MovieEntity.toMovieUI(
         voteCount = voteCount ?: 0,
         voteAverage = movieRating ?: 0.0,
         releaseDate = movieReleaseDate.orEmpty(),
-        runtime = runtime ?: 0,
+        runtime = runtime,
         favorite = movieFavorite ?: false,
         actors = actors.map { it.toActorUI() },
         videos = trailers.map { it.toTrailerUI() }

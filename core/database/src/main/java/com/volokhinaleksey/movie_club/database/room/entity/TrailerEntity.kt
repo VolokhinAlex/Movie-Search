@@ -3,7 +3,6 @@ package com.volokhinaleksey.movie_club.database.room.entity
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.volokhinaleksey.movie_club.model.remote.TrailerDTO
 import com.volokhinaleksey.movie_club.model.ui.TrailerUI
 
 @Entity(
@@ -22,8 +21,13 @@ data class TrailerEntity(
     val type: String?,
 )
 
-fun TrailerEntity.toTrailerDTO(): TrailerDTO {
-    return TrailerDTO(name = name, key = key, type = type, id = id)
+fun TrailerUI.asEntity(movieId: String): TrailerEntity {
+    return TrailerEntity(
+        id = movieId,
+        name = name,
+        key = key,
+        type = type
+    )
 }
 
 fun TrailerEntity.toTrailerUI(): TrailerUI {

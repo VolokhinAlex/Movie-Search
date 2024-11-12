@@ -1,10 +1,11 @@
-package com.volokhinaleksey.movie_club.datasource.pagesource
+package com.volokhinaleksey.movie_club.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.volokhinaleksey.movie_club.database.room.MoviesDataBase
+import com.volokhinaleksey.movie_club.database.room.entity.toMovieUI
 import com.volokhinaleksey.movie_club.model.local.LocalMovieData
-import com.volokhinaleksey.movie_club.utils.mapMovieEntityToLocalMovieData
+import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import kotlinx.coroutines.delay
 
 /**
@@ -16,16 +17,16 @@ import kotlinx.coroutines.delay
 class LocalSimilarPageSource(
     private val db: MoviesDataBase,
     private val movieId: Int,
-) : PagingSource<Int, LocalMovieData>() {
+) : PagingSource<Int, MovieUI>() {
 
-    override fun getRefreshKey(state: PagingState<Int, LocalMovieData>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, MovieUI>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LocalMovieData> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieUI> {
         val page = params.key ?: 0
         return try {
             val similarMovies =
@@ -36,11 +37,9 @@ class LocalSimilarPageSource(
                         movieId = it.similarMovieId.toInt()
                     )
                 }.map {
-                    mapMovieEntityToLocalMovieData(
-                        movieEntity = it,
-                        actors = db.actorDao().getActorsByMovieId(movieId = it.movieId ?: 0),
-                        trailers = db.trailerDao().getTrailerById(movieId = it.movieId ?: 0)
-                    )
+                    val actors = db.actorDao().getActorsByMovieId(movieId = it.movieId ?: 0)
+                    val trailers = db.trailerDao().getTrailerById(movieId = it.movieId ?: 0)
+                    it.toMovieUI(trailers, actors)
                 }
             if (page != 0) delay(1000)
             LoadResult.Page(

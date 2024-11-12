@@ -8,101 +8,11 @@ import com.volokhinaleksey.movie_club.model.local.LocalMovieData
 import com.volokhinaleksey.movie_club.model.local.LocalTrailerData
 import com.volokhinaleksey.movie_club.model.remote.ActorDTO
 import com.volokhinaleksey.movie_club.model.remote.CastDTO
-import com.volokhinaleksey.movie_club.model.remote.CreditsDTO
-import com.volokhinaleksey.movie_club.model.remote.GenresDTO
-import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.model.remote.TrailerDTO
 import com.volokhinaleksey.movie_club.model.ui.ActorUI
 import com.volokhinaleksey.movie_club.model.ui.GenreUI
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.model.ui.TrailerUI
-
-fun mapMovieDataTMDBToMovieUI(moviesTMDB: MovieDataTMDB, category: String): MovieUI {
-    return MovieUI(
-        adult = moviesTMDB.adult ?: false,
-        backdropPath = moviesTMDB.backdrop_path.orEmpty(),
-        posterPath = moviesTMDB.poster_path.orEmpty(),
-        budget = moviesTMDB.budget ?: 0,
-        id = moviesTMDB.id ?: 0,
-        imdbId = moviesTMDB.imdb_id.orEmpty(),
-        genres = moviesTMDB.genres?.map { mapGenreDtoToGenreUI(it) } ?: emptyList(),
-        originalLanguage = moviesTMDB.original_language.orEmpty(),
-        overview = moviesTMDB.overview.orEmpty(),
-        title = moviesTMDB.title.orEmpty(),
-        voteCount = moviesTMDB.vote_count ?: 0,
-        voteAverage = moviesTMDB.vote_average ?: 0.0,
-        releaseDate = moviesTMDB.release_date.orEmpty(),
-        runtime = moviesTMDB.runtime ?: 0,
-        actors = moviesTMDB.credits?.cast?.map { mapCastDtoToActorUI(it) } ?: emptyList(),
-        videos = moviesTMDB.videos?.results?.map { mapTrailerDtoToTrailerUI(it) } ?: emptyList(),
-        category = category
-    )
-}
-
-fun mapMovieDataTMDBToMovieUI(
-    moviesTMDB: MovieDataTMDB,
-    category: String,
-    favorite: Boolean
-): MovieUI {
-    return MovieUI(
-        adult = moviesTMDB.adult ?: false,
-        backdropPath = moviesTMDB.backdrop_path.orEmpty(),
-        posterPath = moviesTMDB.poster_path.orEmpty(),
-        budget = moviesTMDB.budget ?: 0,
-        id = moviesTMDB.id ?: 0,
-        imdbId = moviesTMDB.imdb_id.orEmpty(),
-        genres = moviesTMDB.genres?.map { mapGenreDtoToGenreUI(it) } ?: emptyList(),
-        originalLanguage = moviesTMDB.original_language.orEmpty(),
-        overview = moviesTMDB.overview.orEmpty(),
-        title = moviesTMDB.title.orEmpty(),
-        voteCount = moviesTMDB.vote_count ?: 0,
-        voteAverage = moviesTMDB.vote_average ?: 0.0,
-        releaseDate = moviesTMDB.release_date.orEmpty(),
-        runtime = moviesTMDB.runtime ?: 0,
-        actors = moviesTMDB.credits?.cast?.map { mapCastDtoToActorUI(it) } ?: emptyList(),
-        videos = moviesTMDB.videos?.results?.map { mapTrailerDtoToTrailerUI(it) } ?: emptyList(),
-        category = category,
-        favorite = favorite
-    )
-}
-
-fun mapMovieDataTMDBToMovieUI(moviesTMDB: MovieDataTMDB): MovieUI {
-    return MovieUI(
-        adult = moviesTMDB.adult ?: false,
-        backdropPath = moviesTMDB.backdrop_path.orEmpty(),
-        posterPath = moviesTMDB.poster_path.orEmpty(),
-        budget = moviesTMDB.budget ?: 0,
-        id = moviesTMDB.id ?: 0,
-        imdbId = moviesTMDB.imdb_id.orEmpty(),
-        genres = moviesTMDB.genres?.map { mapGenreDtoToGenreUI(it) } ?: emptyList(),
-        originalLanguage = moviesTMDB.original_language.orEmpty(),
-        overview = moviesTMDB.overview.orEmpty(),
-        title = moviesTMDB.title.orEmpty(),
-        voteCount = moviesTMDB.vote_count ?: 0,
-        voteAverage = moviesTMDB.vote_average ?: 0.0,
-        releaseDate = moviesTMDB.release_date.orEmpty(),
-        runtime = moviesTMDB.runtime ?: 0,
-        actors = moviesTMDB.credits?.cast?.map { mapCastDtoToActorUI(it) } ?: emptyList(),
-        videos = moviesTMDB.videos?.results?.map { mapTrailerDtoToTrailerUI(it) } ?: emptyList(),
-        category = "search"
-    )
-}
-
-fun mapGenreDtoToGenreUI(genresDTO: GenresDTO): GenreUI {
-    return GenreUI(
-        id = genresDTO.id ?: 0,
-        name = genresDTO.name.orEmpty()
-    )
-}
-
-fun mapCastDtoToActorUI(castDTO: CastDTO): ActorUI {
-    return ActorUI(
-        actorId = castDTO.id ?: 0,
-        name = castDTO.name.orEmpty(),
-        character = castDTO.character.orEmpty(),
-        profilePath = castDTO.profile_path.orEmpty()
-    )
-}
 
 fun mapActorDtoToActorUI(actorDTO: ActorDTO): ActorUI {
     return ActorUI(
@@ -118,36 +28,12 @@ fun mapActorDtoToActorUI(actorDTO: ActorDTO): ActorUI {
     )
 }
 
-fun mapTrailerDtoToTrailerUI(trailerDTO: TrailerDTO): TrailerUI {
-    return TrailerUI(
-        id = trailerDTO.id.orEmpty(),
-        name = trailerDTO.name.orEmpty(),
-        key = trailerDTO.key.orEmpty(),
-        type = trailerDTO.type.orEmpty()
-    )
-}
-
 fun mapTrailerDTOToLocalTrailerData(trailer: TrailerDTO): LocalTrailerData {
     return LocalTrailerData(
         id = trailer.id,
         name = trailer.name,
         key = trailer.key,
         type = trailer.type
-    )
-}
-
-fun mapActorDTOToLocalActorData(actor: ActorDTO, movieId: Long): LocalActorData {
-    return LocalActorData(
-        actorId = actor.id ?: 0,
-        movieId = movieId,
-        biography = actor.biography,
-        birthday = actor.birthday,
-        imdbId = actor.imdb_id,
-        name = actor.name,
-        placeOfBirth = actor.place_of_birth,
-        popularity = actor.popularity,
-        profilePath = actor.profile_path,
-        character = ""
     )
 }
 
@@ -178,7 +64,7 @@ fun mapMovieEntityToLocalMovieData(
         moviePoster = movieEntity.moviePoster,
         movieReleaseDate = movieEntity.movieReleaseDate,
         movieRating = movieEntity.movieRating,
-        runtime = movieEntity.runtime,
+        runtime = 0,
         genres = movieEntity.genres,
         overview = movieEntity.overview,
         video = trailers.map { mapTrailerEntityToLocalMovieTrailer(it) },
@@ -200,7 +86,7 @@ fun mapLocalMovieToMovieEntity(movie: LocalMovieData): MovieEntity {
         moviePoster = movie.moviePoster,
         movieReleaseDate = movie.movieReleaseDate,
         movieRating = movie.movieRating,
-        runtime = movie.runtime,
+        runtime = movie.runtime.toString(),
         genres = movie.genres,
         overview = movie.overview,
         category = movie.category,
@@ -209,30 +95,6 @@ fun mapLocalMovieToMovieEntity(movie: LocalMovieData): MovieEntity {
         backdropPath = movie.backdropPath,
         originalLanguage = movie.originalLanguage,
         voteCount = movie.voteCount
-    )
-}
-
-fun mapActorEntityToActorUI(actorEntity: ActorEntity): ActorUI {
-    return ActorUI(
-        actorId = actorEntity.actorId,
-        movieId = actorEntity.movieId ?: 0,
-        birthday = actorEntity.birthday.orEmpty(),
-        biography = actorEntity.biography.orEmpty(),
-        imdbId = actorEntity.imdbId.orEmpty(),
-        name = actorEntity.name.orEmpty(),
-        placeOfBirth = actorEntity.placeOfBirth.orEmpty(),
-        popularity = actorEntity.popularity ?: 0.0,
-        profilePath = actorEntity.profilePath.orEmpty(),
-        character = actorEntity.character.orEmpty()
-    )
-}
-
-fun mapTrailerEntityToTrailerUI(trailerEntity: TrailerEntity): TrailerUI {
-    return TrailerUI(
-        id = trailerEntity.id,
-        name = trailerEntity.name,
-        key = trailerEntity.key.orEmpty(),
-        type = trailerEntity.type.orEmpty()
     )
 }
 
@@ -250,67 +112,11 @@ fun mapLocalMovieToMovieUI(localMovieData: LocalMovieData): MovieUI {
         voteCount = localMovieData.voteCount ?: 0,
         voteAverage = localMovieData.movieRating ?: 0.0,
         releaseDate = localMovieData.movieReleaseDate.orEmpty(),
-        runtime = localMovieData.runtime ?: 0,
+        runtime = localMovieData.runtime.toString(),
         actors = localMovieData.actor.map { mapLocalActorDataToActorUI(it) },
         videos = localMovieData.video.map { mapLocalMovieTrailerToTrailerUI(it) },
         category = localMovieData.category,
         favorite = localMovieData.movieFavorite ?: false
-    )
-}
-
-fun mapMovieDataTMDBToLocalMovieData(movieTMDB: MovieDataTMDB): LocalMovieData {
-    return LocalMovieData(
-        movieId = movieTMDB.id,
-        movieTitle = movieTMDB.title,
-        movieFavorite = false,
-        moviePoster = movieTMDB.poster_path,
-        movieReleaseDate = movieTMDB.release_date,
-        movieRating = movieTMDB.vote_average,
-        runtime = movieTMDB.runtime,
-        genres = movieTMDB.genres?.joinToString { it.name.orEmpty() } ?: "",
-        overview = movieTMDB.overview,
-        video = movieTMDB.videos?.results?.map { mapTrailerDTOToLocalTrailerData(it) }
-            ?: emptyList(),
-        actor = movieTMDB.credits?.cast?.map {
-            mapCastDtoToLocalActorData(
-                actor = it,
-                movieId = movieTMDB.id?.toLong() ?: 0
-            )
-        } ?: emptyList(),
-        category = "search",
-        imdbId = movieTMDB.imdb_id,
-        adult = movieTMDB.adult,
-        backdropPath = movieTMDB.backdrop_path,
-        originalLanguage = movieTMDB.original_language,
-        voteCount = movieTMDB.vote_count
-    )
-}
-
-fun mapMovieDataTMDBToLocalMovieData(movieTMDB: MovieDataTMDB, category: String): LocalMovieData {
-    return LocalMovieData(
-        movieId = movieTMDB.id,
-        movieTitle = movieTMDB.title,
-        movieFavorite = false,
-        moviePoster = movieTMDB.poster_path,
-        movieReleaseDate = movieTMDB.release_date,
-        movieRating = movieTMDB.vote_average,
-        runtime = movieTMDB.runtime,
-        genres = movieTMDB.genres?.joinToString { it.name.orEmpty() } ?: "",
-        overview = movieTMDB.overview,
-        video = movieTMDB.videos?.results?.map { mapTrailerDTOToLocalTrailerData(it) }
-            ?: emptyList(),
-        actor = movieTMDB.credits?.cast?.map {
-            mapCastDtoToLocalActorData(
-                actor = it,
-                movieId = movieTMDB.id?.toLong() ?: 0
-            )
-        } ?: emptyList(),
-        category = category,
-        imdbId = movieTMDB.imdb_id,
-        adult = movieTMDB.adult,
-        backdropPath = movieTMDB.backdrop_path,
-        originalLanguage = movieTMDB.original_language,
-        voteCount = movieTMDB.vote_count
     )
 }
 
@@ -374,18 +180,6 @@ fun mapActorUIToLocalActorData(actorUI: ActorUI): LocalActorData {
     )
 }
 
-fun mapLocalMovieTrailerToTrailerEntity(
-    localTrailerData: LocalTrailerData,
-    movieId: String
-): TrailerEntity {
-    return TrailerEntity(
-        id = movieId,
-        name = localTrailerData.name.orEmpty(),
-        key = localTrailerData.key,
-        type = localTrailerData.type
-    )
-}
-
 fun mapTrailerEntityToLocalMovieTrailer(trailerEntity: TrailerEntity): LocalTrailerData {
     return LocalTrailerData(
         id = trailerEntity.id,
@@ -414,7 +208,7 @@ fun convertMovieEntityToListMovieDataRoom(entity: List<MovieEntity>): List<Local
             moviePoster = it.moviePoster,
             movieReleaseDate = it.movieReleaseDate,
             movieRating = it.movieRating,
-            runtime = it.runtime,
+            runtime = 0,
             genres = it.genres,
             overview = it.overview,
             video = emptyList(),
@@ -427,24 +221,3 @@ fun convertMovieEntityToListMovieDataRoom(entity: List<MovieEntity>): List<Local
             voteCount = it.voteCount
         )
     }
-
-fun convertMovieRoomToMovieDto(localMovieData: LocalMovieData): MovieDataTMDB {
-    return MovieDataTMDB(
-        adult = localMovieData.adult,
-        backdrop_path = localMovieData.backdropPath,
-        poster_path = localMovieData.moviePoster,
-        budget = null,
-        id = localMovieData.movieId,
-        imdb_id = null,
-        genres = localMovieData.genres.split(", ").map { GenresDTO(0, it) },
-        original_language = localMovieData.originalLanguage,
-        overview = localMovieData.overview,
-        title = localMovieData.movieTitle,
-        vote_count = localMovieData.voteCount,
-        vote_average = localMovieData.movieRating,
-        release_date = localMovieData.movieReleaseDate,
-        production_countries = null,
-        runtime = localMovieData.runtime,
-        credits = CreditsDTO(emptyList()), videos = null
-    )
-}
