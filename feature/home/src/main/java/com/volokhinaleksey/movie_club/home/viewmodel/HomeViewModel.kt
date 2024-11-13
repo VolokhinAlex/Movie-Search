@@ -7,25 +7,25 @@ import com.volokhinaleksey.movie_club.model.MovieCategory
 import com.volokhinaleksey.movie_club.model.state.MovieCategoryState
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val homeInteractor: HomeInteractor
 ) : ViewModel() {
     
-    private val _popularMovies = MutableSharedFlow<List<MovieUI>>()
-    val popularMovies: SharedFlow<List<MovieUI>> get() = _popularMovies
+    private val _popularMovies = MutableStateFlow<List<MovieUI>>(emptyList())
+    val popularMovies get() = _popularMovies.asStateFlow()
 
-    private val _nowPlayingMovies = MutableSharedFlow<List<MovieUI>>()
-    val nowPlayingMovies: SharedFlow<List<MovieUI>> get() = _nowPlayingMovies
+    private val _nowPlayingMovies = MutableStateFlow<List<MovieUI>>(emptyList())
+    val nowPlayingMovies get() = _nowPlayingMovies.asStateFlow()
 
-    private val _topRatedMovies = MutableSharedFlow<List<MovieUI>>()
-    val topRatedMovies: SharedFlow<List<MovieUI>> get() = _topRatedMovies
+    private val _topRatedMovies = MutableStateFlow<List<MovieUI>>(emptyList())
+    val topRatedMovies get() = _topRatedMovies.asStateFlow()
 
-    private val _upcomingMovies = MutableSharedFlow<List<MovieUI>>()
-    val upcomingMovies: SharedFlow<List<MovieUI>> get() = _upcomingMovies
+    private val _upcomingMovies = MutableStateFlow<List<MovieUI>>(emptyList())
+    val upcomingMovies get() = _upcomingMovies.asStateFlow()
 
     fun loadAllCategories() {
         viewModelScope.launch(Dispatchers.IO) {
