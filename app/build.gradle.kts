@@ -51,6 +51,7 @@ dependencies {
 
     implementation(project(":feature:home"))
     implementation(project(":feature:details"))
+    implementation(project(":feature:search"))
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.common)

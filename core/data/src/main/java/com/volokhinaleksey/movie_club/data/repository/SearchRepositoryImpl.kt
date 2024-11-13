@@ -1,22 +1,25 @@
-package com.volokhinaleksey.movie_club.datasource.search
+package com.volokhinaleksey.movie_club.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.volokhinaleksey.movie_club.datasource.category.RemoteCategoryDataSource.Companion.CATEGORY_PAGE_SIZE
-import com.volokhinaleksey.movie_club.datasource.pagesource.RemoteSearchPageSource
-import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
+import com.volokhinaleksey.movie_club.data.RemoteSearchPageSource
+import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import kotlinx.coroutines.flow.Flow
 
-class RemoteSearchDataSource(
-    private val apiHolder: CoreApi
-) : SearchDataSource<PagingData<MovieDataTMDB>> {
+interface SearchRepository {
+    fun getMoviesByQuery(query: String): Flow<PagingData<MovieUI>>
+}
 
-    override fun getMoviesByQuery(query: String): Flow<PagingData<MovieDataTMDB>> {
+class SearchRepositoryImpl(
+    private val apiHolder: CoreApi
+) : SearchRepository {
+
+    override fun getMoviesByQuery(query: String): Flow<PagingData<MovieUI>> {
         return Pager(
             config = PagingConfig(
-                pageSize = CATEGORY_PAGE_SIZE,
+                pageSize = 5,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {

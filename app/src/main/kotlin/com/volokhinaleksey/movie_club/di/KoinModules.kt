@@ -9,6 +9,10 @@ import com.volokhinaleksey.movie_club.data.repository.DetailsApiRepository
 import com.volokhinaleksey.movie_club.data.repository.DetailsDatabaseRepository
 import com.volokhinaleksey.movie_club.data.repository.DetailsDatabaseRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
+import com.volokhinaleksey.movie_club.data.repository.SearchDatabaseRepository
+import com.volokhinaleksey.movie_club.data.repository.SearchDatabaseRepositoryImpl
+import com.volokhinaleksey.movie_club.data.repository.SearchRepository
+import com.volokhinaleksey.movie_club.data.repository.SearchRepositoryImpl
 import com.volokhinaleksey.movie_club.database.room.MoviesDataBase
 import com.volokhinaleksey.movie_club.datasource.actor.ActorDataSource
 import com.volokhinaleksey.movie_club.datasource.actor.LocalActorDataSource
@@ -20,15 +24,13 @@ import com.volokhinaleksey.movie_club.datasource.category.LocalCategoryDataSourc
 import com.volokhinaleksey.movie_club.datasource.category.RemoteCategoryDataSource
 import com.volokhinaleksey.movie_club.datasource.favorite.FavoriteDataSource
 import com.volokhinaleksey.movie_club.datasource.favorite.LocalFavoriteDataSource
-import com.volokhinaleksey.movie_club.datasource.search.LocalSearchDataSource
-import com.volokhinaleksey.movie_club.datasource.search.LocalSearchDataSourceImpl
-import com.volokhinaleksey.movie_club.datasource.search.RemoteSearchDataSource
-import com.volokhinaleksey.movie_club.datasource.search.SearchDataSource
 import com.volokhinaleksey.movie_club.details.viewmodel.DetailsViewModel
 import com.volokhinaleksey.movie_club.domain.DetailsInteractor
 import com.volokhinaleksey.movie_club.domain.DetailsInteractorImpl
 import com.volokhinaleksey.movie_club.domain.HomeInteractor
 import com.volokhinaleksey.movie_club.domain.HomeInteractorImpl
+import com.volokhinaleksey.movie_club.domain.SearchInteractor
+import com.volokhinaleksey.movie_club.domain.SearchInteractorImpl
 import com.volokhinaleksey.movie_club.home.viewmodel.HomeViewModel
 import com.volokhinaleksey.movie_club.model.local.LocalMovieData
 import com.volokhinaleksey.movie_club.model.remote.ActorDTO
@@ -44,15 +46,13 @@ import com.volokhinaleksey.movie_club.repository.category.CategoryRepository
 import com.volokhinaleksey.movie_club.repository.category.CategoryRepositoryImpl
 import com.volokhinaleksey.movie_club.repository.favorite.FavoriteRepository
 import com.volokhinaleksey.movie_club.repository.favorite.FavoriteRepositoryImpl
-import com.volokhinaleksey.movie_club.repository.search.SearchRepository
-import com.volokhinaleksey.movie_club.repository.search.SearchRepositoryImpl
+import com.volokhinaleksey.movie_club.search.viewmodel.SearchViewModel
 import com.volokhinaleksey.movie_club.viewmodel.CategoryMoviesViewModel
 import com.volokhinaleksey.movie_club.viewmodel.FavoriteViewModel
 import com.volokhinaleksey.movie_club.viewmodel.MovieActorViewModel
-import com.volokhinaleksey.movie_club.viewmodel.SearchViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -150,9 +150,9 @@ val actorScreen = module {
 }
 
 val searchScreen = module {
-    factory<LocalSearchDataSource> { LocalSearchDataSourceImpl(get()) }
-    factory<SearchDataSource<PagingData<MovieDataTMDB>>> { RemoteSearchDataSource(get()) }
-    factory<SearchRepository> { SearchRepositoryImpl(get(), get()) }
+    factory<SearchRepository> { SearchRepositoryImpl(get()) }
+    factory<SearchDatabaseRepository> { SearchDatabaseRepositoryImpl(get()) }
+    factory<SearchInteractor> { SearchInteractorImpl(get(), get()) }
     viewModel { SearchViewModel(get()) }
 }
 

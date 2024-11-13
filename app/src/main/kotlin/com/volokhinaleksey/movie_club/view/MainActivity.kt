@@ -28,6 +28,7 @@ import com.volokhinaleksey.movie_club.details.ui.DetailsScreen
 import com.volokhinaleksey.movie_club.home.ui.screen.HomeScreen
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.network.utils.NetworkStatus
+import com.volokhinaleksey.movie_club.search.screen.SearchScreen
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor70
 import com.volokhinaleksey.movie_club.utils.parcelable
 import com.volokhinaleksey.movie_club.view.actor_details.ARG_ACTOR_ID
@@ -37,7 +38,6 @@ import com.volokhinaleksey.movie_club.view.category_movies.CategoryMoviesScreen
 import com.volokhinaleksey.movie_club.view.favorite.FavoriteScreen
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
 import com.volokhinaleksey.movie_club.view.navigation.navigate
-import com.volokhinaleksey.movie_club.view.search.SearchScreen
 import com.volokhinaleksey.movie_club.view.splash.SplashScreen
 import org.koin.android.ext.android.inject
 
@@ -111,8 +111,12 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(route = ScreenState.SearchScreen.route) {
                     SearchScreen(
-                        navController = navController,
-                        networkStatus = networkStatus
+                        onMovieDetails = {
+                            navController.navigate(
+                                ScreenState.DetailsScreen.route,
+                                bundleOf(MOVIE_DATA_KEY to it)
+                            )
+                        }
                     )
                 }
                 composable(route = ScreenState.FavoriteScreen.route) {
@@ -146,7 +150,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun BottomNavigationBar(
         navController: NavController,
-        content: @Composable (PaddingValues) -> Unit
+        content: @Composable (PaddingValues) -> Unit,
     ) {
         val bottomNavItems =
             listOf(ScreenState.HomeScreen, ScreenState.SearchScreen, ScreenState.FavoriteScreen)

@@ -22,10 +22,10 @@ import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
 import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
+import com.volokhinaleksey.movie_club.uikit.widgets.MovieListPaging
 import com.volokhinaleksey.movie_club.view.MOVIE_DATA_KEY
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
 import com.volokhinaleksey.movie_club.view.navigation.navigate
-import com.volokhinaleksey.movie_club.view.widgets.ListMoviesPagination
 import com.volokhinaleksey.movie_club.viewmodel.CategoryMoviesViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -69,7 +69,7 @@ fun CategoryMoviesScreen(
 //                navController = navController
 //            )
 //        }
-        ListMoviesPagination(categoryMoviesData) { movieData ->
+        MovieListPaging(categoryMoviesData) { movieData ->
             val detailsMovieBundle = Bundle()
             detailsMovieBundle.putParcelable(MOVIE_DATA_KEY, movieData)
             navController.navigate(ScreenState.DetailsScreen.route, detailsMovieBundle)

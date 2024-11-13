@@ -1,4 +1,4 @@
-package com.volokhinaleksey.movie_club.view.widgets
+package com.volokhinaleksey.movie_club.uikit.widgets
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,17 +17,9 @@ import androidx.paging.compose.LazyPagingItems
 import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_HEIGHT_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_WIDTH_SIZE
-import com.volokhinaleksey.movie_club.uikit.widgets.ErrorMessage
-import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
-
-/**
- * The method creates a list in the form of a grid, which is filled with movies
- * @param lazyMovieItems - List of Movies
- * @param onItemClick - Needed to process clicks on a list item
- */
 
 @Composable
-fun ListMoviesPagination(
+fun MovieListPaging(
     lazyMovieItems: LazyPagingItems<MovieUI>,
     onItemClick: (MovieUI) -> Unit
 ) {
@@ -40,13 +32,11 @@ fun ListMoviesPagination(
     ) {
         items(lazyMovieItems.itemCount) { item ->
             lazyMovieItems[item]?.let { movieData ->
-                com.volokhinaleksey.movie_club.uikit.widgets.MovieCard(
+                MovieCard(
                     modifier = Modifier
                         .size(width = CARD_WIDTH_SIZE, height = CARD_HEIGHT_SIZE)
                         .padding(bottom = 10.dp)
-                        .clickable {
-                            onItemClick(movieData)
-                        },
+                        .clickable { onItemClick(movieData) },
                     movie = movieData
                 )
             }
