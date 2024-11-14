@@ -2,6 +2,7 @@ package com.volokhinaleksey.movie_club.domain
 
 import androidx.paging.PagingData
 import com.volokhinaleksey.movie_club.model.state.MovieState
+import com.volokhinaleksey.movie_club.model.ui.Favorite
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.flow.Flow
 
@@ -16,6 +17,6 @@ interface DetailsInteractor {
 
     fun getSimilarMovies(movieId: Int, isNetworkAvailable: Boolean): Flow<PagingData<Movie>>
 
-    suspend fun updateMovie(movieId: Int, favorite: Boolean)
+    suspend fun saveFavoriteMovie(favorite: Favorite)
 
 }

@@ -64,6 +64,7 @@ fun DetailsScreen(
                         movie = state.data[0],
                         similarMoviesFlow = { similarMoviesFlow },
                         onSimilarMovieDetails = onSimilarMovieDetails,
+                        onChangeFavoriteState = detailsViewModel::saveFavoriteMovie,
                         onActorDetails = onActorDetails,
                         onClosePage = onClosePage
                     )
@@ -78,6 +79,7 @@ internal fun DetailsContent(
     movie: Movie,
     similarMoviesFlow: () -> LazyPagingItems<Movie>,
     onSimilarMovieDetails: (Movie?) -> Unit,
+    onChangeFavoriteState: (Int, Boolean) -> Unit,
     onActorDetails: (Long) -> Unit,
     onClosePage: () -> Unit,
 ) {
@@ -93,7 +95,7 @@ internal fun DetailsContent(
         MovieDetailsContent(
             movie = movie,
             isFavorite = true,
-            onChangeFavoriteState = {}
+            onChangeFavoriteState = { onChangeFavoriteState(movie.id, it) }
         )
 
         MovieCasts(movie = movie, onActorDetails = onActorDetails)

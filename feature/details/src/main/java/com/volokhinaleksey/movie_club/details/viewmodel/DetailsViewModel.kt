@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.volokhinaleksey.movie_club.domain.DetailsInteractor
 import com.volokhinaleksey.movie_club.model.state.MovieState
+import com.volokhinaleksey.movie_club.model.ui.Favorite
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -42,9 +43,9 @@ class DetailsViewModel(
      * @param favorite - If we add then true if we delete then false
      */
 
-    fun setFavoriteMovie(movieId: Int, favorite: Boolean) {
+    fun saveFavoriteMovie(movieId: Int, favorite: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            detailsInteractor.updateMovie(movieId, favorite)
+            detailsInteractor.saveFavoriteMovie(Favorite(movieId, favorite))
         }
     }
 

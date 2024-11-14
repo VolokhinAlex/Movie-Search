@@ -1,6 +1,7 @@
 package com.volokhinaleksey.movie_club.data.repository
 
 import androidx.paging.PagingData
+import com.volokhinaleksey.movie_club.model.ui.Favorite
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.flow.Flow
 
@@ -12,6 +13,8 @@ interface DetailsRepository {
     ): Movie
 
     fun getSimilarMovies(movieId: Int): Flow<PagingData<Movie>>
+
+    suspend fun saveFavoriteMovie(favorite: Favorite)
 
 }
 

@@ -25,30 +25,6 @@ fun mapActorDtoToActorUI(actorDTO: ActorDTO): ActorUI {
     )
 }
 
-fun mapTrailerDTOToLocalTrailerData(trailer: TrailerDTO): LocalTrailerData {
-    return LocalTrailerData(
-        id = trailer.id,
-        name = trailer.name,
-        key = trailer.key,
-        type = trailer.type
-    )
-}
-
-fun mapCastDtoToLocalActorData(actor: CastDTO, movieId: Long): LocalActorData {
-    return LocalActorData(
-        actorId = actor.id ?: 0,
-        movieId = movieId,
-        biography = null,
-        birthday = null,
-        imdbId = null,
-        name = actor.name,
-        placeOfBirth = null,
-        popularity = null,
-        profilePath = actor.profile_path,
-        character = actor.character
-    )
-}
-
 fun mapLocalMovieToMovieUI(localMovieData: LocalMovieData): Movie {
     return Movie(
         adult = localMovieData.adult ?: false,

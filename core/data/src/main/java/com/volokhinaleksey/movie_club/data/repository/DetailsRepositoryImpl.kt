@@ -5,12 +5,16 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.volokhinaleksey.movie_club.data.RemoteSimilarPageSource
 import com.volokhinaleksey.movie_club.data.mappers.toMovieUI
+import com.volokhinaleksey.movie_club.database.room.MovieDataBase
+import com.volokhinaleksey.movie_club.database.room.entity.asEntity
+import com.volokhinaleksey.movie_club.model.ui.Favorite
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import kotlinx.coroutines.flow.Flow
 
-class DetailsApiRepository(
-    private val apiHolder: CoreApi
+class DetailsRepositoryImpl(
+    private val apiHolder: CoreApi,
+    private val dataBase: MovieDataBase
 ) : DetailsRepository {
     override suspend fun getMovieDetails(movieId: Int, language: String): Movie {
         return apiHolder.moviesApi.getMovieDetails(
@@ -33,5 +37,9 @@ class DetailsApiRepository(
                 )
             }
         ).flow
+    }
+
+    override suspend fun saveFavoriteMovie(favorite: Favorite) {
+        dataBase.favoritesDao().saveFavoriteMovie(favorite.asEntity())
     }
 }

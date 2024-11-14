@@ -36,7 +36,7 @@ class HomeRepositoryImpl(
 
         for (movie in movies) {
             val movieId = movie.id ?: 0
-            movie.genres.forEach { genreId ->
+            movie.genres?.forEach { genreId ->
                 entities.add(MoviesGenresEntity(movieId = movieId, genreId = genreId))
             }
         }

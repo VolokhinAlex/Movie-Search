@@ -36,7 +36,7 @@ data class MovieDataTMDB(
     val budget: Int?,
     val id: Int?,
     val imdb_id: String?,
-    @SerializedName("genre_ids") val genres: List<Int>,
+    @SerializedName("genre_ids") val genres: List<Int>?,
     val original_language: String?,
     val overview: String?,
     val title: String?,

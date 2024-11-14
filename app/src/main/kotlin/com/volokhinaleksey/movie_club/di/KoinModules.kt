@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.volokhinaleksey.movie_club.data.repository.DetailsApiRepository
+import com.volokhinaleksey.movie_club.data.repository.DetailsRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
 import com.volokhinaleksey.movie_club.data.repository.HomeRepository
 import com.volokhinaleksey.movie_club.data.repository.HomeRepositoryImpl
@@ -122,7 +122,7 @@ val homeScreen = module {
 }
 
 val detailsScreen = module {
-    factory<DetailsRepository> { DetailsApiRepository(get()) }
+    factory<DetailsRepository> { DetailsRepositoryImpl(get(), get()) }
     factory<DetailsInteractor> { DetailsInteractorImpl(get()) }
     viewModel { DetailsViewModel(get()) }
 }

@@ -17,7 +17,7 @@ fun MovieDataTMDB.toMovieUI(
         posterPath = poster_path.orEmpty(),
         id = id ?: 0,
         imdbId = imdb_id.orEmpty(),
-        genres = genres.map { Genre(id = it, name = "") },
+        genres = genres?.map { Genre(id = it, name = "") } ?: emptyList(),
         originalLanguage = original_language.orEmpty(),
         overview = overview.orEmpty(),
         title = title.orEmpty(),

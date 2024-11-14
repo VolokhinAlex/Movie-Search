@@ -4,12 +4,13 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
 import com.volokhinaleksey.movie_club.model.state.MovieState
+import com.volokhinaleksey.movie_club.model.ui.Favorite
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DetailsInteractorImpl(
-    private val detailsApiRepository: DetailsRepository
+    private val detailsRepository: DetailsRepository
 ) : DetailsInteractor {
     override suspend fun getMovieDetails(
         movieId: Int,
@@ -19,7 +20,7 @@ class DetailsInteractorImpl(
     ): MovieState {
         return try {
             if (isNetworkAvailable) {
-                val movie = detailsApiRepository.getMovieDetails(
+                val movie = detailsRepository.getMovieDetails(
                     movieId = movieId,
                     language = language
                 )
@@ -62,11 +63,15 @@ class DetailsInteractorImpl(
 //            }
 //        }
 
-        return detailsApiRepository.getSimilarMovies(movieId = movieId)
+        return detailsRepository.getSimilarMovies(movieId = movieId)
             .map { it.map { it.copy(releaseDate = convertStringFullDateToOnlyYear(it.releaseDate)) } }
     }
 
-    override suspend fun updateMovie(movieId: Int, favorite: Boolean) {
-//        detailsDatabaseRepository.updateMovieFavoriteInLocalDataBase(movieId, favorite)
+    override suspend fun saveFavoriteMovie(favorite: Favorite) {
+        try {
+            detailsRepository.saveFavoriteMovie(favorite)
+        } catch (e: Exception) {
+            println("DetailsInteractorImpl, saveFavoriteMovie, favorite=$favorite, error=$e")
+        }
     }
 }
