@@ -2,16 +2,14 @@ package com.volokhinaleksey.movie_club.domain
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.volokhinaleksey.movie_club.data.repository.DetailsDatabaseRepository
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
 import com.volokhinaleksey.movie_club.model.state.MovieState
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DetailsInteractorImpl(
-    private val detailsApiRepository: DetailsRepository,
-    private val detailsDatabaseRepository: DetailsDatabaseRepository,
+    private val detailsApiRepository: DetailsRepository
 ) : DetailsInteractor {
     override suspend fun getMovieDetails(
         movieId: Int,
@@ -25,14 +23,14 @@ class DetailsInteractorImpl(
                     movieId = movieId,
                     language = language
                 )
-                detailsDatabaseRepository.saveMovieDetailsToLocalDataBase(movie)
+//                detailsDatabaseRepository.saveMovieDetailsToLocalDataBase(movie)
                 MovieState.Success(listOf(movie))
             } else {
-                val result = detailsDatabaseRepository.getMovieDetails(
-                    movieId = movieId,
-                    language = language
-                )
-                MovieState.Success(listOf(result))
+//                val result = detailsDatabaseRepository.getMovieDetails(
+//                    movieId = movieId,
+//                    language = language
+//                )
+                MovieState.Success(listOf())
             }
         } catch (e: Exception) {
             MovieState.Error(e)
@@ -42,7 +40,7 @@ class DetailsInteractorImpl(
     override fun getSimilarMovies(
         movieId: Int,
         isNetworkAvailable: Boolean,
-    ): Flow<PagingData<MovieUI>> {
+    ): Flow<PagingData<Movie>> {
 //        return if (isNetworkAvailable) {
 //            detailsApiRepository.getSimilarMovies(movieId = movieId).map {
 //                it.map { movie ->
@@ -69,6 +67,6 @@ class DetailsInteractorImpl(
     }
 
     override suspend fun updateMovie(movieId: Int, favorite: Boolean) {
-        detailsDatabaseRepository.updateMovieFavoriteInLocalDataBase(movieId, favorite)
+//        detailsDatabaseRepository.updateMovieFavoriteInLocalDataBase(movieId, favorite)
     }
 }

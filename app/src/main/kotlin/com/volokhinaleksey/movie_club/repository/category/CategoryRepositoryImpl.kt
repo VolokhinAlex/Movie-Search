@@ -4,7 +4,7 @@ import androidx.paging.PagingData
 import com.volokhinaleksey.movie_club.datasource.category.CategoryDataSource
 import com.volokhinaleksey.movie_club.datasource.category.LocalCategoryDataSource
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -26,7 +26,7 @@ class CategoryRepositoryImpl(
     override fun getCategoryMovies(
         categoryMovies: String,
         isNetworkAvailable: Boolean
-    ): Flow<PagingData<MovieUI>> {
+    ): Flow<PagingData<Movie>> {
 //        return if (isNetworkAvailable) {
 //            remoteDataSource.getCategoryMovies(categoryMovies = categoryMovies).map {
 //                it.map { it.toMovieUI() }

@@ -6,14 +6,12 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.volokhinaleksey.movie_club.data.repository.DetailsApiRepository
-import com.volokhinaleksey.movie_club.data.repository.DetailsDatabaseRepository
-import com.volokhinaleksey.movie_club.data.repository.DetailsDatabaseRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
-import com.volokhinaleksey.movie_club.data.repository.SearchDatabaseRepository
-import com.volokhinaleksey.movie_club.data.repository.SearchDatabaseRepositoryImpl
+import com.volokhinaleksey.movie_club.data.repository.HomeRepository
+import com.volokhinaleksey.movie_club.data.repository.HomeRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.SearchRepository
 import com.volokhinaleksey.movie_club.data.repository.SearchRepositoryImpl
-import com.volokhinaleksey.movie_club.database.room.MoviesDataBase
+import com.volokhinaleksey.movie_club.database.room.MovieDataBase
 import com.volokhinaleksey.movie_club.datasource.actor.ActorDataSource
 import com.volokhinaleksey.movie_club.datasource.actor.LocalActorDataSource
 import com.volokhinaleksey.movie_club.datasource.actor.LocalActorDataSourceImpl
@@ -29,6 +27,8 @@ import com.volokhinaleksey.movie_club.domain.DetailsInteractor
 import com.volokhinaleksey.movie_club.domain.DetailsInteractorImpl
 import com.volokhinaleksey.movie_club.domain.HomeInteractor
 import com.volokhinaleksey.movie_club.domain.HomeInteractorImpl
+import com.volokhinaleksey.movie_club.domain.LocaleInteractor
+import com.volokhinaleksey.movie_club.domain.LocaleInteractorImpl
 import com.volokhinaleksey.movie_club.domain.SearchInteractor
 import com.volokhinaleksey.movie_club.domain.SearchInteractorImpl
 import com.volokhinaleksey.movie_club.home.viewmodel.HomeViewModel
@@ -57,12 +57,12 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val DB_NAME = "MovieSearch.db"
+private const val DB_NAME = "movie_club.db"
 
 val database = module {
     single {
         Room
-            .databaseBuilder(get(), MoviesDataBase::class.java, DB_NAME)
+            .databaseBuilder(get(), MovieDataBase::class.java, DB_NAME)
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -115,24 +115,15 @@ val network = module {
 }
 
 val homeScreen = module {
-    factory<com.volokhinaleksey.movie_club.data.repository.HomeRepository> {
-        com.volokhinaleksey.movie_club.data.repository.HomeApiRepository(
-            get()
-        )
-    }
-    factory<com.volokhinaleksey.movie_club.data.repository.HomeDatabaseRepository> {
-        com.volokhinaleksey.movie_club.data.repository.HomeDatabaseRepositoryImpl(
-            get()
-        )
-    }
-    factory<HomeInteractor> { HomeInteractorImpl(get(), get()) }
-    viewModel { HomeViewModel(get()) }
+    factory<HomeRepository> { HomeRepositoryImpl(get(), get()) }
+    factory<HomeInteractor> { HomeInteractorImpl(get()) }
+    factory<LocaleInteractor> { LocaleInteractorImpl() }
+    viewModel { HomeViewModel(get(), get()) }
 }
 
 val detailsScreen = module {
-    factory<DetailsDatabaseRepository> { DetailsDatabaseRepositoryImpl(get()) }
     factory<DetailsRepository> { DetailsApiRepository(get()) }
-    factory<DetailsInteractor> { DetailsInteractorImpl(get(), get()) }
+    factory<DetailsInteractor> { DetailsInteractorImpl(get()) }
     viewModel { DetailsViewModel(get()) }
 }
 
@@ -151,8 +142,7 @@ val actorScreen = module {
 
 val searchScreen = module {
     factory<SearchRepository> { SearchRepositoryImpl(get()) }
-    factory<SearchDatabaseRepository> { SearchDatabaseRepositoryImpl(get()) }
-    factory<SearchInteractor> { SearchInteractorImpl(get(), get()) }
+    factory<SearchInteractor> { SearchInteractorImpl(get()) }
     viewModel { SearchViewModel(get()) }
 }
 

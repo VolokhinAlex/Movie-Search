@@ -28,6 +28,7 @@ material = "1.8.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+workRuntimeKtx = "2.9.1"
 
 [libraries]
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
@@ -40,6 +41,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
 androidx-room-core = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
 
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-composeBom" }

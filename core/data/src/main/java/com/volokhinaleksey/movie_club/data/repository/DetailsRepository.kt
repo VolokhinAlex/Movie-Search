@@ -1,7 +1,7 @@
 package com.volokhinaleksey.movie_club.data.repository
 
 import androidx.paging.PagingData
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.flow.Flow
 
 interface DetailsRepository {
@@ -9,9 +9,9 @@ interface DetailsRepository {
     suspend fun getMovieDetails(
         movieId: Int,
         language: String
-    ): MovieUI
+    ): Movie
 
-    fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieUI>>
+    fun getSimilarMovies(movieId: Int): Flow<PagingData<Movie>>
 
 }
 

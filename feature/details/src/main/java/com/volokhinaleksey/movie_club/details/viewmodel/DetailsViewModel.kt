@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.volokhinaleksey.movie_club.domain.DetailsInteractor
 import com.volokhinaleksey.movie_club.model.state.MovieState
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -53,7 +53,7 @@ class DetailsViewModel(
      * @param movieId - The current ID of the movie that similar movies will be searched for
      */
 
-    fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieUI>> =
+    fun getSimilarMovies(movieId: Int): Flow<PagingData<Movie>> =
         detailsInteractor.getSimilarMovies(movieId = movieId, isNetworkAvailable = true)
             .cachedIn(viewModelScope)
 

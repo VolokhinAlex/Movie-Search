@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_TEXT_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor70
 import java.text.DecimalFormat
@@ -37,7 +37,7 @@ import java.text.DecimalFormat
 @Composable
 fun MovieCard(
     modifier: Modifier = Modifier,
-    movie: MovieUI
+    movie: Movie
 ) {
     val ratingFormat = remember { DecimalFormat("#.#") }
     Card(

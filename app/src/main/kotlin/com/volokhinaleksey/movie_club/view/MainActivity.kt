@@ -26,7 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.volokhinaleksey.movie_club.details.ui.DetailsScreen
 import com.volokhinaleksey.movie_club.home.ui.screen.HomeScreen
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.network.utils.NetworkStatus
 import com.volokhinaleksey.movie_club.search.screen.SearchScreen
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor70
@@ -89,10 +89,10 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable(route = ScreenState.DetailsScreen.route) {
-                    val movieDetailsData = it.arguments?.parcelable<MovieUI>(MOVIE_DATA_KEY)
+                    val movieDetailsData = it.arguments?.parcelable<Movie>(MOVIE_DATA_KEY)
                     movieDetailsData?.let { data ->
                         DetailsScreen(
-                            movieUI = data,
+                            movie = data,
                             onSimilarMovieDetails = {
                                 navController.navigate(
                                     ScreenState.DetailsScreen.route,

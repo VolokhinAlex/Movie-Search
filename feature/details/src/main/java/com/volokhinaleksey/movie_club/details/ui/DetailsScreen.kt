@@ -22,7 +22,7 @@ import com.volokhinaleksey.movie_club.details.ui.widget.MovieTrailer
 import com.volokhinaleksey.movie_club.details.ui.widget.SimilarMovies
 import com.volokhinaleksey.movie_club.details.viewmodel.DetailsViewModel
 import com.volokhinaleksey.movie_club.model.state.MovieState
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
 import com.volokhinaleksey.movie_club.uikit.widgets.ErrorMessage
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
@@ -30,16 +30,16 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DetailsScreen(
-    movieUI: MovieUI,
+    movie: Movie,
     detailsViewModel: DetailsViewModel = koinViewModel(),
-    onSimilarMovieDetails: (MovieUI?) -> Unit,
+    onSimilarMovieDetails: (Movie?) -> Unit,
     onActorDetails: (Long) -> Unit,
     onClosePage: () -> Unit,
 ) {
     val movieDetailsState by detailsViewModel.movieDetails.collectAsState(MovieState.Loading)
-    val similarMoviesFlow = detailsViewModel.getSimilarMovies(movieUI.id).collectAsLazyPagingItems()
+    val similarMoviesFlow = detailsViewModel.getSimilarMovies(movie.id).collectAsLazyPagingItems()
 
-    LaunchedEffect(true) { detailsViewModel.getMovieDetails(movieUI.id) }
+    LaunchedEffect(true) { detailsViewModel.getMovieDetails(movie.id) }
 
     Column(
         modifier = Modifier
@@ -75,13 +75,13 @@ fun DetailsScreen(
 
 @Composable
 internal fun DetailsContent(
-    movie: MovieUI,
-    similarMoviesFlow: () -> LazyPagingItems<MovieUI>,
-    onSimilarMovieDetails: (MovieUI?) -> Unit,
+    movie: Movie,
+    similarMoviesFlow: () -> LazyPagingItems<Movie>,
+    onSimilarMovieDetails: (Movie?) -> Unit,
     onActorDetails: (Long) -> Unit,
     onClosePage: () -> Unit,
 ) {
-    MoviePoster(movieUI = movie, onClick = onClosePage)
+    MoviePoster(movie = movie, onClick = onClosePage)
     Column(
         modifier = Modifier.padding(
             start = 15.dp,
@@ -91,7 +91,7 @@ internal fun DetailsContent(
         )
     ) {
         MovieDetailsContent(
-            movieUI = movie,
+            movie = movie,
             isFavorite = true,
             onChangeFavoriteState = {}
         )

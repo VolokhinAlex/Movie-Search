@@ -1,6 +1,6 @@
 package com.volokhinaleksey.movie_club.data.repository
 
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 
 interface DetailsDatabaseRepository : DetailsRepository {
 
@@ -9,7 +9,7 @@ interface DetailsDatabaseRepository : DetailsRepository {
      * @param localMovieData - The movie to save
      */
 
-    suspend fun saveMovieDetailsToLocalDataBase(movieUI: MovieUI)
+    suspend fun saveMovieDetailsToLocalDataBase(movie: Movie)
 
     /**
      * Method for adding or removing a movie from the favorites list
@@ -19,7 +19,7 @@ interface DetailsDatabaseRepository : DetailsRepository {
 
     suspend fun updateMovieFavoriteInLocalDataBase(movieId: Int, favorite: Boolean)
 
-    suspend fun saveSimilarMovies(movieUI: MovieUI, movieId: Int)
+    suspend fun saveSimilarMovies(movie: Movie, movieId: Int)
 
-    suspend fun saveMovie(movieUI: MovieUI)
+    suspend fun saveMovie(movie: Movie)
 }

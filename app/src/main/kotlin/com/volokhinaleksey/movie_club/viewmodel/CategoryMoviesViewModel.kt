@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.repository.category.CategoryRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -20,7 +20,7 @@ class CategoryMoviesViewModel(
     fun getCategoryMoviesFromRemoteServer(
         category: String,
         isOnline: Boolean
-    ): Flow<PagingData<MovieUI>> =
+    ): Flow<PagingData<Movie>> =
         categoryRepository.getCategoryMovies(
             categoryMovies = category,
             isNetworkAvailable = isOnline

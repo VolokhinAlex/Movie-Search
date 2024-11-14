@@ -2,7 +2,7 @@ package com.volokhinaleksey.movie_club.domain
 
 import androidx.paging.PagingData
 import com.volokhinaleksey.movie_club.model.state.MovieState
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.flow.Flow
 
 interface DetailsInteractor {
@@ -14,7 +14,7 @@ interface DetailsInteractor {
         category: String = ""
     ): MovieState
 
-    fun getSimilarMovies(movieId: Int, isNetworkAvailable: Boolean): Flow<PagingData<MovieUI>>
+    fun getSimilarMovies(movieId: Int, isNetworkAvailable: Boolean): Flow<PagingData<Movie>>
 
     suspend fun updateMovie(movieId: Int, favorite: Boolean)
 

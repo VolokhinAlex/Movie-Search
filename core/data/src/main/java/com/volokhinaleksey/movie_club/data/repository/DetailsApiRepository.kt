@@ -5,14 +5,14 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.volokhinaleksey.movie_club.data.RemoteSimilarPageSource
 import com.volokhinaleksey.movie_club.data.mappers.toMovieUI
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import kotlinx.coroutines.flow.Flow
 
 class DetailsApiRepository(
     private val apiHolder: CoreApi
 ) : DetailsRepository {
-    override suspend fun getMovieDetails(movieId: Int, language: String): MovieUI {
+    override suspend fun getMovieDetails(movieId: Int, language: String): Movie {
         return apiHolder.moviesApi.getMovieDetails(
             movieId = movieId,
             language = language,
@@ -20,7 +20,7 @@ class DetailsApiRepository(
         ).toMovieUI()
     }
 
-    override fun getSimilarMovies(movieId: Int): Flow<PagingData<MovieUI>> {
+    override fun getSimilarMovies(movieId: Int): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5,

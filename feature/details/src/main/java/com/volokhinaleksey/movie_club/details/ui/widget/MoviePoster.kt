@@ -15,14 +15,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 
 @Composable
-internal fun MoviePoster(movieUI: MovieUI, onClick: () -> Unit) {
+internal fun MoviePoster(movie: Movie, onClick: () -> Unit) {
     Box {
         SubcomposeAsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${movieUI.posterPath}",
+            model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
             loading = { LoadingProgressBar() },
             contentDescription = "",
             modifier = Modifier

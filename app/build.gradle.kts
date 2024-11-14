@@ -53,6 +53,8 @@ dependencies {
     implementation(project(":feature:details"))
     implementation(project(":feature:search"))
 
+    implementation(libs.androidx.work.runtime.ktx)
+
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.common)
 

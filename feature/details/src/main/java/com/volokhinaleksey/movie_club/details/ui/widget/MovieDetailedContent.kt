@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_PAGING
 import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_SIZE
@@ -26,7 +26,7 @@ import java.text.DecimalFormat
 
 @Composable
 internal fun MovieDetailsContent(
-    movieUI: MovieUI,
+    movie: Movie,
     isFavorite: Boolean,
     onChangeFavoriteState: (Boolean) -> Unit,
 ) {
@@ -37,7 +37,7 @@ internal fun MovieDetailsContent(
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(0.8f),
-            text = movieUI.title,
+            text = movie.title,
             color = Color.White,
             fontSize = TITLE_SIZE,
             fontWeight = FontWeight.Bold,
@@ -56,7 +56,7 @@ internal fun MovieDetailsContent(
         )
     ) {
         Text(
-            text = movieUI.genres.joinToString { it.name },
+            text = movie.genres.joinToString { it.name },
             fontSize = DETAILS_PRIMARY_SIZE,
             color = Color.White
         )
@@ -67,7 +67,7 @@ internal fun MovieDetailsContent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "IMDB ${ratingFormat.format(movieUI.voteAverage)}",
+            text = "IMDB ${ratingFormat.format(movie.voteAverage)}",
             modifier = Modifier.padding(end = 5.dp),
             color = Color.White, fontSize = DETAILS_PRIMARY_SIZE
         )
@@ -80,13 +80,13 @@ internal fun MovieDetailsContent(
                 .size(22.dp)
         )
         Text(
-            text = movieUI.releaseDate,
+            text = movie.releaseDate,
             modifier = Modifier.padding(end = 15.dp),
             color = Color.White,
             fontSize = DETAILS_PRIMARY_SIZE
         )
         Text(
-            text = movieUI.runtime,
+            text = movie.runtime,
             color = Color.White,
             fontSize = DETAILS_PRIMARY_SIZE
         )
@@ -98,7 +98,7 @@ internal fun MovieDetailsContent(
         modifier = Modifier.padding(top = DETAILS_PRIMARY_PAGING, bottom = DETAILS_PRIMARY_PAGING)
     )
     Text(
-        text = movieUI.overview,
+        text = movie.overview,
         modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING),
         color = Color.White
     )

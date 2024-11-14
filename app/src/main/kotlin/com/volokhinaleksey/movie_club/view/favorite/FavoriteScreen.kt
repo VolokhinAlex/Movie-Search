@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.volokhinaleksey.movie_club.model.state.MovieState
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_HEIGHT_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_WIDTH_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
@@ -103,7 +103,7 @@ private fun RenderFavoriteDataFromLocalDataBase(
 
 @Composable
 private fun FavoriteMoviesList(
-    favoriteMoviesData: List<MovieUI>,
+    favoriteMoviesData: List<Movie>,
     navController: NavController,
 ) {
     LazyVerticalGrid(

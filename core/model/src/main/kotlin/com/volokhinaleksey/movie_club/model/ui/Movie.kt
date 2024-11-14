@@ -4,18 +4,16 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class MovieUI(
+data class Movie(
     val adult: Boolean = false,
     val backdropPath: String = "",
     val posterPath: String = "",
-    val budget: Int = 0,
     val id: Int = 0,
     val imdbId: String = "",
     val genres: List<GenreUI> = emptyList(),
     val originalLanguage: String = "",
     val overview: String = "",
     val title: String = "",
-    val voteCount: Int = 0,
     val voteAverage: Double = 0.0,
     val releaseDate: String = "",
     val runtime: String = "",

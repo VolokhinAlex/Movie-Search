@@ -3,74 +3,59 @@ package com.volokhinaleksey.movie_club.home.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.volokhinaleksey.movie_club.domain.HomeInteractor
+import com.volokhinaleksey.movie_club.domain.LocaleInteractor
 import com.volokhinaleksey.movie_club.model.MovieCategory
 import com.volokhinaleksey.movie_club.model.state.MovieCategoryState
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val homeInteractor: HomeInteractor
+    homeInteractor: HomeInteractor,
+    localeInteractor: LocaleInteractor
 ) : ViewModel() {
-    
-    private val _popularMovies = MutableStateFlow<List<MovieUI>>(emptyList())
-    val popularMovies get() = _popularMovies.asStateFlow()
 
-    private val _nowPlayingMovies = MutableStateFlow<List<MovieUI>>(emptyList())
-    val nowPlayingMovies get() = _nowPlayingMovies.asStateFlow()
+    val popularMovies = homeInteractor.getMovies(categoryId = MovieCategory.Popular.id)
+        .map(MovieCategoryState::Success)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(2_000),
+            initialValue = MovieCategoryState.Loading
+        )
 
-    private val _topRatedMovies = MutableStateFlow<List<MovieUI>>(emptyList())
-    val topRatedMovies get() = _topRatedMovies.asStateFlow()
+    val nowPlayingMovies = homeInteractor.getMovies(categoryId = MovieCategory.NowPlaying.id)
+        .map(MovieCategoryState::Success)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(2_000),
+            initialValue = MovieCategoryState.Loading
+        )
 
-    private val _upcomingMovies = MutableStateFlow<List<MovieUI>>(emptyList())
-    val upcomingMovies get() = _upcomingMovies.asStateFlow()
+    val topRatedMovies = homeInteractor.getMovies(categoryId = MovieCategory.TopRated.id)
+        .map(MovieCategoryState::Success)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(2_000),
+            initialValue = MovieCategoryState.Loading
+        )
 
-    fun loadAllCategories() {
+    val upcomingMovies = homeInteractor.getMovies(categoryId = MovieCategory.Upcoming.id)
+        .map(MovieCategoryState::Success)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(2_000),
+            initialValue = MovieCategoryState.Loading
+        )
+
+    init {
         viewModelScope.launch(Dispatchers.IO) {
-            val language = "en-EN"
-            val isLocalSource = false
-            launch {
-                val result = homeInteractor.getMovies(
-                    categoryId = MovieCategory.Popular.id,
-                    language = language,
-                    page = 1,
-                    isLocalSource = isLocalSource
-                )
-                if (result is MovieCategoryState.Success) { _popularMovies.emit(result.data) }
-            }
-
-            launch {
-                val result = homeInteractor.getMovies(
-                    categoryId = MovieCategory.NowPlaying.id,
-                    language = language,
-                    page = 1,
-                    isLocalSource = isLocalSource
-                )
-                if (result is MovieCategoryState.Success) { _nowPlayingMovies.emit(result.data) }
-            }
-
-            launch {
-                val result = homeInteractor.getMovies(
-                    categoryId = MovieCategory.Upcoming.id,
-                    language = language,
-                    page = 1,
-                    isLocalSource = isLocalSource
-                )
-                if (result is MovieCategoryState.Success) { _topRatedMovies.emit(result.data) }
-            }
-
-            launch {
-                val result = homeInteractor.getMovies(
-                    categoryId = MovieCategory.TopRated.id,
-                    language = language,
-                    page = 1,
-                    isLocalSource = isLocalSource
-                )
-                if (result is MovieCategoryState.Success) { _upcomingMovies.emit(result.data) }
+            MovieCategory.entries.forEach {
+                launch {
+                    homeInteractor.syncData(it.id, localeInteractor.getCurrentLanguage())
+                }
             }
         }
     }
-    
 }

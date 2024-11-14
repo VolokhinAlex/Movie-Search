@@ -59,7 +59,7 @@ interface MovieTMDBAPI {
         @Path("category") categoryId: String,
         @Query("api_key") token: String = BuildConfig.MOVIE_API_KEY,
         @Query("language") language: String,
-        @Query("page") page: Int
+        @Query("page") page: Int = 1
     ): CategoryMoviesTMDB
 
     /**

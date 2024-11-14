@@ -14,14 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_HEIGHT_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_WIDTH_SIZE
 
 @Composable
 fun MovieListPaging(
-    lazyMovieItems: LazyPagingItems<MovieUI>,
-    onItemClick: (MovieUI) -> Unit
+    lazyMovieItems: LazyPagingItems<Movie>,
+    onItemClick: (Movie) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),

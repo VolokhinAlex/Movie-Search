@@ -9,15 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_WIDTH_SIZE
 import com.volokhinaleksey.movie_club.uikit.widgets.MovieCard
 
 @Composable
 internal fun SimilarMovies(
-    similarMoviesFlow: () -> LazyPagingItems<MovieUI>,
-    onSimilarMovieDetails: (MovieUI?) -> Unit
+    similarMoviesFlow: () -> LazyPagingItems<Movie>,
+    onSimilarMovieDetails: (Movie?) -> Unit
 ) {
     TitleCategoryDetails(
         title = stringResource(id = R.string.similar),

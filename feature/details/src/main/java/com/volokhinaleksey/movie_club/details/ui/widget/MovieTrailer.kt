@@ -22,13 +22,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import coil.compose.SubcomposeAsyncImage
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.TransparentColor
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 
 @Composable
-internal fun MovieTrailer(movie: MovieUI) {
+internal fun MovieTrailer(movie: Movie) {
     val context = LocalContext.current
     TitleCategoryDetails(
         title = stringResource(id = R.string.trailer),

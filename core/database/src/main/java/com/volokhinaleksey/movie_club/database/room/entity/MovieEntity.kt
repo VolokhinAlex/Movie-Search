@@ -3,90 +3,77 @@ package com.volokhinaleksey.movie_club.database.room.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.volokhinaleksey.movie_club.model.ui.GenreUI
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
+import com.volokhinaleksey.movie_club.model.ui.Movie
 
-/**
- * The model of local movie table
- * @param movieId - movie ID
- * @param movieTitle - The title of a particular movie
- * @param movieFavorite - Favorite movie. Values 1 (True) or 0 (False)
- * @param moviePoster - Movie Image
- * @param movieReleaseDate - Release date of the movie
- * @param movieRating - Rating of the movie from 0 to 10
- */
-
-@Entity(tableName = "movies_table")
+@Entity(tableName = "movies")
 data class MovieEntity(
     @PrimaryKey
-    @ColumnInfo(name = "movie_id")
-    val movieId: Int?,
-    @ColumnInfo(name = "movie_title")
-    val movieTitle: String?,
-    @ColumnInfo(name = "movie_favorite")
-    val movieFavorite: Boolean?,
-    @ColumnInfo(name = "movie_poster")
-    val moviePoster: String?,
-    @ColumnInfo(name = "movie_release_date")
-    val movieReleaseDate: String?,
-    @ColumnInfo(name = "movie_rating")
-    val movieRating: Double?,
+    val id: Int,
+    val title: String,
+    val poster: String,
+    @ColumnInfo("release_date") val releaseDate: String,
     val runtime: String,
-    val genres: String,
-    val overview: String?,
+    val overview: String,
     val category: String,
-    @ColumnInfo(name = "imdb_id")
-    val imdbId: String?,
-    val adult: Boolean?,
-    @ColumnInfo(name = "backdrop_path")
-    val backdropPath: String?,
-    @ColumnInfo(name = "original_language")
-    val originalLanguage: String?,
-    @ColumnInfo(name = "vote_count")
-    val voteCount: Int?,
+    @ColumnInfo(name = "imdb_id") val imdbId: String,
+    val adult: Boolean,
+    @ColumnInfo(name = "backdrop_path") val backdropPath: String,
+    val language: String,
+    @ColumnInfo(name = "vote_average") val voteAverage: Double,
 )
 
-fun MovieUI.asEntity(categoryId: String): MovieEntity {
+fun Movie.asEntity(category: String): MovieEntity {
     return MovieEntity(
-        movieId = id,
-        movieTitle = title,
-        movieFavorite = false,
-        moviePoster = posterPath,
-        movieReleaseDate = releaseDate,
-        movieRating = voteAverage,
+        id = id,
+        title = title,
+        poster = posterPath,
+        releaseDate = releaseDate,
         runtime = runtime,
-        genres = genres.joinToString { it.name },
         overview = overview,
-        category = categoryId,
-        adult = adult,
+        category = category,
         imdbId = imdbId,
+        adult = adult,
         backdropPath = backdropPath,
-        originalLanguage = originalLanguage,
-        voteCount = voteCount
+        language = originalLanguage,
+        voteAverage = voteAverage
     )
 }
 
-fun MovieEntity.toMovieUI(
-    trailers: List<TrailerEntity>,
-    actors: List<ActorEntity>,
-): MovieUI {
-    return MovieUI(
-        adult = adult ?: false,
-        backdropPath = backdropPath.orEmpty(),
-        posterPath = moviePoster.orEmpty(),
-        budget = 0,
-        id = movieId ?: 0,
-        imdbId = imdbId.orEmpty(),
-        genres = genres.split(",").map { GenreUI(id = 0, name = it) },
-        originalLanguage = originalLanguage.orEmpty(),
+fun MovieDataTMDB.asEntity(category: String): MovieEntity {
+    return MovieEntity(
+        id = id ?: 0,
+        title = title.orEmpty(),
+        poster = poster_path.orEmpty(),
+        releaseDate = release_date.orEmpty(),
+        runtime = timeToFormatHoursAndMinutes(runtime ?: 0),
         overview = overview.orEmpty(),
-        title = movieTitle.orEmpty(),
-        voteCount = voteCount ?: 0,
-        voteAverage = movieRating ?: 0.0,
-        releaseDate = movieReleaseDate.orEmpty(),
-        runtime = runtime,
-        favorite = movieFavorite ?: false,
-        actors = actors.map { it.toActorUI() },
-        videos = trailers.map { it.toTrailerUI() }
+        category = category,
+        imdbId = imdb_id.orEmpty(),
+        adult = adult ?: false,
+        backdropPath = backdrop_path.orEmpty(),
+        language = original_language.orEmpty(),
+        voteAverage = vote_average ?: 0.0
     )
+}
+
+fun MovieEntity.asExternalModel() = Movie(
+    adult = adult,
+    backdropPath = backdropPath,
+    posterPath = poster,
+    id = id,
+    imdbId = imdbId,
+    originalLanguage = language,
+    overview = overview,
+    title = title,
+    voteAverage = voteAverage,
+    releaseDate = releaseDate,
+    runtime = runtime,
+)
+
+//TODO(utils module)
+internal fun timeToFormatHoursAndMinutes(min: Int): String {
+    val hour = min / 60
+    val minutes = min % 60
+    return String.format("%02dh %02dmin", hour, minutes)
 }

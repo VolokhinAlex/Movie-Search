@@ -7,14 +7,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_WIDTH_SIZE
 import com.volokhinaleksey.movie_club.uikit.widgets.MovieCard
 
 @Composable
 internal fun HorizontalMovieList(
-    movies: List<MovieUI>,
-    onClick: (MovieUI) -> Unit,
+    movies: List<Movie>,
+    onClick: (Movie) -> Unit,
 ) {
     LazyRow(modifier = Modifier.padding(start = 20.dp, bottom = 20.dp)) {
         items(

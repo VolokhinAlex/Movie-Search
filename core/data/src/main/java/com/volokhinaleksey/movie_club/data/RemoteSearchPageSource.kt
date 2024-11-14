@@ -3,7 +3,7 @@ package com.volokhinaleksey.movie_club.data
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.volokhinaleksey.movie_club.data.mappers.toMovieUI
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import java.io.IOException
 
@@ -16,15 +16,15 @@ import java.io.IOException
 class RemoteSearchPageSource(
     private val apiHolder: CoreApi,
     private val query: String,
-) : PagingSource<Int, MovieUI>() {
+) : PagingSource<Int, Movie>() {
 
-    override fun getRefreshKey(state: PagingState<Int, MovieUI>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         val anchorPosition = state.anchorPosition ?: return null
         val page = state.closestPageToPosition(anchorPosition) ?: return null
         return page.prevKey?.plus(1) ?: page.nextKey?.minus(1)
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieUI> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         if (query.isEmpty()) {
             return LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
         }

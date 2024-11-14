@@ -19,14 +19,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
-import com.volokhinaleksey.movie_club.model.ui.MovieUI
+import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_PAGING
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 
 @Composable
 internal fun MovieCasts(
-    movie: MovieUI,
+    movie: Movie,
     onActorDetails: (Long) -> Unit
 ) {
     TitleCategoryDetails(
