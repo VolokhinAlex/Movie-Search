@@ -10,7 +10,7 @@ data class Movie(
     val posterPath: String = "",
     val id: Int = 0,
     val imdbId: String = "",
-    val genres: List<GenreUI> = emptyList(),
+    val genres: List<Genre> = emptyList(),
     val originalLanguage: String = "",
     val overview: String = "",
     val title: String = "",

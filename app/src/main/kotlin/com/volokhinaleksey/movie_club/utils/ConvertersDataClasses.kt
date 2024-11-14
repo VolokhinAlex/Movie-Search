@@ -7,7 +7,7 @@ import com.volokhinaleksey.movie_club.model.remote.ActorDTO
 import com.volokhinaleksey.movie_club.model.remote.CastDTO
 import com.volokhinaleksey.movie_club.model.remote.TrailerDTO
 import com.volokhinaleksey.movie_club.model.ui.ActorUI
-import com.volokhinaleksey.movie_club.model.ui.GenreUI
+import com.volokhinaleksey.movie_club.model.ui.Genre
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.model.ui.TrailerUI
 
@@ -56,7 +56,7 @@ fun mapLocalMovieToMovieUI(localMovieData: LocalMovieData): Movie {
         posterPath = localMovieData.moviePoster.orEmpty(),
         id = localMovieData.movieId ?: 0,
         imdbId = localMovieData.imdbId.orEmpty(),
-        genres = localMovieData.genres.split(", ").map { GenreUI(id = 0, name = it) },
+        genres = localMovieData.genres.split(", ").map { Genre(id = 0, name = it) },
         originalLanguage = localMovieData.originalLanguage.orEmpty(),
         overview = localMovieData.overview.orEmpty(),
         title = localMovieData.movieTitle.orEmpty(),

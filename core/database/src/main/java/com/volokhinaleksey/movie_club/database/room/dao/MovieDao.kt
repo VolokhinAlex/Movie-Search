@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.volokhinaleksey.movie_club.database.room.entity.MovieEntity
+import com.volokhinaleksey.movie_club.database.room.entity.MoviesGenresEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -18,4 +19,7 @@ interface MovieDao {
 
     @Query("SELECT * FROM movies WHERE category = :categoryId")
     fun getNewsResources(categoryId: String): Flow<List<MovieEntity>>
+
+    @Upsert
+    suspend fun upsertMoviesGenres(moviesGenresEntities: List<MoviesGenresEntity>)
 }

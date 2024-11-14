@@ -1,6 +1,7 @@
 package com.volokhinaleksey.movie_club.model.remote
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -35,7 +36,7 @@ data class MovieDataTMDB(
     val budget: Int?,
     val id: Int?,
     val imdb_id: String?,
-    val genres: List<GenresDTO>?,
+    @SerializedName("genre_ids") val genres: List<Int>,
     val original_language: String?,
     val overview: String?,
     val title: String?,

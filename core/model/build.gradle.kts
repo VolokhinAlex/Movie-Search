@@ -33,4 +33,5 @@ android {
 
 dependencies {
     implementation(libs.androidx.core)
+    implementation(libs.squareup.retrofit.converter.gson)
 }

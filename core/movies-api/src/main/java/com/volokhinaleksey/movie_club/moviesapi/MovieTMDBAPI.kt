@@ -2,6 +2,7 @@ package com.volokhinaleksey.movie_club.moviesapi
 
 import com.volokhinaleksey.movie_club.model.remote.ActorDTO
 import com.volokhinaleksey.movie_club.model.remote.CategoryMoviesTMDB
+import com.volokhinaleksey.movie_club.model.remote.GenresDTO
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.movies_api.BuildConfig
 import retrofit2.http.GET
@@ -73,5 +74,11 @@ interface MovieTMDBAPI {
         @Query("language") language: String,
         @Query("page") page: Int
     ): CategoryMoviesTMDB
+
+    @GET("3/genre/movie/list")
+    suspend fun getGenres(
+        @Query("api_key") token: String = BuildConfig.MOVIE_API_KEY,
+        @Query("language") language: String
+    ): GenresDTO
 
 }

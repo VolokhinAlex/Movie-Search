@@ -1,15 +1,11 @@
 package com.volokhinaleksey.movie_club.data.mappers
 
 import com.volokhinaleksey.movie_club.data.repository.timeToFormatHoursAndMinutes
-import com.volokhinaleksey.movie_club.model.local.LocalActorData
-import com.volokhinaleksey.movie_club.model.local.LocalTrailerData
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.model.remote.toActorUI
-import com.volokhinaleksey.movie_club.model.remote.toGenreUI
 import com.volokhinaleksey.movie_club.model.remote.toTrailerUI
-import com.volokhinaleksey.movie_club.model.ui.ActorUI
+import com.volokhinaleksey.movie_club.model.ui.Genre
 import com.volokhinaleksey.movie_club.model.ui.Movie
-import com.volokhinaleksey.movie_club.model.ui.TrailerUI
 
 fun MovieDataTMDB.toMovieUI(
     category: String = "",
@@ -21,7 +17,7 @@ fun MovieDataTMDB.toMovieUI(
         posterPath = poster_path.orEmpty(),
         id = id ?: 0,
         imdbId = imdb_id.orEmpty(),
-        genres = genres?.map { it.toGenreUI() } ?: emptyList(),
+        genres = genres.map { Genre(id = it, name = "") },
         originalLanguage = original_language.orEmpty(),
         overview = overview.orEmpty(),
         title = title.orEmpty(),
@@ -32,29 +28,5 @@ fun MovieDataTMDB.toMovieUI(
         videos = videos?.results?.map { it.toTrailerUI() } ?: emptyList(),
         category = category,
         favorite = isFavorite
-    )
-}
-
-internal fun LocalActorData.toActorUI(): ActorUI {
-    return ActorUI(
-        actorId = actorId,
-        movieId = movieId ?: 0,
-        biography = biography.orEmpty(),
-        birthday = birthday.orEmpty(),
-        imdbId = imdbId.orEmpty(),
-        name = name.orEmpty(),
-        placeOfBirth = placeOfBirth.orEmpty(),
-        popularity = popularity ?: 0.0,
-        profilePath = profilePath.orEmpty(),
-        character = character.orEmpty()
-    )
-}
-
-fun LocalTrailerData.toTrailerUI(): TrailerUI {
-    return TrailerUI(
-        id = id.orEmpty(),
-        name = name.orEmpty(),
-        key = key.orEmpty(),
-        type = type.orEmpty()
     )
 }
