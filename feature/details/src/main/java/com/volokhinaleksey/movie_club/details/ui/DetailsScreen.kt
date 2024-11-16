@@ -21,7 +21,7 @@ import com.volokhinaleksey.movie_club.details.ui.widget.MoviePoster
 import com.volokhinaleksey.movie_club.details.ui.widget.MovieTrailer
 import com.volokhinaleksey.movie_club.details.ui.widget.SimilarMovies
 import com.volokhinaleksey.movie_club.details.viewmodel.DetailsViewModel
-import com.volokhinaleksey.movie_club.model.state.MovieState
+import com.volokhinaleksey.movie_club.model.state.DetailsMovieState
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
 import com.volokhinaleksey.movie_club.uikit.widgets.ErrorMessage
@@ -36,7 +36,7 @@ fun DetailsScreen(
     onActorDetails: (Long) -> Unit,
     onClosePage: () -> Unit,
 ) {
-    val movieDetailsState by detailsViewModel.movieDetails.collectAsState(MovieState.Loading)
+    val movieDetailsState by detailsViewModel.movieDetails.collectAsState()
     val similarMoviesFlow = detailsViewModel.getSimilarMovies(movie.id).collectAsLazyPagingItems()
 
     LaunchedEffect(true) { detailsViewModel.getMovieDetails(movie.id) }
@@ -49,26 +49,24 @@ fun DetailsScreen(
         verticalArrangement = Arrangement.Center
     ) {
         when (val state = movieDetailsState) {
-            is MovieState.Error -> {
+            is DetailsMovieState.Error -> {
                 ErrorMessage(
-                    message = state.errorMessage.message.orEmpty(),
-                    click = { }
+                    message = state.message,
+                    click = { detailsViewModel.getMovieDetails(movie.id) }
                 )
             }
 
-            MovieState.Loading -> LoadingProgressBar()
+            DetailsMovieState.Loading -> LoadingProgressBar()
 
-            is MovieState.Success -> {
-                if (state.data.isNotEmpty()) {
-                    DetailsContent(
-                        movie = state.data[0],
-                        similarMoviesFlow = { similarMoviesFlow },
-                        onSimilarMovieDetails = onSimilarMovieDetails,
-                        onChangeFavoriteState = detailsViewModel::saveFavoriteMovie,
-                        onActorDetails = onActorDetails,
-                        onClosePage = onClosePage
-                    )
-                }
+            is DetailsMovieState.Success -> {
+                DetailsContent(
+                    movie = state.data,
+                    similarMoviesFlow = { similarMoviesFlow },
+                    onSimilarMovieDetails = onSimilarMovieDetails,
+                    onChangeFavoriteState = detailsViewModel::saveFavoriteMovie,
+                    onActorDetails = onActorDetails,
+                    onClosePage = onClosePage
+                )
             }
         }
     }
@@ -94,7 +92,7 @@ internal fun DetailsContent(
     ) {
         MovieDetailsContent(
             movie = movie,
-            isFavorite = true,
+            isFavorite = movie.favorite,
             onChangeFavoriteState = { onChangeFavoriteState(movie.id, it) }
         )
 

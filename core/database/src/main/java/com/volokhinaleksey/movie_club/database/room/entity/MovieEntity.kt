@@ -40,20 +40,20 @@ fun Movie.asEntity(category: String): MovieEntity {
     )
 }
 
-fun MovieDataTMDB.asEntity(category: String): MovieEntity {
+fun MovieDataTMDB.asEntity(category: String = ""): MovieEntity {
     return MovieEntity(
         id = id ?: 0,
         title = title.orEmpty(),
-        poster = poster_path.orEmpty(),
-        releaseDate = release_date.orEmpty(),
+        poster = posterPath.orEmpty(),
+        releaseDate = releaseDate.orEmpty(),
         runtime = timeToFormatHoursAndMinutes(runtime ?: 0),
         overview = overview.orEmpty(),
         category = category,
-        imdbId = imdb_id.orEmpty(),
+        imdbId = imdbId.orEmpty(),
         adult = adult ?: false,
-        backdropPath = backdrop_path.orEmpty(),
-        language = original_language.orEmpty(),
-        voteAverage = vote_average ?: 0.0
+        backdropPath = backdropPath.orEmpty(),
+        language = originalLanguage.orEmpty(),
+        voteAverage = voteAverage ?: 0.0
     )
 }
 

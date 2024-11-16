@@ -17,7 +17,7 @@ class HomeRepositoryImpl(
 
     override fun getMovies(
         categoryId: String
-    ): Flow<List<Movie>> = database.moviesDao().getNewsResources(categoryId)
+    ): Flow<List<Movie>> = database.moviesDao().getMoviesByCategory(categoryId)
         .map { it.map(MovieEntity::asExternalModel) }
 
     override suspend fun syncData(categoryId: String, lang: String) {

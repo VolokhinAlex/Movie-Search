@@ -13,6 +13,4 @@ data class GenreEntity(
 
 fun GenreDTO.asEntity() = GenreEntity(id = id ?: 0, name = name.orEmpty())
 
-fun Genre.asEntity() = GenreEntity(id = id, name = name)
-
 fun GenreEntity.asExternalModel() = Genre(id = id, name = name)

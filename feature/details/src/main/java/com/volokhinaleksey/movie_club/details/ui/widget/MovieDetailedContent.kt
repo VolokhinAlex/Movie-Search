@@ -44,7 +44,7 @@ internal fun MovieDetailsContent(
         )
         MovieFavorite(
             isFavorite = isFavorite,
-            onChangeState = { onChangeFavoriteState(isFavorite) }
+            onChangeState = onChangeFavoriteState
         )
     }
 

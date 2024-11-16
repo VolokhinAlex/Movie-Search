@@ -8,20 +8,28 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun MovieFavorite(isFavorite: Boolean, onChangeState: () -> Unit) {
+internal fun MovieFavorite(isFavorite: Boolean, onChangeState: (Boolean) -> Unit) {
+    var favorite by remember(isFavorite) { mutableStateOf(isFavorite) }
     Box(
         modifier = Modifier
             .size(25.dp)
-            .clickable { onChangeState() },
+            .clickable {
+                favorite = !favorite
+                onChangeState(favorite)
+            },
         contentAlignment = Alignment.Center
     ) {
-        if (isFavorite) {
+        if (favorite) {
             Icon(
                 imageVector = Icons.Default.Favorite,
                 contentDescription = "",

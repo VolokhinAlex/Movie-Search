@@ -9,4 +9,4 @@ import kotlinx.parcelize.Parcelize
  */
 
 @Parcelize
-data class CreditsDTO(val cast: List<CastDTO>) : Parcelable
+data class ActorsDTO(val cast: List<ActorDTO>) : Parcelable

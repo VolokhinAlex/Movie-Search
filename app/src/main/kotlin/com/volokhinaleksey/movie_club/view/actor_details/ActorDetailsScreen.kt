@@ -31,7 +31,7 @@ import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import com.volokhinaleksey.movie_club.R
 import com.volokhinaleksey.movie_club.model.state.ActorState
-import com.volokhinaleksey.movie_club.model.ui.ActorUI
+import com.volokhinaleksey.movie_club.model.ui.Actor
 import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
 import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
@@ -149,7 +149,7 @@ fun ToolbarActorDetailsScreen(navController: NavController) {
  */
 
 @Composable
-fun ActorDetails(actorDetailsData: ActorUI) {
+fun ActorDetails(actorDetailsData: Actor) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -182,7 +182,7 @@ fun ActorDetails(actorDetailsData: ActorUI) {
  * The method sets the title and details about actor from remote server
  * of the section in actor details screen
  * @param title - Title of information about the actor
- * @param details - Specific information about the actor. see [ActorUI]
+ * @param details - Specific information about the actor. see [Actor]
  */
 
 @Composable

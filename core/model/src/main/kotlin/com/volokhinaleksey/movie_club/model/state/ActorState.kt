@@ -1,11 +1,9 @@
 package com.volokhinaleksey.movie_club.model.state
 
-import com.volokhinaleksey.movie_club.model.ui.ActorUI
+import com.volokhinaleksey.movie_club.model.ui.Actor
 
 sealed interface ActorState {
-    data class Success(val data: List<ActorUI>) : ActorState
-
+    data class Success(val data: List<Actor>) : ActorState
     data class Error(val errorMessage: Throwable) : ActorState
-
-    object Loading : ActorState
+    data object Loading : ActorState
 }

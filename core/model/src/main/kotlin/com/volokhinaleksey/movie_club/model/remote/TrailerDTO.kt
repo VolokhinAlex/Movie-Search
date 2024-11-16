@@ -1,7 +1,7 @@
 package com.volokhinaleksey.movie_club.model.remote
 
 import android.os.Parcelable
-import com.volokhinaleksey.movie_club.model.ui.TrailerUI
+import com.volokhinaleksey.movie_club.model.ui.Trailer
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -20,8 +20,8 @@ data class TrailerDTO(
     val id: String?
 ) : Parcelable
 
-fun TrailerDTO.toTrailerUI(): TrailerUI {
-    return TrailerUI(
+fun TrailerDTO.toTrailerUI(): Trailer {
+    return Trailer(
         id = id.orEmpty(),
         name = name.orEmpty(),
         key = key.orEmpty(),

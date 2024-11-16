@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TrailerUI(
+data class Trailer(
     val id: String = "",
     val name: String = "",
     val key: String = "",

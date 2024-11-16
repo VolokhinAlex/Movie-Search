@@ -123,8 +123,9 @@ val homeScreen = module {
 
 val detailsScreen = module {
     factory<DetailsRepository> { DetailsRepositoryImpl(get(), get()) }
+    factory<LocaleInteractor> { LocaleInteractorImpl() }
     factory<DetailsInteractor> { DetailsInteractorImpl(get()) }
-    viewModel { DetailsViewModel(get()) }
+    viewModel { DetailsViewModel(get(), get()) }
 }
 
 val favoriteScreen = module {

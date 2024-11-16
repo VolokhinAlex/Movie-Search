@@ -17,8 +17,8 @@ data class Movie(
     val voteAverage: Double = 0.0,
     val releaseDate: String = "",
     val runtime: String = "",
-    val actors: List<ActorUI> = emptyList(),
-    val videos: List<TrailerUI> = emptyList(),
+    val actors: List<Actor> = emptyList(),
+    val videos: List<Trailer> = emptyList(),
     val favorite: Boolean = false,
     val category: String = ""
 ): Parcelable

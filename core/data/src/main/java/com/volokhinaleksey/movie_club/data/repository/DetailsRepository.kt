@@ -7,15 +7,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface DetailsRepository {
 
-    suspend fun getMovieDetails(
-        movieId: Int,
-        language: String
-    ): Movie
+    suspend fun getMovieDetails(movieId: Int): Movie
 
     fun getSimilarMovies(movieId: Int): Flow<PagingData<Movie>>
 
     suspend fun saveFavoriteMovie(favorite: Favorite)
 
+    suspend fun syncMovieDetails(movieId: Int, language: String)
 }
 
 /**

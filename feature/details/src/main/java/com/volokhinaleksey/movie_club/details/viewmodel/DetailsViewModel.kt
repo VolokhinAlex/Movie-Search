@@ -5,34 +5,33 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.volokhinaleksey.movie_club.domain.DetailsInteractor
-import com.volokhinaleksey.movie_club.model.state.MovieState
+import com.volokhinaleksey.movie_club.domain.LocaleInteractor
+import com.volokhinaleksey.movie_club.model.state.DetailsMovieState
 import com.volokhinaleksey.movie_club.model.ui.Favorite
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
-    private val detailsInteractor: DetailsInteractor
+    private val detailsInteractor: DetailsInteractor,
+    private val localeInteractor: LocaleInteractor
 ) : ViewModel() {
 
-    private val _movieDetails = MutableSharedFlow<MovieState>()
-    val movieDetails get() = _movieDetails.asSharedFlow()
+    private val _movieDetails = MutableStateFlow<DetailsMovieState>(DetailsMovieState.Loading)
+    val movieDetails get() = _movieDetails.asStateFlow()
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                _movieDetails.emit(MovieState.Loading)
-                val result = detailsInteractor.getMovieDetails(
-                    movieId = movieId,
-                    language = "en-EN",
-                    isNetworkAvailable = true
-                )
-                _movieDetails.emit(result)
+                detailsInteractor.syncMovieDetails(movieId, localeInteractor.getCurrentLanguage())
+                val result = detailsInteractor.getMovieDetails(movieId = movieId)
+                println("DetailsViewModel, result=$result")
+                _movieDetails.emit(DetailsMovieState.Success(result))
             } catch (e: Exception) {
-                _movieDetails.emit(MovieState.Error(e))
+                _movieDetails.emit(DetailsMovieState.Error(e.localizedMessage?.toString() ?: ""))
             }
         }
     }

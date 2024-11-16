@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ActorUI(
+data class Actor(
     val actorId: Long = 0,
     val movieId: Long = 0,
     val biography: String = "",

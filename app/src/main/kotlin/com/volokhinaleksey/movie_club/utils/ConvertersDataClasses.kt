@@ -4,24 +4,22 @@ import com.volokhinaleksey.movie_club.model.local.LocalActorData
 import com.volokhinaleksey.movie_club.model.local.LocalMovieData
 import com.volokhinaleksey.movie_club.model.local.LocalTrailerData
 import com.volokhinaleksey.movie_club.model.remote.ActorDTO
-import com.volokhinaleksey.movie_club.model.remote.CastDTO
-import com.volokhinaleksey.movie_club.model.remote.TrailerDTO
-import com.volokhinaleksey.movie_club.model.ui.ActorUI
+import com.volokhinaleksey.movie_club.model.ui.Actor
 import com.volokhinaleksey.movie_club.model.ui.Genre
 import com.volokhinaleksey.movie_club.model.ui.Movie
-import com.volokhinaleksey.movie_club.model.ui.TrailerUI
+import com.volokhinaleksey.movie_club.model.ui.Trailer
 
-fun mapActorDtoToActorUI(actorDTO: ActorDTO): ActorUI {
-    return ActorUI(
+fun mapActorDtoToActorUI(actorDTO: ActorDTO): Actor {
+    return Actor(
         actorId = actorDTO.id ?: 0,
         movieId = actorDTO.id ?: 0,
         biography = actorDTO.biography.orEmpty(),
-        imdbId = actorDTO.imdb_id.orEmpty(),
+        imdbId = actorDTO.imdbId.orEmpty(),
         birthday = actorDTO.birthday.orEmpty(),
         name = actorDTO.name.orEmpty(),
-        placeOfBirth = actorDTO.place_of_birth.orEmpty(),
+        placeOfBirth = actorDTO.placeOfBirth.orEmpty(),
         popularity = actorDTO.popularity ?: 0.0,
-        profilePath = actorDTO.profile_path.orEmpty()
+        profilePath = actorDTO.profilePath.orEmpty()
     )
 }
 
@@ -46,8 +44,8 @@ fun mapLocalMovieToMovieUI(localMovieData: LocalMovieData): Movie {
     )
 }
 
-fun mapLocalActorDataToActorUI(localActorData: LocalActorData): ActorUI {
-    return ActorUI(
+fun mapLocalActorDataToActorUI(localActorData: LocalActorData): Actor {
+    return Actor(
         actorId = localActorData.actorId,
         movieId = localActorData.movieId ?: 0,
         biography = localActorData.biography.orEmpty(),
@@ -61,23 +59,23 @@ fun mapLocalActorDataToActorUI(localActorData: LocalActorData): ActorUI {
     )
 }
 
-fun mapActorUIToLocalActorData(actorUI: ActorUI): LocalActorData {
+fun mapActorUIToLocalActorData(actor: Actor): LocalActorData {
     return LocalActorData(
-        actorId = actorUI.actorId,
-        movieId = actorUI.movieId,
-        biography = actorUI.biography,
-        birthday = actorUI.birthday,
-        imdbId = actorUI.imdbId,
-        name = actorUI.name,
-        placeOfBirth = actorUI.placeOfBirth,
-        popularity = actorUI.popularity,
-        profilePath = actorUI.profilePath,
-        character = actorUI.character
+        actorId = actor.actorId,
+        movieId = actor.movieId,
+        biography = actor.biography,
+        birthday = actor.birthday,
+        imdbId = actor.imdbId,
+        name = actor.name,
+        placeOfBirth = actor.placeOfBirth,
+        popularity = actor.popularity,
+        profilePath = actor.profilePath,
+        character = actor.character
     )
 }
 
-fun mapLocalMovieTrailerToTrailerUI(trailer: LocalTrailerData): TrailerUI {
-    return TrailerUI(
+fun mapLocalMovieTrailerToTrailerUI(trailer: LocalTrailerData): Trailer {
+    return Trailer(
         id = trailer.id.orEmpty(),
         name = trailer.name.orEmpty(),
         key = trailer.key.orEmpty(),

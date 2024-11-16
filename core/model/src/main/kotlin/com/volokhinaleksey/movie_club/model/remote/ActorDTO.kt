@@ -1,18 +1,19 @@
 package com.volokhinaleksey.movie_club.model.remote
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 /**
  * The CastDTO class contains data about the Actor
- * @param biography -       Biography of the actor
- * @param birthday -        Birthday of the actor
- * @param id -              Actor id
- * @param imdb_id -         Id to search for an actor on the imdb site
- * @param name -            Full name of the actor
- * @param place_of_birth -  The actor's place of birth
- * @param popularity -      The popularity of the actor
- * @param profile_path -    Photo of the actor
+ * @param biography Biography of the actor
+ * @param birthday Birthday of the actor
+ * @param id Actor id
+ * @param imdbId Id to search for an actor on the imdb site
+ * @param name Full name of the actor
+ * @param placeOfBirth The actor's place of birth
+ * @param popularity The popularity of the actor
+ * @param profilePath Photo of the actor
  */
 
 @Parcelize
@@ -20,9 +21,10 @@ data class ActorDTO(
     val biography: String?,
     val birthday: String?,
     val id: Long?,
-    val imdb_id: String?,
+    @SerializedName("imdb_id") val imdbId: String?,
     val name: String?,
-    val place_of_birth: String?,
+    @SerializedName("place_of_birth") val placeOfBirth: String?,
     val popularity: Double?,
-    val profile_path: String?
+    @SerializedName("profile_path") val profilePath: String?,
+    val character: String? = null,
 ) : Parcelable
