@@ -25,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.volokhinaleksey.movie_club.details.ui.DetailsScreen
+import com.volokhinaleksey.movie_club.favorites.ui.FavoriteScreen
 import com.volokhinaleksey.movie_club.home.ui.screen.HomeScreen
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.network.utils.NetworkStatus
@@ -35,7 +36,6 @@ import com.volokhinaleksey.movie_club.view.actor_details.ARG_ACTOR_ID
 import com.volokhinaleksey.movie_club.view.actor_details.ActorDetailsScreen
 import com.volokhinaleksey.movie_club.view.category_movies.ARG_CATEGORY_NAME_DATA
 import com.volokhinaleksey.movie_club.view.category_movies.CategoryMoviesScreen
-import com.volokhinaleksey.movie_club.view.favorite.FavoriteScreen
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
 import com.volokhinaleksey.movie_club.view.navigation.navigate
 import com.volokhinaleksey.movie_club.view.splash.SplashScreen
@@ -63,6 +63,12 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun Navigation(networkStatus: Boolean) {
         val navController = rememberNavController()
+        val openMovieDetails: (Movie) -> Unit = {
+            navController.navigate(
+                ScreenState.DetailsScreen.route,
+                bundleOf(MOVIE_DATA_KEY to it)
+            )
+        }
         BottomNavigationBar(navController) { innerPadding ->
             NavHost(
                 navController = navController,
@@ -93,12 +99,7 @@ class MainActivity : ComponentActivity() {
                     movieDetailsData?.let { data ->
                         DetailsScreen(
                             movie = data,
-                            onSimilarMovieDetails = {
-                                navController.navigate(
-                                    ScreenState.DetailsScreen.route,
-                                    bundleOf(MOVIE_DATA_KEY to it)
-                                )
-                            },
+                            onSimilarMovieDetails = { openMovieDetails(data) },
                             onActorDetails = {
                                 navController.navigate(
                                     ScreenState.ActorDetailsScreen.route,
@@ -110,17 +111,10 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 composable(route = ScreenState.SearchScreen.route) {
-                    SearchScreen(
-                        onMovieDetails = {
-                            navController.navigate(
-                                ScreenState.DetailsScreen.route,
-                                bundleOf(MOVIE_DATA_KEY to it)
-                            )
-                        }
-                    )
+                    SearchScreen { openMovieDetails(it) }
                 }
                 composable(route = ScreenState.FavoriteScreen.route) {
-                    FavoriteScreen(navController = navController)
+                    FavoriteScreen { openMovieDetails(it) }
                 }
                 composable(route = ScreenState.CategoryMoviesScreen.route) {
                     val categoryName = it.arguments?.getString(ARG_CATEGORY_NAME_DATA)

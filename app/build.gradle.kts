@@ -48,10 +48,12 @@ dependencies {
     implementation(project(":core:uikit"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
+    implementation(project(":core:utils"))
 
     implementation(project(":feature:home"))
     implementation(project(":feature:details"))
     implementation(project(":feature:search"))
+    implementation(project(":feature:favorites"))
 
     implementation(libs.androidx.work.runtime.ktx)
 

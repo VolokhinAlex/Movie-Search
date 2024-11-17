@@ -24,3 +24,5 @@ data class FavoriteEntity(
 )
 
 fun Favorite.asEntity() = FavoriteEntity(movieId = movieId, favorite = isFavorite)
+
+fun FavoriteEntity.asExternalModel() = Favorite(movieId = movieId, isFavorite = favorite)

@@ -9,5 +9,7 @@ interface HomeRepository {
         categoryId: String
     ): Flow<List<Movie>>
 
+    fun getMovies(ids: List<Int>): Flow<List<Movie>>
+
     suspend fun syncData(categoryId: String, lang: String)
 }

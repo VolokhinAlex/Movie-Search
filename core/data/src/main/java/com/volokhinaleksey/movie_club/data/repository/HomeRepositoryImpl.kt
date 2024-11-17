@@ -20,6 +20,10 @@ class HomeRepositoryImpl(
     ): Flow<List<Movie>> = database.moviesDao().getMoviesByCategory(categoryId)
         .map { it.map(MovieEntity::asExternalModel) }
 
+    override fun getMovies(ids: List<Int>): Flow<List<Movie>> = database.moviesDao()
+        .getMoviesByIds(ids)
+        .map { it.map(MovieEntity::asExternalModel) }
+
     override suspend fun syncData(categoryId: String, lang: String) {
         val movies = apiHolder.moviesApi.getMoviesByCategory(
             categoryId = categoryId,

@@ -5,8 +5,10 @@ import androidx.room.Room
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.volokhinaleksey.movie_club.data.repository.DetailsRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
+import com.volokhinaleksey.movie_club.data.repository.DetailsRepositoryImpl
+import com.volokhinaleksey.movie_club.data.repository.FavoritesRepository
+import com.volokhinaleksey.movie_club.data.repository.FavoritesRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.HomeRepository
 import com.volokhinaleksey.movie_club.data.repository.HomeRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.SearchRepository
@@ -20,19 +22,19 @@ import com.volokhinaleksey.movie_club.datasource.category.CategoryDataSource
 import com.volokhinaleksey.movie_club.datasource.category.LocalCategoryDataSource
 import com.volokhinaleksey.movie_club.datasource.category.LocalCategoryDataSourceImpl
 import com.volokhinaleksey.movie_club.datasource.category.RemoteCategoryDataSource
-import com.volokhinaleksey.movie_club.datasource.favorite.FavoriteDataSource
-import com.volokhinaleksey.movie_club.datasource.favorite.LocalFavoriteDataSource
 import com.volokhinaleksey.movie_club.details.viewmodel.DetailsViewModel
 import com.volokhinaleksey.movie_club.domain.DetailsInteractor
 import com.volokhinaleksey.movie_club.domain.DetailsInteractorImpl
+import com.volokhinaleksey.movie_club.domain.FavoritesInteractor
+import com.volokhinaleksey.movie_club.domain.FavoritesInteractorImpl
 import com.volokhinaleksey.movie_club.domain.HomeInteractor
 import com.volokhinaleksey.movie_club.domain.HomeInteractorImpl
 import com.volokhinaleksey.movie_club.domain.LocaleInteractor
 import com.volokhinaleksey.movie_club.domain.LocaleInteractorImpl
 import com.volokhinaleksey.movie_club.domain.SearchInteractor
 import com.volokhinaleksey.movie_club.domain.SearchInteractorImpl
+import com.volokhinaleksey.movie_club.favorites.viewmodel.FavoritesViewModel
 import com.volokhinaleksey.movie_club.home.viewmodel.HomeViewModel
-import com.volokhinaleksey.movie_club.model.local.LocalMovieData
 import com.volokhinaleksey.movie_club.model.remote.ActorDTO
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
@@ -44,11 +46,8 @@ import com.volokhinaleksey.movie_club.repository.actor.MovieActorRepository
 import com.volokhinaleksey.movie_club.repository.actor.MovieActorRepositoryImpl
 import com.volokhinaleksey.movie_club.repository.category.CategoryRepository
 import com.volokhinaleksey.movie_club.repository.category.CategoryRepositoryImpl
-import com.volokhinaleksey.movie_club.repository.favorite.FavoriteRepository
-import com.volokhinaleksey.movie_club.repository.favorite.FavoriteRepositoryImpl
 import com.volokhinaleksey.movie_club.search.viewmodel.SearchViewModel
 import com.volokhinaleksey.movie_club.viewmodel.CategoryMoviesViewModel
-import com.volokhinaleksey.movie_club.viewmodel.FavoriteViewModel
 import com.volokhinaleksey.movie_club.viewmodel.MovieActorViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -129,9 +128,10 @@ val detailsScreen = module {
 }
 
 val favoriteScreen = module {
-    factory<FavoriteDataSource<LocalMovieData>> { LocalFavoriteDataSource(get()) }
-    factory<FavoriteRepository> { FavoriteRepositoryImpl(get()) }
-    viewModel { FavoriteViewModel(get()) }
+    factory<FavoritesRepository> { FavoritesRepositoryImpl(get()) }
+    factory<HomeRepository> { HomeRepositoryImpl(get(), get()) }
+    factory<FavoritesInteractor> { FavoritesInteractorImpl(get(), get()) }
+    viewModel { FavoritesViewModel(get()) }
 }
 
 val actorScreen = module {
