@@ -54,6 +54,7 @@ dependencies {
     implementation(project(":feature:details"))
     implementation(project(":feature:search"))
     implementation(project(":feature:favorites"))
+    implementation(project(":feature:actor"))
 
     implementation(libs.androidx.work.runtime.ktx)
 

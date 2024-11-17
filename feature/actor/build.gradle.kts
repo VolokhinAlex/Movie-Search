@@ -5,13 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.volokhinaleksey.movie_club.uikit"
+    namespace = "com.volokhinaleksey.movie_club.actor"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
-
-        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -23,7 +21,6 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -34,14 +31,23 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:uikit"))
     implementation(project(":core:model"))
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
     implementation(project(":core:utils"))
 
-    implementation(libs.androidx.compose.paging)
+    implementation(libs.androidx.core)
+
+    implementation(libs.compose.koin)
+
+    // Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.viewmodel)
     implementation(libs.compose.coil)
+
+    implementation(libs.kotlinx.coroutines.core)
 }

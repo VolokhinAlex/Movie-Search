@@ -7,9 +7,3 @@ sealed interface MovieState {
     data class Error(val errorMessage: Throwable) : MovieState
     data object Loading : MovieState
 }
-
-sealed interface DetailsMovieState {
-    data class Success(val data: Movie) : DetailsMovieState
-    data class Error(val message: String) : DetailsMovieState
-    data object Loading : DetailsMovieState
-}

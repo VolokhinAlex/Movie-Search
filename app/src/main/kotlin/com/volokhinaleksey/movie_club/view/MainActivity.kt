@@ -12,8 +12,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -24,49 +22,38 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.volokhinaleksey.movie_club.actor.ui.ActorDetailsScreen
 import com.volokhinaleksey.movie_club.details.ui.DetailsScreen
 import com.volokhinaleksey.movie_club.favorites.ui.FavoriteScreen
 import com.volokhinaleksey.movie_club.home.ui.screen.HomeScreen
 import com.volokhinaleksey.movie_club.model.ui.Movie
-import com.volokhinaleksey.movie_club.network.utils.NetworkStatus
 import com.volokhinaleksey.movie_club.search.screen.SearchScreen
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor70
+import com.volokhinaleksey.movie_club.utils.ARG_ACTOR_ID
+import com.volokhinaleksey.movie_club.utils.ARG_MOVIE
 import com.volokhinaleksey.movie_club.utils.parcelable
-import com.volokhinaleksey.movie_club.view.actor_details.ARG_ACTOR_ID
-import com.volokhinaleksey.movie_club.view.actor_details.ActorDetailsScreen
 import com.volokhinaleksey.movie_club.view.category_movies.ARG_CATEGORY_NAME_DATA
 import com.volokhinaleksey.movie_club.view.category_movies.CategoryMoviesScreen
 import com.volokhinaleksey.movie_club.view.navigation.ScreenState
 import com.volokhinaleksey.movie_club.view.navigation.navigate
 import com.volokhinaleksey.movie_club.view.splash.SplashScreen
-import org.koin.android.ext.android.inject
-
-const val MOVIE_DATA_KEY = "Movie Data"
 
 class MainActivity : ComponentActivity() {
-
-    private val networkStatus: NetworkStatus by inject()
-    private val isNetworkAvailable = mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LaunchedEffect(key1 = true) {
-                networkStatus.networkObserve().collect {
-                    isNetworkAvailable.value = it
-                }
-            }
-            Navigation(isNetworkAvailable.value)
+            Navigation()
         }
     }
 
     @Composable
-    fun Navigation(networkStatus: Boolean) {
+    fun Navigation() {
         val navController = rememberNavController()
         val openMovieDetails: (Movie) -> Unit = {
             navController.navigate(
                 ScreenState.DetailsScreen.route,
-                bundleOf(MOVIE_DATA_KEY to it)
+                bundleOf(ARG_MOVIE to it)
             )
         }
         BottomNavigationBar(navController) { innerPadding ->
@@ -80,12 +67,7 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(route = ScreenState.HomeScreen.route) {
                     HomeScreen(
-                        showMovieDetails = {
-                            navController.navigate(
-                                ScreenState.DetailsScreen.route,
-                                bundleOf(MOVIE_DATA_KEY to it)
-                            )
-                        },
+                        showMovieDetails = { openMovieDetails(it) },
                         showMoreMovies = {
                             navController.navigate(
                                 ScreenState.CategoryMoviesScreen.route,
@@ -95,18 +77,18 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 composable(route = ScreenState.DetailsScreen.route) {
-                    val movieDetailsData = it.arguments?.parcelable<Movie>(MOVIE_DATA_KEY)
+                    val movieDetailsData = it.arguments?.parcelable<Movie>(ARG_MOVIE)
                     movieDetailsData?.let { data ->
                         DetailsScreen(
                             movie = data,
                             onSimilarMovieDetails = { openMovieDetails(data) },
-                            onActorDetails = {
+                            onActorDetails = { actorId ->
                                 navController.navigate(
                                     ScreenState.ActorDetailsScreen.route,
-                                    bundleOf(ARG_ACTOR_ID to it)
+                                    bundleOf(ARG_ACTOR_ID to actorId)
                                 )
                             },
-                            onClosePage = { navController.popBackStack() }
+                            onClosePage = navController::popBackStack
                         )
                     }
                 }
@@ -122,7 +104,7 @@ class MainActivity : ComponentActivity() {
                         CategoryMoviesScreen(
                             categoryName = categoryName,
                             navController = navController,
-                            networkStatus = networkStatus
+                            networkStatus = true
                         )
                     }
                 }
@@ -131,8 +113,7 @@ class MainActivity : ComponentActivity() {
                     actorId?.let {
                         ActorDetailsScreen(
                             actorId = actorId,
-                            navController = navController,
-                            networkStatus = networkStatus
+                            onBack = navController::popBackStack
                         )
                     }
                 }

@@ -28,6 +28,7 @@ import coil.request.ImageRequest
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_TEXT_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor70
+import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
 import java.text.DecimalFormat
 
 /**
@@ -52,7 +53,7 @@ fun MovieCard(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://image.tmdb.org/t/p/w500${movie.posterPath}")
+                    .data("$TMDB_LOAD_IMAGE_API${movie.posterPath}")
                     .build(), contentDescription = "movie_poster",
                 modifier = Modifier
                     .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))

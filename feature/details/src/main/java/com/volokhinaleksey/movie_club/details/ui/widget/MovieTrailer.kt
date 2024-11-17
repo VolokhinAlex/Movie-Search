@@ -26,6 +26,7 @@ import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.TransparentColor
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
+import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
 
 @Composable
 internal fun MovieTrailer(movie: Movie) {
@@ -36,7 +37,7 @@ internal fun MovieTrailer(movie: Movie) {
     )
     Box(modifier = Modifier.size(width = 250.dp, height = 150.dp)) {
         SubcomposeAsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${movie.backdropPath}",
+            model = "$TMDB_LOAD_IMAGE_API${movie.backdropPath}",
             loading = { LoadingProgressBar() },
             contentDescription = "movie_poster",
             modifier = Modifier

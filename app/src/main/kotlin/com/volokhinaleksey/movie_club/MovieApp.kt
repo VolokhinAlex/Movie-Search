@@ -1,4 +1,4 @@
-package com.volokhinaleksey.movie_club.app
+package com.volokhinaleksey.movie_club
 
 import android.app.Application
 import com.volokhinaleksey.movie_club.di.actorScreen

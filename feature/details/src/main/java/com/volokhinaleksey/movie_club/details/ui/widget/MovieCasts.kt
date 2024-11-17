@@ -23,6 +23,7 @@ import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_PAGING
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
+import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
 
 @Composable
 internal fun MovieCasts(
@@ -43,7 +44,7 @@ internal fun MovieCasts(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     SubcomposeAsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500${item.profilePath}",
+                        model = "$TMDB_LOAD_IMAGE_API${item.profilePath}",
                         loading = { LoadingProgressBar() },
                         contentDescription = "movie_poster",
                         modifier = Modifier

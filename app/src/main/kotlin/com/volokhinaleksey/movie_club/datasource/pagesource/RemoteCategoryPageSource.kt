@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
-import com.volokhinaleksey.movie_club.view.LanguageQuery
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -34,7 +33,7 @@ class RemoteCategoryPageSource(
             val serverResponse =
                 apiHolder.moviesApi.getMoviesByCategory(
                     categoryId = category,
-                    language = LanguageQuery.EN.languageQuery,
+                    language = "en-EN",
                     page = page
                 )
             val nextKey = if (serverResponse.results.isEmpty()) null else page + 1

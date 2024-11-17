@@ -5,6 +5,9 @@ import androidx.room.Room
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.volokhinaleksey.movie_club.actor.viewmodel.ActorsViewModel
+import com.volokhinaleksey.movie_club.data.repository.ActorRepository
+import com.volokhinaleksey.movie_club.data.repository.ActorRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.FavoritesRepository
@@ -14,15 +17,13 @@ import com.volokhinaleksey.movie_club.data.repository.HomeRepositoryImpl
 import com.volokhinaleksey.movie_club.data.repository.SearchRepository
 import com.volokhinaleksey.movie_club.data.repository.SearchRepositoryImpl
 import com.volokhinaleksey.movie_club.database.room.MovieDataBase
-import com.volokhinaleksey.movie_club.datasource.actor.ActorDataSource
-import com.volokhinaleksey.movie_club.datasource.actor.LocalActorDataSource
-import com.volokhinaleksey.movie_club.datasource.actor.LocalActorDataSourceImpl
-import com.volokhinaleksey.movie_club.datasource.actor.RemoteActorDataSource
 import com.volokhinaleksey.movie_club.datasource.category.CategoryDataSource
 import com.volokhinaleksey.movie_club.datasource.category.LocalCategoryDataSource
 import com.volokhinaleksey.movie_club.datasource.category.LocalCategoryDataSourceImpl
 import com.volokhinaleksey.movie_club.datasource.category.RemoteCategoryDataSource
 import com.volokhinaleksey.movie_club.details.viewmodel.DetailsViewModel
+import com.volokhinaleksey.movie_club.domain.ActorInteractor
+import com.volokhinaleksey.movie_club.domain.ActorInteractorImpl
 import com.volokhinaleksey.movie_club.domain.DetailsInteractor
 import com.volokhinaleksey.movie_club.domain.DetailsInteractorImpl
 import com.volokhinaleksey.movie_club.domain.FavoritesInteractor
@@ -35,20 +36,14 @@ import com.volokhinaleksey.movie_club.domain.SearchInteractor
 import com.volokhinaleksey.movie_club.domain.SearchInteractorImpl
 import com.volokhinaleksey.movie_club.favorites.viewmodel.FavoritesViewModel
 import com.volokhinaleksey.movie_club.home.viewmodel.HomeViewModel
-import com.volokhinaleksey.movie_club.model.remote.ActorDTO
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import com.volokhinaleksey.movie_club.moviesapi.MovieTMBDCore
 import com.volokhinaleksey.movie_club.moviesapi.MovieTMDBAPI
-import com.volokhinaleksey.movie_club.network.utils.AndroidNetworkStatus
-import com.volokhinaleksey.movie_club.network.utils.NetworkStatus
-import com.volokhinaleksey.movie_club.repository.actor.MovieActorRepository
-import com.volokhinaleksey.movie_club.repository.actor.MovieActorRepositoryImpl
 import com.volokhinaleksey.movie_club.repository.category.CategoryRepository
 import com.volokhinaleksey.movie_club.repository.category.CategoryRepositoryImpl
 import com.volokhinaleksey.movie_club.search.viewmodel.SearchViewModel
 import com.volokhinaleksey.movie_club.viewmodel.CategoryMoviesViewModel
-import com.volokhinaleksey.movie_club.viewmodel.MovieActorViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.dsl.viewModel
@@ -107,10 +102,6 @@ val network = module {
             .build()
             .create(MovieTMDBAPI::class.java)
     }
-
-    single<NetworkStatus> {
-        AndroidNetworkStatus(get())
-    }
 }
 
 val homeScreen = module {
@@ -135,10 +126,10 @@ val favoriteScreen = module {
 }
 
 val actorScreen = module {
-    factory<LocalActorDataSource> { LocalActorDataSourceImpl(get()) }
-    factory<ActorDataSource<ActorDTO>> { RemoteActorDataSource(get()) }
-    factory<MovieActorRepository> { MovieActorRepositoryImpl(get(), get()) }
-    viewModel { MovieActorViewModel(get()) }
+    factory<ActorRepository> { ActorRepositoryImpl(get(), get()) }
+    factory<LocaleInteractor> { LocaleInteractorImpl() }
+    factory<ActorInteractor> { ActorInteractorImpl(get()) }
+    viewModel { ActorsViewModel(get(), get()) }
 }
 
 val searchScreen = module {
