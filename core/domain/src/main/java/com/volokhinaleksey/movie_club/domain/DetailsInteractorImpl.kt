@@ -3,6 +3,7 @@ package com.volokhinaleksey.movie_club.domain
 import androidx.paging.map
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
 import com.volokhinaleksey.movie_club.model.ui.Favorite
+import com.volokhinaleksey.movie_club.utils.convertStringFullDateToOnlyYear
 import kotlinx.coroutines.flow.map
 
 class DetailsInteractorImpl(
@@ -11,7 +12,7 @@ class DetailsInteractorImpl(
 
     override suspend fun getMovieDetails(movieId: Int) = detailsRepository
         .getMovieDetails(movieId)
-        .run { copy(releaseDate = convertStringFullDateToOnlyYear(releaseDate)) }
+        .run { copy(releaseDate = releaseDate.convertStringFullDateToOnlyYear()) }
 
     override fun getSimilarMovies(
         movieId: Int,
@@ -19,7 +20,7 @@ class DetailsInteractorImpl(
     ) = detailsRepository
         .getSimilarMovies(movieId = movieId, language = language)
         .map { movies ->
-            movies.map { it.copy(releaseDate = convertStringFullDateToOnlyYear(it.releaseDate)) }
+            movies.map { it.copy(releaseDate = it.releaseDate.convertStringFullDateToOnlyYear()) }
         }
 
     override suspend fun saveFavoriteMovie(favorite: Favorite) {

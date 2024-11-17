@@ -44,6 +44,7 @@ android {
 dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:movies-api"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:database"))
     implementation(project(":core:uikit"))
     implementation(project(":core:data"))
@@ -55,6 +56,7 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:favorites"))
     implementation(project(":feature:actor"))
+    implementation(project(":feature:movie_category"))
 
     implementation(libs.androidx.work.runtime.ktx)
 
@@ -99,4 +101,7 @@ dependencies {
     implementation(libs.google.material)
 
     implementation(libs.androidx.core)
+
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.preferences.core)
 }

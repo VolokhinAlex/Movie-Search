@@ -33,6 +33,7 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
+    implementation(project(":core:utils"))
 
     api(libs.androidx.room.core)
     api(libs.androidx.room.runtime)

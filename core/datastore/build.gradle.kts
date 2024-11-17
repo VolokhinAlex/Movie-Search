@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.volokhinaleksey.movie_club.data"
+    namespace = "com.volokhinaleksey.movie_club.datastore"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -31,12 +31,6 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
-    implementation(project(":core:movies-api"))
-    implementation(project(":core:database"))
-    implementation(project(":core:datastore"))
-    implementation(project(":core:utils"))
 
-    implementation(libs.kotlinx.coroutines.core)
-
-    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.datastore.preferences.core)
 }

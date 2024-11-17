@@ -1,6 +1,7 @@
 package com.volokhinaleksey.movie_club.domain
 
 import com.volokhinaleksey.movie_club.data.repository.HomeRepository
+import com.volokhinaleksey.movie_club.utils.convertStringFullDateToOnlyYear
 import kotlinx.coroutines.flow.map
 
 class HomeInteractorImpl(
@@ -9,7 +10,7 @@ class HomeInteractorImpl(
 
     override fun getMovies(categoryId: String) = homeRepository.getMovies(categoryId)
         .map {
-            it.map { it.copy(releaseDate = convertStringFullDateToOnlyYear(it.releaseDate)) }
+            it.map { it.copy(releaseDate = it.releaseDate.convertStringFullDateToOnlyYear()) }
         }
 
     override suspend fun syncData(categoryId: String, lang: String) {

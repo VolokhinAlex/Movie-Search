@@ -4,6 +4,7 @@ import android.app.Application
 import com.volokhinaleksey.movie_club.di.actorScreen
 import com.volokhinaleksey.movie_club.di.categoryScreen
 import com.volokhinaleksey.movie_club.di.database
+import com.volokhinaleksey.movie_club.di.datastore
 import com.volokhinaleksey.movie_club.di.detailsScreen
 import com.volokhinaleksey.movie_club.di.favoriteScreen
 import com.volokhinaleksey.movie_club.di.homeScreen
@@ -21,6 +22,7 @@ class MovieApp : Application() {
             modules(
                 listOf(
                     database,
+                    datastore,
                     network,
                     homeScreen,
                     detailsScreen,

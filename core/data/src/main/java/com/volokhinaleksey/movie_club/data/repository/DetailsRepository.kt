@@ -15,14 +15,3 @@ interface DetailsRepository {
 
     suspend fun syncMovieDetails(movieId: Int, category: String, language: String)
 }
-
-/**
- * Minutes are converted to the format of hours and minutes
- * @sample min = 96 -> 1h 36min
- */
-
-internal fun timeToFormatHoursAndMinutes(min: Int): String {
-    val hour = min / 60
-    val minutes = min % 60
-    return String.format("%02dh %02dmin", hour, minutes)
-}

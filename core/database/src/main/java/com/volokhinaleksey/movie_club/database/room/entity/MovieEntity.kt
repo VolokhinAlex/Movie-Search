@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.model.ui.Movie
+import com.volokhinaleksey.movie_club.utils.timeToFormatHoursAndMinutes
 
 @Entity(tableName = "movies")
 data class MovieEntity(
@@ -46,7 +47,7 @@ fun MovieDataTMDB.asEntity(category: String = ""): MovieEntity {
         title = title.orEmpty(),
         poster = posterPath.orEmpty(),
         releaseDate = releaseDate.orEmpty(),
-        runtime = timeToFormatHoursAndMinutes(runtime ?: 0),
+        runtime = runtime.timeToFormatHoursAndMinutes(),
         overview = overview.orEmpty(),
         category = category,
         imdbId = imdbId.orEmpty(),
@@ -71,10 +72,3 @@ fun MovieEntity.asExternalModel() = Movie(
     runtime = runtime,
     category = category
 )
-
-//TODO(utils module)
-internal fun timeToFormatHoursAndMinutes(min: Int): String {
-    val hour = min / 60
-    val minutes = min % 60
-    return String.format("%02dh %02dmin", hour, minutes)
-}

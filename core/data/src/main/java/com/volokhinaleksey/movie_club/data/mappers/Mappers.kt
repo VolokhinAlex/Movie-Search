@@ -1,10 +1,10 @@
 package com.volokhinaleksey.movie_club.data.mappers
 
-import com.volokhinaleksey.movie_club.data.repository.timeToFormatHoursAndMinutes
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.model.remote.toTrailerUI
 import com.volokhinaleksey.movie_club.model.ui.Genre
 import com.volokhinaleksey.movie_club.model.ui.Movie
+import com.volokhinaleksey.movie_club.utils.timeToFormatHoursAndMinutes
 
 fun MovieDataTMDB.toMovieUI(
     category: String = "",
@@ -22,7 +22,7 @@ fun MovieDataTMDB.toMovieUI(
         title = title.orEmpty(),
         voteAverage = voteAverage ?: 0.0,
         releaseDate = releaseDate.orEmpty(),
-        runtime = timeToFormatHoursAndMinutes(runtime ?: 0),
+        runtime = runtime.timeToFormatHoursAndMinutes(),
         actors = emptyList(),
         videos = videos?.results?.map { it.toTrailerUI() } ?: emptyList(),
         category = category,

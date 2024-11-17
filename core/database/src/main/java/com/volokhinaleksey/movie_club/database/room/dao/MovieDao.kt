@@ -29,6 +29,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies WHERE category = :categoryId")
     fun getMoviesByCategory(categoryId: String): Flow<List<MovieEntity>>
 
+    @Query("SELECT * FROM movies WHERE category = :categoryId")
+    fun getMoviesByCategoryPaging(categoryId: String): PagingSource<Int, MovieEntity>
+
     @Query("SELECT * FROM movies WHERE id IN (:ids)")
     fun getMoviesByIds(ids: List<Int>): Flow<List<MovieEntity>>
 

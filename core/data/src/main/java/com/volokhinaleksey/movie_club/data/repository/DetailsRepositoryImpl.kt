@@ -4,7 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.map
-import com.volokhinaleksey.movie_club.data.SimilarMoviesRemoteMediator
+import com.volokhinaleksey.movie_club.data.mediator.SimilarMoviesRemoteMediator
 import com.volokhinaleksey.movie_club.database.room.MovieDataBase
 import com.volokhinaleksey.movie_club.database.room.entity.asEntity
 import com.volokhinaleksey.movie_club.database.room.entity.asExternalModel
