@@ -28,3 +28,6 @@ data class ActorDTO(
     @SerializedName("profile_path") val profilePath: String?,
     val character: String? = null,
 ) : Parcelable
+
+@Parcelize
+data class ActorsDTO(val cast: List<ActorDTO>) : Parcelable

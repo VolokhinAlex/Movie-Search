@@ -21,7 +21,6 @@ import kotlinx.parcelize.Parcelize
  * @param voteCount Number of users who voted
  * @param voteAverage Popularity ball (0-10) according to IMDB
  * @param releaseDate Premiere date of the movie
- * @param productionCountries The country where the movie was shot
  * @param runtime Duration of the movie by time
  * @param credits The main characters of the movie
  * @param videos Movie trailers
@@ -43,7 +42,6 @@ data class MovieDataTMDB(
     @SerializedName("vote_count") val voteCount: Int?,
     @SerializedName("vote_average") val voteAverage: Double?,
     @SerializedName("release_date") val releaseDate: String?,
-    @SerializedName("production_countries") val productionCountries: List<CountriesDTO>?,
     val runtime: Int?,
     val credits: ActorsDTO?,
     val videos: VideosDTO?
