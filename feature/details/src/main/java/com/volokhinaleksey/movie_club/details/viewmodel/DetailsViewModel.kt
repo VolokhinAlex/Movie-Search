@@ -23,13 +23,17 @@ class DetailsViewModel(
     private val _movieDetails = MutableStateFlow<DetailsMovieState>(DetailsMovieState.Loading)
     val movieDetails get() = _movieDetails.asStateFlow()
 
-    fun getMovieDetails(movieId: Int) {
+    fun getMovieDetails(movie: Movie) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                detailsInteractor.syncMovieDetails(movieId, localeInteractor.getCurrentLanguage())
-                val result = detailsInteractor.getMovieDetails(movieId = movieId)
-                println("DetailsViewModel, result=$result")
+                detailsInteractor.syncMovieDetails(
+                    movieId = movie.id,
+                    category = movie.category,
+                    language = localeInteractor.getCurrentLanguage()
+                )
+                val result = detailsInteractor.getMovieDetails(movieId = movie.id)
                 _movieDetails.emit(DetailsMovieState.Success(result))
+                println("DetailsViewModel, result=$result")
             } catch (e: Exception) {
                 _movieDetails.emit(DetailsMovieState.Error(e.localizedMessage?.toString() ?: ""))
             }
@@ -54,8 +58,8 @@ class DetailsViewModel(
      */
 
     fun getSimilarMovies(movieId: Int): Flow<PagingData<Movie>> =
-        detailsInteractor.getSimilarMovies(movieId = movieId, isNetworkAvailable = true)
+        detailsInteractor
+            .getSimilarMovies(movieId = movieId, language = localeInteractor.getCurrentLanguage())
             .cachedIn(viewModelScope)
-
 
 }

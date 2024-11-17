@@ -30,7 +30,7 @@ class HomeRepositoryImpl(
 
         database.genresDao().upsertAllGenres(genres.genres.map { it.asEntity() })
 
-        database.moviesDao().upsertAllMovies(movies.map { it.asEntity(categoryId) })
+        database.moviesDao().insertAllMovies(movies.map { it.asEntity(categoryId) })
 
         val entities = mutableListOf<MoviesGenresEntity>()
 

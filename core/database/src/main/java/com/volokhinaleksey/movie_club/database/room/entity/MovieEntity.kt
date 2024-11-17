@@ -69,6 +69,7 @@ fun MovieEntity.asExternalModel() = Movie(
     voteAverage = voteAverage,
     releaseDate = releaseDate,
     runtime = runtime,
+    category = category
 )
 
 //TODO(utils module)

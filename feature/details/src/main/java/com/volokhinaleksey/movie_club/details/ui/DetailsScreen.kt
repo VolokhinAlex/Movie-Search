@@ -39,7 +39,7 @@ fun DetailsScreen(
     val movieDetailsState by detailsViewModel.movieDetails.collectAsState()
     val similarMoviesFlow = detailsViewModel.getSimilarMovies(movie.id).collectAsLazyPagingItems()
 
-    LaunchedEffect(true) { detailsViewModel.getMovieDetails(movie.id) }
+    LaunchedEffect(true) { detailsViewModel.getMovieDetails(movie) }
 
     Column(
         modifier = Modifier
@@ -52,7 +52,7 @@ fun DetailsScreen(
             is DetailsMovieState.Error -> {
                 ErrorMessage(
                     message = state.message,
-                    click = { detailsViewModel.getMovieDetails(movie.id) }
+                    click = { detailsViewModel.getMovieDetails(movie) }
                 )
             }
 

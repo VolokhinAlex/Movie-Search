@@ -33,7 +33,11 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
-    implementation(libs.androidx.room.core)
+
+    api(libs.androidx.room.core)
     api(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.room.paging)
 }

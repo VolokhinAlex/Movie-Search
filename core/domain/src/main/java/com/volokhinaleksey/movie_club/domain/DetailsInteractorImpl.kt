@@ -1,11 +1,8 @@
 package com.volokhinaleksey.movie_club.domain
 
-import androidx.paging.PagingData
 import androidx.paging.map
 import com.volokhinaleksey.movie_club.data.repository.DetailsRepository
 import com.volokhinaleksey.movie_club.model.ui.Favorite
-import com.volokhinaleksey.movie_club.model.ui.Movie
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DetailsInteractorImpl(
@@ -18,11 +15,12 @@ class DetailsInteractorImpl(
 
     override fun getSimilarMovies(
         movieId: Int,
-        isNetworkAvailable: Boolean,
-    ): Flow<PagingData<Movie>> {
-        return detailsRepository.getSimilarMovies(movieId = movieId)
-            .map { it.map { it.copy(releaseDate = convertStringFullDateToOnlyYear(it.releaseDate)) } }
-    }
+        language: String
+    ) = detailsRepository
+        .getSimilarMovies(movieId = movieId, language = language)
+        .map { movies ->
+            movies.map { it.copy(releaseDate = convertStringFullDateToOnlyYear(it.releaseDate)) }
+        }
 
     override suspend fun saveFavoriteMovie(favorite: Favorite) {
         try {
@@ -32,9 +30,9 @@ class DetailsInteractorImpl(
         }
     }
 
-    override suspend fun syncMovieDetails(movieId: Int, language: String) {
+    override suspend fun syncMovieDetails(movieId: Int, category: String, language: String) {
         try {
-            detailsRepository.syncMovieDetails(movieId, language)
+            detailsRepository.syncMovieDetails(movieId, category, language)
         } catch (e: Exception) {
             println("DetailsInteractorImpl, syncMovieDetails, movieId=$movieId, error=$e")
         }

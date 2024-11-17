@@ -9,10 +9,10 @@ interface DetailsInteractor {
 
     suspend fun getMovieDetails(movieId: Int): Movie
 
-    fun getSimilarMovies(movieId: Int, isNetworkAvailable: Boolean): Flow<PagingData<Movie>>
+    fun getSimilarMovies(movieId: Int, language: String): Flow<PagingData<Movie>>
 
     suspend fun saveFavoriteMovie(favorite: Favorite)
 
-    suspend fun syncMovieDetails(movieId: Int, language: String)
+    suspend fun syncMovieDetails(movieId: Int, category: String, language: String)
 
 }
