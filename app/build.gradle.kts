@@ -43,12 +43,7 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
-    implementation(project(":core:movies-api"))
-    implementation(project(":core:datastore"))
-    implementation(project(":core:database"))
     implementation(project(":core:uikit"))
-    implementation(project(":core:data"))
-    implementation(project(":core:domain"))
     implementation(project(":core:utils"))
 
     implementation(project(":feature:home"))
@@ -58,50 +53,21 @@ dependencies {
     implementation(project(":feature:actor"))
     implementation(project(":feature:movie_category"))
 
-    implementation(libs.androidx.work.runtime.ktx)
-
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.common)
-
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.messaging)
 
     // Compose
     implementation(libs.androidx.compose.navigation)
-    implementation(libs.androidx.compose.paging)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling)
     implementation(libs.compose.activity)
-    implementation(libs.compose.viewmodel)
-    implementation(libs.compose.livedata)
-    implementation(libs.compose.coil)
-    implementation(libs.compose.material)
-
-    implementation(libs.androidx.appcompat)
-
-    implementation(libs.androidx.livedata)
-    implementation(libs.androidx.viewmodel)
-
-    implementation(libs.androidx.room.core)
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)
-    implementation(libs.koin.android.compat)
-    implementation(libs.compose.koin)
-
-    implementation(libs.squareup.retrofit)
-    implementation(libs.squareup.retrofit.converter.gson)
-    implementation(libs.squareup.logging.interceptor)
-
-    implementation(libs.google.material)
 
     implementation(libs.androidx.core)
 
-    implementation(libs.androidx.datastore)
-    implementation(libs.androidx.datastore.preferences.core)
+    implementation(libs.threetenabp)
 }

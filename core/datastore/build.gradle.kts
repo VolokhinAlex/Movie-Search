@@ -32,5 +32,9 @@ android {
 dependencies {
     implementation(project(":core:model"))
 
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+
+    implementation(libs.androidx.datastore)
     implementation(libs.androidx.datastore.preferences.core)
 }

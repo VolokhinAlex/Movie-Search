@@ -53,7 +53,7 @@ class HomeViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             MovieCategory.entries.forEach {
                 launch {
-                    homeInteractor.syncData(it.id, localeInteractor.getCurrentLanguage())
+                    homeInteractor.syncData(it, localeInteractor.getCurrentLanguage())
                 }
             }
         }

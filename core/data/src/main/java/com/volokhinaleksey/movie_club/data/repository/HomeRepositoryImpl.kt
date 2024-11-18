@@ -5,10 +5,13 @@ import com.volokhinaleksey.movie_club.database.room.entity.MovieEntity
 import com.volokhinaleksey.movie_club.database.room.entity.MoviesGenresEntity
 import com.volokhinaleksey.movie_club.database.room.entity.asEntity
 import com.volokhinaleksey.movie_club.database.room.entity.asExternalModel
+import com.volokhinaleksey.movie_club.model.MovieCategory
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 class HomeRepositoryImpl(
     private val database: MovieDataBase,
@@ -24,17 +27,28 @@ class HomeRepositoryImpl(
         .getMoviesByIds(ids)
         .map { it.map(MovieEntity::asExternalModel) }
 
-    override suspend fun syncData(categoryId: String, lang: String) {
-        val movies = apiHolder.moviesApi.getMoviesByCategory(
-            categoryId = categoryId,
-            language = lang
-        ).results
+    override suspend fun syncData(category: MovieCategory, lang: String) {
+        val movies = when (category) {
+            MovieCategory.Upcoming -> {
+                val startReleaseDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                apiHolder.moviesApi.getUpcomingMovies(
+                    startReleaseDate = startReleaseDate,
+                    language = lang
+                ).results
+            }
+            else -> {
+                apiHolder.moviesApi.getMoviesByCategory(
+                    categoryId = category.id,
+                    language = lang
+                ).results
+            }
+        }
 
         val genres = apiHolder.moviesApi.getGenres(language = lang)
 
         database.genresDao().upsertAllGenres(genres.genres.map { it.asEntity() })
 
-        database.moviesDao().insertAllMovies(movies.map { it.asEntity(categoryId) })
+        database.moviesDao().insertAllMovies(movies.map { it.asEntity(category.id) })
 
         val entities = mutableListOf<MoviesGenresEntity>()
 

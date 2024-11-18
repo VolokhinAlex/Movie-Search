@@ -1,5 +1,6 @@
 package com.volokhinaleksey.movie_club.data.repository
 
+import com.volokhinaleksey.movie_club.model.MovieCategory
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import kotlinx.coroutines.flow.Flow
 
@@ -11,5 +12,5 @@ interface HomeRepository {
 
     fun getMovies(ids: List<Int>): Flow<List<Movie>>
 
-    suspend fun syncData(categoryId: String, lang: String)
+    suspend fun syncData(category: MovieCategory, lang: String)
 }

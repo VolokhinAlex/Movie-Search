@@ -63,6 +63,15 @@ interface MovieTMDBAPI {
         @Query("page") page: Int = 1
     ): CategoryMoviesTMDB
 
+    @GET("3/discover/movie")
+    suspend fun getUpcomingMovies(
+        @Query("primary_release_date.gte") startReleaseDate: String,
+        @Query("language") language: String,
+        @Query("page") page: Int = 1,
+        @Query("api_key") token: String = BuildConfig.MOVIE_API_KEY,
+        @Query("sort_by") sortBy: String = "popularity.desc",
+    ): CategoryMoviesTMDB
+
     /**
      * The method for getting the similar movies
      */

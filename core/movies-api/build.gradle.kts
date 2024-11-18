@@ -44,6 +44,10 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
+    implementation(project(":core:utils"))
+
+    implementation(libs.koin.core)
+
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.retrofit.converter.gson)
     implementation(libs.squareup.logging.interceptor)
