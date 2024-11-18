@@ -51,7 +51,7 @@ class CategoryMoviesRemoteMediator(
 
             datastore.saveCategoryMoviesRemoteKey(CategoryMoviesRemoteKey(category, nextKey ?: 1))
 
-            database.withTransaction { saveCategoryMovies(result, category) }
+            database.withTransaction { saveCategoryMovies(result, "${category}_more") }
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {

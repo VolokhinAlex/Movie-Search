@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.volokhinaleksey.movie_club.favorites.viewmodel.FavoritesViewModel
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
 import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
 import org.koin.androidx.compose.koinViewModel
 
@@ -32,7 +32,7 @@ fun FavoriteScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(PrimaryColor80), horizontalAlignment = Alignment.CenterHorizontally
+            .background(DarkPrimaryColor80), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header
         Text(

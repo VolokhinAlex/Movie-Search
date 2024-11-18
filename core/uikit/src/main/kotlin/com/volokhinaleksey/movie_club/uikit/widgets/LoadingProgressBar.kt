@@ -8,14 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.volokhinaleksey.movie_club.uikit.theme.BlueDark40
-import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
 
 @Composable
 fun LoadingProgressBar() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(PrimaryColor80),
+            .background(DarkPrimaryColor80),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(

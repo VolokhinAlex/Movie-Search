@@ -13,7 +13,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.search.viewmodel.SearchViewModel
-import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
 import com.volokhinaleksey.movie_club.uikit.widgets.MovieListPaging
 import org.koin.androidx.compose.koinViewModel
 
@@ -29,7 +29,7 @@ fun SearchScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(PrimaryColor80)
+            .background(DarkPrimaryColor80)
             .padding(top = 15.dp)
     ) {
         SearchBar(

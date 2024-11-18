@@ -19,11 +19,10 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor70
-import com.volokhinaleksey.movie_club.uikit.theme.SearchFieldColor
+import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor70
+import com.volokhinaleksey.movie_club.uikit.theme.DarkTextColor
 
 @Composable
 internal fun SearchTextField(
@@ -42,7 +41,7 @@ internal fun SearchTextField(
                 start = if (!focused) 16.dp else 0.dp,
                 end = 16.dp
             ),
-        color = PrimaryColor70,
+        color = DarkPrimaryColor70,
         shape = RoundedCornerShape(percent = 50),
     ) {
         Box(
@@ -50,7 +49,7 @@ internal fun SearchTextField(
         ) {
             if (query.isEmpty()) {
                 Text(
-                    color = SearchFieldColor,
+                    color = DarkTextColor,
                     text = stringResource(R.string.search_hint),
                     modifier = Modifier
                         .align(Alignment.CenterStart)

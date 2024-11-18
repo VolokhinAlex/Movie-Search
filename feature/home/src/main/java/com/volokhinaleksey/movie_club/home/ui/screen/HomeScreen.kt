@@ -24,7 +24,7 @@ import com.volokhinaleksey.movie_club.model.MovieCategory
 import com.volokhinaleksey.movie_club.model.state.MovieCategoryState
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
 import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
 import org.koin.androidx.compose.koinViewModel
 
@@ -42,7 +42,7 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(PrimaryColor80)
+            .background(DarkPrimaryColor80)
             .verticalScroll(rememberScrollState())
     ) {
         Text(

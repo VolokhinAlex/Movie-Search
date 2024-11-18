@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.ERROR_MESSAGE_BUTTON_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.ERROR_MESSAGE_TITLE_SIZE
-import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
 import com.volokhinaleksey.movie_club.uikit.theme.RedDark40
 
 /**
@@ -28,7 +28,7 @@ fun ErrorMessage(message: String, click: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(PrimaryColor80),
+            .background(DarkPrimaryColor80),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

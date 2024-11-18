@@ -37,6 +37,6 @@ class CategoryRepositoryImpl(
             datastore = datastore,
             coreApi = coreApi
         ),
-        pagingSourceFactory = { database.moviesDao().getMoviesByCategoryPaging(category) }
+        pagingSourceFactory = { database.moviesDao().getMoviesByCategoryPaging("${category}_more") }
     ).flow.map { movies -> movies.map { it.asExternalModel() } }
 }

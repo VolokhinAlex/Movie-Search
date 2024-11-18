@@ -27,7 +27,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_TEXT_SIZE
-import com.volokhinaleksey.movie_club.uikit.theme.PrimaryColor70
+import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor70
 import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
 import java.text.DecimalFormat
 
@@ -45,7 +45,7 @@ fun MovieCard(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = PrimaryColor70,
+            containerColor = DarkPrimaryColor70,
         )
     ) {
         Column(

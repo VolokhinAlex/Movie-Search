@@ -6,7 +6,7 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.volokhinaleksey.movie_club.R
+import com.volokhinaleksey.movie_club.uikit.R
 
 /**
  * The class is needed for easy navigation between screens
