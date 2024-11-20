@@ -13,14 +13,14 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.search.viewmodel.SearchViewModel
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.uikit.widgets.MovieListPaging
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel = koinViewModel(),
-    onMovieDetails: (Movie) -> Unit
+    onMovieDetails: (Movie) -> Unit,
 ) {
     val searchQuery by searchViewModel.searchQuery.collectAsState()
     val isFocused by searchViewModel.isFocused.collectAsState()
@@ -29,7 +29,7 @@ fun SearchScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkPrimaryColor80)
+            .background(MovieClubTheme.colors.primaryContainerColor)
             .padding(top = 15.dp)
     ) {
         SearchBar(
@@ -48,7 +48,7 @@ fun SearchScreen(
 @Composable
 internal fun SearchResult(
     movieItems: () -> LazyPagingItems<Movie>,
-    onItemClick: (Movie) -> Unit
+    onItemClick: (Movie) -> Unit,
 ) {
     MovieListPaging(lazyMovieItems = movieItems(), onItemClick = onItemClick)
 }

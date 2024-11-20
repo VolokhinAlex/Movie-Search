@@ -5,7 +5,6 @@ android-minSdk = "24"
 android-targetSdk = "34"
 androidx-core = "1.13.1"
 androidx-appcompat = "1.7.0"
-androidx-livedata = "2.8.7"
 androidx-viewmodel = "2.8.7"
 androidx-paging = "3.3.2"
 androidx-composeBom = "2024.10.01"
@@ -34,14 +33,10 @@ workRuntimeKtx = "2.9.1"
 
 [libraries]
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferencesCore" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferencesCore" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "androidx-room" }
-androidx-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-viewmodel" }
-androidx-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidx-livedata" }
 androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "androidx-paging" }
-androidx-paging-common = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "androidx-paging" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
 androidx-room-core = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
@@ -57,13 +52,10 @@ compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-viewmodel" }
-compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "compose-coil" }
 
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
-koin-android-compat = { group = "io.insert-koin", name = "koin-android-compat", version.ref = "koin" }
-koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
 compose-koin = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
@@ -74,9 +66,6 @@ squareup-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebase-crashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "firebase-analytics" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
 
 [plugins]

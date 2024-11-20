@@ -7,20 +7,19 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.volokhinaleksey.movie_club.uikit.theme.BlueDark40
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 
 @Composable
 fun LoadingProgressBar() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkPrimaryColor80),
+            .background(MovieClubTheme.colors.primaryContainerColor),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
             modifier = Modifier.align(Alignment.Center),
-            color = BlueDark40
+            color = MovieClubTheme.colors.highlightColor
         )
     }
 }

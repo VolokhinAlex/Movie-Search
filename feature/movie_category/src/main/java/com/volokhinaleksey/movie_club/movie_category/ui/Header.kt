@@ -12,13 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.volokhinaleksey.movie_club.model.MovieCategory
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 
 @Composable
 internal fun Header(
@@ -45,14 +43,12 @@ internal fun Header(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = null,
-                tint = Color.White
+                tint = MovieClubTheme.colors.onPrimaryColor
             )
         }
         Text(
             text = stringResource(id = title),
-            fontSize = TITLE_SIZE,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
+            style = MovieClubTheme.typography.heading
         )
     }
 }

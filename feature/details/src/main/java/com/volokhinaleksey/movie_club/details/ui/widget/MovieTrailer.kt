@@ -24,7 +24,7 @@ import androidx.core.content.ContextCompat.startActivity
 import coil.compose.SubcomposeAsyncImage
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.DarkTransparentColor
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
 
@@ -47,7 +47,7 @@ internal fun MovieTrailer(movie: Movie) {
         )
         Box(
             modifier = Modifier
-                .background(DarkTransparentColor)
+                .background(MovieClubTheme.colors.surfaceVariant)
                 .clip(RoundedCornerShape(8.dp))
                 .fillMaxSize()
                 .clickable {

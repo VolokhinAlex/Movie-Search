@@ -1,13 +1,23 @@
 package com.volokhinaleksey.movie_club.uikit.theme
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-val BlueDark40 = Color(0xFF2D0CC2)
-val RedDark40 = Color(0xFFA20C0C)
+internal val DarkErrorColor = Color(0xFFA20C0C)
+internal val DarkPrimaryColor80 = Color(0xFF111111)
+internal val DarkPrimaryColor70 = Color(0xFF1B1C1E)
+internal val DarkTransparentColor = Color(0x5E000000)
 
-val DarkPrimaryColor80 = Color(0xFF111111)
-val DarkPrimaryColor70 = Color(0xFF1B1C1E)
-val DarkTransparentColor = Color(0x5E000000)
-val DarkTextColor = Color.White
+@Immutable
+data class MovieClubColors(
+    val primaryContainerColor: Color,
+    val onPrimaryColor: Color,
+    val secondaryColor: Color,
+    val highlightColor: Color,
+    val onErrorColor: Color,
+    val surfaceVariant: Color,
+)
 
-
+val LocalMovieClubColors =
+    staticCompositionLocalOf<MovieClubColors> { error("Colors not provided") }

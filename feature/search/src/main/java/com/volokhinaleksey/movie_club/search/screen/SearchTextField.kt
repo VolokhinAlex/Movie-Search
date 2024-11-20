@@ -16,13 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor70
-import com.volokhinaleksey.movie_club.uikit.theme.DarkTextColor
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 
 @Composable
 internal fun SearchTextField(
@@ -41,7 +39,7 @@ internal fun SearchTextField(
                 start = if (!focused) 16.dp else 0.dp,
                 end = 16.dp
             ),
-        color = DarkPrimaryColor70,
+        color = MovieClubTheme.colors.secondaryColor,
         shape = RoundedCornerShape(percent = 50),
     ) {
         Box(
@@ -49,7 +47,7 @@ internal fun SearchTextField(
         ) {
             if (query.isEmpty()) {
                 Text(
-                    color = DarkTextColor,
+                    color = MovieClubTheme.colors.onPrimaryColor,
                     text = stringResource(R.string.search_hint),
                     modifier = Modifier
                         .align(Alignment.CenterStart)
@@ -65,10 +63,10 @@ internal fun SearchTextField(
                     .align(Alignment.CenterStart)
                     .padding(start = 24.dp, end = 8.dp),
                 textStyle = LocalTextStyle.current.copy(
-                    color = Color.White
+                    color = MovieClubTheme.colors.onPrimaryColor
                 ),
                 singleLine = true,
-                cursorBrush = SolidColor(Color.White)
+                cursorBrush = SolidColor(MovieClubTheme.colors.onPrimaryColor)
             )
         }
     }

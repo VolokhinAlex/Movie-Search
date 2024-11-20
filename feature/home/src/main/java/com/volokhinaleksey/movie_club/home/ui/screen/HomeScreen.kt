@@ -12,10 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.volokhinaleksey.movie_club.home.ui.CategoryTitle
 import com.volokhinaleksey.movie_club.home.ui.HorizontalMovieList
@@ -24,8 +21,7 @@ import com.volokhinaleksey.movie_club.model.MovieCategory
 import com.volokhinaleksey.movie_club.model.state.MovieCategoryState
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
-import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -42,7 +38,7 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkPrimaryColor80)
+            .background(MovieClubTheme.colors.primaryContainerColor)
             .verticalScroll(rememberScrollState())
     ) {
         Text(
@@ -50,10 +46,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp),
-            color = Color.White,
-            fontSize = TITLE_SIZE,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
+            style = MovieClubTheme.typography.toolbar
         )
 
         CategoryContainer(

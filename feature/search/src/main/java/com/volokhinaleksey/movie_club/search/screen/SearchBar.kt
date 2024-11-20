@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 
 @Composable
 internal fun SearchBar(
@@ -41,7 +42,7 @@ internal fun SearchBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = null,
-                    tint = Color.White
+                    tint = MovieClubTheme.colors.onPrimaryColor
                 )
             }
         }

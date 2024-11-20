@@ -70,4 +70,6 @@ dependencies {
     implementation(libs.androidx.core)
 
     implementation(libs.threetenabp)
+
+    implementation(libs.google.material)
 }

@@ -11,7 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.volokhinaleksey.movie_club.actor.viewmodel.ActorsViewModel
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -26,7 +26,7 @@ fun ActorDetailsScreen(
 
     Column(
         modifier = Modifier
-            .background(DarkPrimaryColor80)
+            .background(MovieClubTheme.colors.primaryContainerColor)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {

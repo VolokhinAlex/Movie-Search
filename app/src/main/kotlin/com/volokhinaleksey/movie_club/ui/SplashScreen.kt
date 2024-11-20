@@ -17,11 +17,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.volokhinaleksey.movie_club.R
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import kotlinx.coroutines.delay
 
 @Composable
@@ -52,7 +51,7 @@ fun Splash(alpha: Float) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkPrimaryColor80),
+            .background(MovieClubTheme.colors.primaryContainerColor),
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -61,7 +60,7 @@ fun Splash(alpha: Float) {
             modifier = Modifier
                 .size(200.dp)
                 .alpha(alpha = alpha),
-            tint = Color.White
+            tint = MovieClubTheme.colors.onPrimaryColor
         )
     }
 }

@@ -13,13 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.volokhinaleksey.movie_club.model.MovieCategory
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 
 @Composable
 internal fun CategoryTitle(
@@ -42,16 +40,14 @@ internal fun CategoryTitle(
                     MovieCategory.Upcoming -> R.string.upcoming
                 }
             ),
-            fontSize = TITLE_SIZE,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
+            style = MovieClubTheme.typography.heading
         )
         IconButton(onClick) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = stringResource(id = R.string.more_movies),
                 modifier = Modifier.size(28.dp),
-                tint = Color.White
+                tint = MovieClubTheme.colors.onPrimaryColor
             )
         }
     }

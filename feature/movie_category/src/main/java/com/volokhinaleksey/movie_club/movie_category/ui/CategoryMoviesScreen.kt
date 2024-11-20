@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.movie_category.viewmodel.CategoryMoviesViewModel
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -23,7 +23,7 @@ fun CategoryMoviesScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(DarkPrimaryColor80)
+            .background(MovieClubTheme.colors.primaryContainerColor)
     ) {
         Header(category = category, onBack = onBack)
         CategoryMovieList(items = { categoryMovieItems }, onItemClick = onItemClick)

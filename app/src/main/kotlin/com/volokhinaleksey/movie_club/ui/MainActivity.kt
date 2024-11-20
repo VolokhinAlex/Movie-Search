@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +33,8 @@ import com.volokhinaleksey.movie_club.movie_category.ui.CategoryMoviesScreen
 import com.volokhinaleksey.movie_club.navigation.ScreenState
 import com.volokhinaleksey.movie_club.navigation.navigate
 import com.volokhinaleksey.movie_club.search.screen.SearchScreen
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor70
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubAppTheme
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.utils.ARG_ACTOR_ID
 import com.volokhinaleksey.movie_club.utils.ARG_CATEGORY_NAME
 import com.volokhinaleksey.movie_club.utils.ARG_MOVIE
@@ -43,28 +45,28 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MovieClub()
+            MovieClubApp()
         }
     }
 }
 
 @Composable
-internal fun MovieClub() {
-    val navController = rememberNavController()
-    BottomNavigationBar(navController) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = ScreenState.SplashScreen.route,
-            modifier = Modifier.padding(innerPadding),
-            builder = { navigationBuilder(navController) }
-        )
+internal fun MovieClubApp() {
+    MovieClubAppTheme {
+        val navController = rememberNavController()
+        BottomNavigationBar(navController) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = ScreenState.SplashScreen.route,
+                modifier = Modifier.padding(innerPadding),
+                builder = { navigationBuilder(navController) }
+            )
+        }
     }
 }
 
 
-internal fun NavGraphBuilder.navigationBuilder(
-    navController: NavController
-) {
+internal fun NavGraphBuilder.navigationBuilder(navController: NavController) {
     val openMovieDetails: (Movie) -> Unit = {
         navController.navigate(
             ScreenState.DetailsScreen.route,
@@ -146,7 +148,7 @@ internal fun BottomNavigationBar(
                     .route != currentRoute && ScreenState.ActorDetailsScreen.route != currentRoute
                 && ScreenState.SplashScreen.route != currentRoute
             ) {
-                NavigationBar(containerColor = DarkPrimaryColor70) {
+                NavigationBar(containerColor = MovieClubTheme.colors.secondaryColor) {
                     bottomNavItems.forEach { item ->
                         val selected = item.route == currentRoute
                         NavigationBarItem(
@@ -156,7 +158,7 @@ internal fun BottomNavigationBar(
                                 Text(
                                     text = stringResource(id = item.name),
                                     fontWeight = FontWeight.SemiBold,
-                                    color = if (selected) Color.White else Color.Unspecified
+                                    color = if (selected) MovieClubTheme.colors.onPrimaryColor else Color.Unspecified
                                 )
                             },
                             icon = {
@@ -166,7 +168,10 @@ internal fun BottomNavigationBar(
                                         contentDescription = stringResource(id = item.name),
                                     )
                                 }
-                            }
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                indicatorColor = MovieClubTheme.colors.highlightColor
+                            )
                         )
                     }
                 }

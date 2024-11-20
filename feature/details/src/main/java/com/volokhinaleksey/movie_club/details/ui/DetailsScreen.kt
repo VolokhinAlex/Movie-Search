@@ -23,7 +23,7 @@ import com.volokhinaleksey.movie_club.details.ui.widget.SimilarMovies
 import com.volokhinaleksey.movie_club.details.viewmodel.DetailsViewModel
 import com.volokhinaleksey.movie_club.model.state.DetailsMovieState
 import com.volokhinaleksey.movie_club.model.ui.Movie
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor80
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.uikit.widgets.ErrorMessage
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 import org.koin.androidx.compose.koinViewModel
@@ -43,7 +43,7 @@ fun DetailsScreen(
 
     Column(
         modifier = Modifier
-            .background(DarkPrimaryColor80)
+            .background(MovieClubTheme.colors.primaryContainerColor)
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center

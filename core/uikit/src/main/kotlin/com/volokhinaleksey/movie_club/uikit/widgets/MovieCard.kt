@@ -27,7 +27,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.theme.CARD_TEXT_SIZE
-import com.volokhinaleksey.movie_club.uikit.theme.DarkPrimaryColor70
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
 import java.text.DecimalFormat
 
@@ -45,7 +45,7 @@ fun MovieCard(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = DarkPrimaryColor70,
+            containerColor = MovieClubTheme.colors.secondaryColor,
         )
     ) {
         Column(
@@ -61,7 +61,7 @@ fun MovieCard(
             )
             Text(
                 text = movie.title,
-                color = Color.White,
+                color = MovieClubTheme.colors.onPrimaryColor,
                 fontSize = CARD_TEXT_SIZE,
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp),
                 maxLines = 1,
@@ -75,7 +75,7 @@ fun MovieCard(
             ) {
                 Text(
                     text = movie.releaseDate,
-                    color = Color.White,
+                    color = MovieClubTheme.colors.onPrimaryColor,
                     fontSize = CARD_TEXT_SIZE
                 )
                 Row(
@@ -84,7 +84,7 @@ fun MovieCard(
                     Text(
                         text = ratingFormat.format(movie.voteAverage),
                         modifier = Modifier.padding(end = 5.dp),
-                        color = Color.White,
+                        color = MovieClubTheme.colors.onPrimaryColor,
                         fontSize = CARD_TEXT_SIZE
                     )
                     Icon(

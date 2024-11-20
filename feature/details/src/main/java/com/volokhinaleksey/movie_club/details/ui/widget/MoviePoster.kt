@@ -11,11 +11,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.volokhinaleksey.movie_club.model.ui.Movie
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
 
@@ -38,7 +38,7 @@ internal fun MoviePoster(movie: Movie, onClick: () -> Unit) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = Icons.AutoMirrored.Filled.ArrowBack.name,
-                tint = Color.White
+                tint = MovieClubTheme.colors.onPrimaryColor
             )
         }
     }

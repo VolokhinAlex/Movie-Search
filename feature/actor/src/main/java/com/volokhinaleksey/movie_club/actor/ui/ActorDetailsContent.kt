@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -26,7 +25,7 @@ import com.volokhinaleksey.movie_club.model.state.ActorDetailsState
 import com.volokhinaleksey.movie_club.model.ui.Actor
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_SIZE
-import com.volokhinaleksey.movie_club.uikit.theme.TITLE_SIZE
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.uikit.widgets.ErrorMessage
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
@@ -50,7 +49,7 @@ internal fun ActorDetailsContent(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "",
-                        tint = Color.White
+                        tint = MovieClubTheme.colors.onPrimaryColor
                     )
                 }
             }
@@ -87,8 +86,7 @@ internal fun ActorDetails(actor: Actor) {
         Text(
             text = actor.name,
             modifier = Modifier.padding(top = 10.dp),
-            fontSize = TITLE_SIZE,
-            color = Color.White
+            style = MovieClubTheme.typography.heading
         )
 
         detailItems.forEach {
@@ -96,7 +94,7 @@ internal fun ActorDetails(actor: Actor) {
                 text = "${stringResource(id = it.first)}: ${it.second}",
                 modifier = Modifier.padding(top = 10.dp),
                 fontSize = DETAILS_PRIMARY_SIZE,
-                color = Color.White
+                color = MovieClubTheme.colors.onPrimaryColor
             )
         }
     }

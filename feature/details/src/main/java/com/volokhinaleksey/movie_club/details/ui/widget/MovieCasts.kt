@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +21,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_PAGING
+import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
 import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
 
@@ -57,10 +57,10 @@ internal fun MovieCasts(
                     Text(
                         text = item.name,
                         modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
-                        color = Color.White
+                        color = MovieClubTheme.colors.onPrimaryColor
                     )
 
-                    Text(text = item.character, color = Color.White, fontSize = 14.sp)
+                    Text(text = item.character, color = MovieClubTheme.colors.onPrimaryColor, fontSize = 14.sp)
                 }
             }
         }
