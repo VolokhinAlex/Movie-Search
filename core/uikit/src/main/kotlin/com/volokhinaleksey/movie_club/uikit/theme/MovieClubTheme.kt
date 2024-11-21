@@ -47,6 +47,10 @@ fun MovieClubAppTheme(content: @Composable () -> Unit) {
             fontSize = 16.sp,
             color = Color.White
         ),
+        bodySmall = TextStyle(
+            fontSize = 13.sp,
+            color = Color.White
+        ),
         toolbar = TextStyle(
             color = Color.White,
             fontSize = 24.sp,

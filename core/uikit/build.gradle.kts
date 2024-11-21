@@ -41,7 +41,8 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling)
+    implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.tooling)
     implementation(libs.compose.viewmodel)
     implementation(libs.compose.coil)
 }

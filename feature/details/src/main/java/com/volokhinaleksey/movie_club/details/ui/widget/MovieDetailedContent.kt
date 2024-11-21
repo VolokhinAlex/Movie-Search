@@ -1,11 +1,14 @@
 package com.volokhinaleksey.movie_club.details.ui.widget
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -15,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
@@ -44,35 +48,22 @@ internal fun MovieDetailsContent(
         )
     }
 
-    // Genres
-    Box(
-        modifier = Modifier.padding(
-            top = DETAILS_PRIMARY_PAGING,
-            bottom = DETAILS_PRIMARY_PAGING
-        )
-    ) {
-        Text(
-            text = movie.genres.joinToString { it.name },
-            style = MovieClubTheme.typography.bodyMedium
-        )
-    }
-
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(top = DETAILS_PRIMARY_PAGING),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "IMDB ${ratingFormat.format(movie.voteAverage)}",
-            modifier = Modifier.padding(end = 5.dp),
-            style = MovieClubTheme.typography.bodyMedium
-        )
         Icon(
             imageVector = Icons.Default.Star,
             contentDescription = "",
             tint = Color(0xFFFFC006),
             modifier = Modifier
-                .padding(end = 15.dp)
+                .padding(end = 5.dp)
                 .size(22.dp)
+        )
+        Text(
+            text = "${ratingFormat.format(movie.voteAverage)}/10 (IMDb)",
+            modifier = Modifier.padding(end = 15.dp),
+            style = MovieClubTheme.typography.bodyMedium
         )
         Text(
             text = movie.releaseDate,
@@ -85,11 +76,38 @@ internal fun MovieDetailsContent(
         )
     }
 
+    // Genres
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = DETAILS_PRIMARY_PAGING)
+    ) {
+        items(
+            count = movie.genres.size,
+            key = { movie.genres[it].id }
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(end = 5.dp)
+                    .background(MovieClubTheme.colors.secondaryColor, RoundedCornerShape(100))
+                    .padding(vertical = 5.dp, horizontal = 10.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = movie.genres[it].name.uppercase(),
+                    style = MovieClubTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+        }
+    }
+
     // Movie Overview
     TitleCategoryDetails(
         title = stringResource(id = R.string.overview),
-        modifier = Modifier.padding(top = DETAILS_PRIMARY_PAGING, bottom = DETAILS_PRIMARY_PAGING),
+        modifier = Modifier.padding(vertical = DETAILS_PRIMARY_PAGING),
     )
+
     Text(
         text = movie.overview,
         modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING),
