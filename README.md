@@ -23,6 +23,3 @@ The project was written during Kotlin's training. The project uses a third-party
 * Android Architecture Components
 * The project is completely written in Kotlin
 
-## Project Architecture
-### The MVVM pattern was chosen for the application architecture.
-![MVVM](https://user-images.githubusercontent.com/89124134/213107437-dfb8ed2b-481e-4eb3-8da0-336d061593a6.png)
