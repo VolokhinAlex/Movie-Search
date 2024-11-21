@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 
 object MovieClubTheme {
     val colors: MovieClubColors
@@ -18,30 +19,37 @@ object MovieClubTheme {
 
 
 @Composable
-fun MovieClubAppTheme(
-    textSize: MovieClubSize = MovieClubSize.Medium,
-    padding: MovieClubPadding = MovieClubPadding.Medium,
-    content: @Composable () -> Unit
-) {
+fun MovieClubAppTheme(content: @Composable () -> Unit) {
     val colors = MovieClubColors(
         primaryContainerColor = DarkPrimaryColor80,
         onPrimaryColor = Color.White,
         secondaryColor = DarkPrimaryColor70,
-        highlightColor = Color(0xFF845496),
+        highlightColor = Color(0xFFCC94AC),
         onErrorColor = DarkErrorColor,
         surfaceVariant = DarkTransparentColor
     )
 
     val typography = MovieClubTypography(
-        heading = TextStyle(
+        headingLarge = TextStyle(
             color = Color.White,
-            fontSize = HEADER_TEXT_SIZE,
+            fontSize = 21.sp,
             fontWeight = FontWeight.SemiBold,
         ),
-        body = TextStyle(),
+        headingMedium = TextStyle(
+            color = Color.White,
+            fontSize = 20.sp,
+        ),
+        bodyLarge = TextStyle(
+            fontSize = 18.sp,
+            color = Color.White
+        ),
+        bodyMedium = TextStyle(
+            fontSize = 16.sp,
+            color = Color.White
+        ),
         toolbar = TextStyle(
             color = Color.White,
-            fontSize = TOOLBAR_TEXT_SIZE,
+            fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         ),

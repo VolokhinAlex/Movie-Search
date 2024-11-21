@@ -10,6 +10,6 @@ internal fun TitleCategoryDetails(title: String, modifier: Modifier) {
     Text(
         text = title,
         modifier = modifier,
-        style = MovieClubTheme.typography.heading
+        style = MovieClubTheme.typography.headingLarge
     )
 }

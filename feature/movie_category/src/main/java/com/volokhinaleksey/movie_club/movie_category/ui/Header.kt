@@ -48,7 +48,7 @@ internal fun Header(
         }
         Text(
             text = stringResource(id = title),
-            style = MovieClubTheme.typography.heading
+            style = MovieClubTheme.typography.headingLarge
         )
     }
 }

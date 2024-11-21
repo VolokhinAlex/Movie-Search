@@ -40,7 +40,7 @@ internal fun CategoryTitle(
                     MovieCategory.Upcoming -> R.string.upcoming
                 }
             ),
-            style = MovieClubTheme.typography.heading
+            style = MovieClubTheme.typography.headingLarge
         )
         IconButton(onClick) {
             Icon(

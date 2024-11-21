@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.volokhinaleksey.movie_club.model.ui.Movie
-import com.volokhinaleksey.movie_club.uikit.theme.CARD_TEXT_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.utils.TMDB_LOAD_IMAGE_API
 import java.text.DecimalFormat
@@ -44,12 +43,11 @@ fun MovieCard(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MovieClubTheme.colors.secondaryColor,
-        )
+        colors = CardDefaults.cardColors(containerColor = MovieClubTheme.colors.secondaryColor)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -61,8 +59,7 @@ fun MovieCard(
             )
             Text(
                 text = movie.title,
-                color = MovieClubTheme.colors.onPrimaryColor,
-                fontSize = CARD_TEXT_SIZE,
+                style = MovieClubTheme.typography.headingMedium,
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -70,13 +67,12 @@ fun MovieCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp),
+                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = movie.releaseDate,
-                    color = MovieClubTheme.colors.onPrimaryColor,
-                    fontSize = CARD_TEXT_SIZE
+                    style = MovieClubTheme.typography.headingMedium,
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -84,8 +80,7 @@ fun MovieCard(
                     Text(
                         text = ratingFormat.format(movie.voteAverage),
                         modifier = Modifier.padding(end = 5.dp),
-                        color = MovieClubTheme.colors.onPrimaryColor,
-                        fontSize = CARD_TEXT_SIZE
+                        style = MovieClubTheme.typography.headingMedium,
                     )
                     Icon(
                         imageVector = Icons.Default.Star,

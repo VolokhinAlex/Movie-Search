@@ -24,7 +24,6 @@ import coil.compose.SubcomposeAsyncImage
 import com.volokhinaleksey.movie_club.model.state.ActorDetailsState
 import com.volokhinaleksey.movie_club.model.ui.Actor
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import com.volokhinaleksey.movie_club.uikit.widgets.ErrorMessage
 import com.volokhinaleksey.movie_club.uikit.widgets.LoadingProgressBar
@@ -69,7 +68,9 @@ internal fun ActorDetails(actor: Actor) {
     }
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(20.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -85,16 +86,15 @@ internal fun ActorDetails(actor: Actor) {
 
         Text(
             text = actor.name,
-            modifier = Modifier.padding(top = 10.dp),
-            style = MovieClubTheme.typography.heading
+            modifier = Modifier.padding(top = 15.dp),
+            style = MovieClubTheme.typography.headingLarge
         )
 
         detailItems.forEach {
             Text(
                 text = "${stringResource(id = it.first)}: ${it.second}",
-                modifier = Modifier.padding(top = 10.dp),
-                fontSize = DETAILS_PRIMARY_SIZE,
-                color = MovieClubTheme.colors.onPrimaryColor
+                modifier = Modifier.padding(top = 15.dp),
+                style = MovieClubTheme.typography.bodyMedium
             )
         }
     }

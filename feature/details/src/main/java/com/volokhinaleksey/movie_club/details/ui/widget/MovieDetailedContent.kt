@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.uikit.R
 import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_PAGING
-import com.volokhinaleksey.movie_club.uikit.theme.DETAILS_PRIMARY_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 import java.text.DecimalFormat
 
@@ -37,7 +36,7 @@ internal fun MovieDetailsContent(
         Text(
             modifier = Modifier.fillMaxWidth(0.8f),
             text = movie.title,
-            style = MovieClubTheme.typography.heading
+            style = MovieClubTheme.typography.headingLarge
         )
         MovieFavorite(
             isFavorite = isFavorite,
@@ -54,8 +53,7 @@ internal fun MovieDetailsContent(
     ) {
         Text(
             text = movie.genres.joinToString { it.name },
-            fontSize = DETAILS_PRIMARY_SIZE,
-            color = MovieClubTheme.colors.onPrimaryColor
+            style = MovieClubTheme.typography.bodyMedium
         )
     }
 
@@ -66,8 +64,7 @@ internal fun MovieDetailsContent(
         Text(
             text = "IMDB ${ratingFormat.format(movie.voteAverage)}",
             modifier = Modifier.padding(end = 5.dp),
-            color = MovieClubTheme.colors.onPrimaryColor,
-            fontSize = DETAILS_PRIMARY_SIZE
+            style = MovieClubTheme.typography.bodyMedium
         )
         Icon(
             imageVector = Icons.Default.Star,
@@ -80,13 +77,11 @@ internal fun MovieDetailsContent(
         Text(
             text = movie.releaseDate,
             modifier = Modifier.padding(end = 15.dp),
-            color = MovieClubTheme.colors.onPrimaryColor,
-            fontSize = DETAILS_PRIMARY_SIZE
+            style = MovieClubTheme.typography.bodyMedium
         )
         Text(
             text = movie.runtime,
-            color = MovieClubTheme.colors.onPrimaryColor,
-            fontSize = DETAILS_PRIMARY_SIZE
+            style = MovieClubTheme.typography.bodyMedium
         )
     }
 
@@ -98,6 +93,6 @@ internal fun MovieDetailsContent(
     Text(
         text = movie.overview,
         modifier = Modifier.padding(bottom = DETAILS_PRIMARY_PAGING),
-        color = MovieClubTheme.colors.onPrimaryColor
+        style = MovieClubTheme.typography.bodyMedium
     )
 }

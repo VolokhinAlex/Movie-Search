@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.volokhinaleksey.movie_club.uikit.R
-import com.volokhinaleksey.movie_club.uikit.theme.ERROR_MESSAGE_BUTTON_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.ERROR_MESSAGE_TITLE_SIZE
 import com.volokhinaleksey.movie_club.uikit.theme.MovieClubTheme
 
@@ -31,16 +30,17 @@ fun ErrorMessage(message: String, click: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = message, fontSize = ERROR_MESSAGE_TITLE_SIZE, color = MovieClubTheme.colors.onErrorColor,
+            text = message,
+            fontSize = ERROR_MESSAGE_TITLE_SIZE,
+            color = MovieClubTheme.colors.onErrorColor,
             fontWeight = FontWeight(500),
             textAlign = TextAlign.Center
         )
         Button(onClick = click) {
             Text(
                 text = stringResource(id = R.string.retry),
-                fontSize = ERROR_MESSAGE_BUTTON_SIZE,
-                color = MovieClubTheme.colors.onPrimaryColor,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = MovieClubTheme.typography.headingLarge
             )
         }
     }
