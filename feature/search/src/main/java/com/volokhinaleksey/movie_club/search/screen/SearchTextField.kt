@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,9 +46,10 @@ internal fun SearchTextField(
         ) {
             if (query.isEmpty()) {
                 Text(
-                    color = MovieClubTheme.colors.onPrimaryColor,
                     text = stringResource(R.string.search_hint),
+                    style = MovieClubTheme.typography.bodyMedium,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .align(Alignment.CenterStart)
                         .padding(start = 24.dp),
                 )
@@ -58,13 +58,12 @@ internal fun SearchTextField(
                 value = query,
                 onValueChange = onQueryChange,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .onFocusChanged { onSearchFocusChange(it.isFocused) }
                     .focusRequester(focusRequester)
                     .align(Alignment.CenterStart)
                     .padding(start = 24.dp, end = 8.dp),
-                textStyle = LocalTextStyle.current.copy(
-                    color = MovieClubTheme.colors.onPrimaryColor
-                ),
+                textStyle = MovieClubTheme.typography.bodyMedium,
                 singleLine = true,
                 cursorBrush = SolidColor(MovieClubTheme.colors.onPrimaryColor)
             )

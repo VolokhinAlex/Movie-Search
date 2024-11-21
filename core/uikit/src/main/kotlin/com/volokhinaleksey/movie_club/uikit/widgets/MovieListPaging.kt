@@ -48,12 +48,12 @@ fun MovieListPaging(
                     loadState.append is LoadState.Loading -> LoadingProgressBar()
                     loadState.refresh is LoadState.Error -> {
                         val message = lazyMovieItems.loadState.refresh as LoadState.Error
-                        ErrorMessage(message = message.error.localizedMessage!!) { lazyMovieItems.retry() }
+                        ErrorMessage(message = message.error.localizedMessage.orEmpty()) { lazyMovieItems.retry() }
                     }
 
                     loadState.append is LoadState.Error -> {
                         val message = lazyMovieItems.loadState.append as LoadState.Error
-                        ErrorMessage(message = message.error.localizedMessage!!) { lazyMovieItems.retry() }
+                        ErrorMessage(message = message.error.localizedMessage.orEmpty()) { lazyMovieItems.retry() }
                     }
                 }
             }
