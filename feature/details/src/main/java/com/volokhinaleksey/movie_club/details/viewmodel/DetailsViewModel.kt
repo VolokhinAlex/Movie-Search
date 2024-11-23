@@ -28,7 +28,6 @@ class DetailsViewModel(
             try {
                 detailsInteractor.syncMovieDetails(
                     movieId = movie.id,
-                    category = movie.category,
                     language = localeInteractor.getCurrentLanguage()
                 )
                 val result = detailsInteractor.getMovieDetails(movieId = movie.id)

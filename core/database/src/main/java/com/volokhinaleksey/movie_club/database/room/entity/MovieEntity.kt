@@ -2,12 +2,13 @@ package com.volokhinaleksey.movie_club.database.room.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.volokhinaleksey.movie_club.model.remote.MovieDataTMDB
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.utils.timeToFormatHoursAndMinutes
 
-@Entity(tableName = "movies")
+@Entity(tableName = "movies", indices = [Index("id")])
 data class MovieEntity(
     @PrimaryKey
     val id: Int,
@@ -16,7 +17,6 @@ data class MovieEntity(
     @ColumnInfo("release_date") val releaseDate: String,
     val runtime: String,
     val overview: String,
-    val category: String,
     @ColumnInfo(name = "imdb_id") val imdbId: String,
     val adult: Boolean,
     @ColumnInfo(name = "backdrop_path") val backdropPath: String,
@@ -24,7 +24,7 @@ data class MovieEntity(
     @ColumnInfo(name = "vote_average") val voteAverage: Double,
 )
 
-fun Movie.asEntity(category: String): MovieEntity {
+fun Movie.asEntity(): MovieEntity {
     return MovieEntity(
         id = id,
         title = title,
@@ -32,7 +32,6 @@ fun Movie.asEntity(category: String): MovieEntity {
         releaseDate = releaseDate,
         runtime = runtime,
         overview = overview,
-        category = category,
         imdbId = imdbId,
         adult = adult,
         backdropPath = backdropPath,
@@ -41,7 +40,7 @@ fun Movie.asEntity(category: String): MovieEntity {
     )
 }
 
-fun MovieDataTMDB.asEntity(category: String = ""): MovieEntity {
+fun MovieDataTMDB.asEntity(): MovieEntity {
     return MovieEntity(
         id = id ?: 0,
         title = title.orEmpty(),
@@ -49,7 +48,6 @@ fun MovieDataTMDB.asEntity(category: String = ""): MovieEntity {
         releaseDate = releaseDate.orEmpty(),
         runtime = runtime.timeToFormatHoursAndMinutes(),
         overview = overview.orEmpty(),
-        category = category,
         imdbId = imdbId.orEmpty(),
         adult = adult ?: false,
         backdropPath = backdropPath.orEmpty(),
@@ -58,7 +56,7 @@ fun MovieDataTMDB.asEntity(category: String = ""): MovieEntity {
     )
 }
 
-fun MovieEntity.asExternalModel() = Movie(
+fun MovieEntity.asExternalModel(categoryId: String = "") = Movie(
     adult = adult,
     backdropPath = backdropPath,
     posterPath = poster,
@@ -70,5 +68,5 @@ fun MovieEntity.asExternalModel() = Movie(
     voteAverage = voteAverage,
     releaseDate = releaseDate,
     runtime = runtime,
-    category = category
+    category = categoryId
 )

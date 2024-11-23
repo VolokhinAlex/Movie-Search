@@ -5,12 +5,14 @@ import androidx.room.RoomDatabase
 import com.volokhinaleksey.movie_club.database.room.dao.ActorsDao
 import com.volokhinaleksey.movie_club.database.room.dao.FavoritesDao
 import com.volokhinaleksey.movie_club.database.room.dao.GenresDao
+import com.volokhinaleksey.movie_club.database.room.dao.MovieCategoryDao
 import com.volokhinaleksey.movie_club.database.room.dao.MovieDao
 import com.volokhinaleksey.movie_club.database.room.dao.SimilarMoviesRemoteKeyDao
 import com.volokhinaleksey.movie_club.database.room.dao.TrailersDao
 import com.volokhinaleksey.movie_club.database.room.entity.ActorEntity
 import com.volokhinaleksey.movie_club.database.room.entity.FavoriteEntity
 import com.volokhinaleksey.movie_club.database.room.entity.GenreEntity
+import com.volokhinaleksey.movie_club.database.room.entity.MovieCategoryEntity
 import com.volokhinaleksey.movie_club.database.room.entity.MovieEntity
 import com.volokhinaleksey.movie_club.database.room.entity.MovieTrailersEntity
 import com.volokhinaleksey.movie_club.database.room.entity.MoviesGenresEntity
@@ -30,9 +32,10 @@ import com.volokhinaleksey.movie_club.database.room.entity.SimilarMovieRemoteKey
         ActorEntity::class,
         MovieTrailersEntity::class,
         SimilarMovieEntity::class,
-        SimilarMovieRemoteKey::class
+        SimilarMovieRemoteKey::class,
+        MovieCategoryEntity::class
     ],
-    version = 5
+    version = 6
 )
 abstract class MovieDataBase : RoomDatabase() {
     abstract fun moviesDao(): MovieDao
@@ -41,4 +44,5 @@ abstract class MovieDataBase : RoomDatabase() {
     abstract fun actorsDao(): ActorsDao
     abstract fun trailersDao(): TrailersDao
     abstract fun similarMoviesRemoteKeyDao(): SimilarMoviesRemoteKeyDao
+    abstract fun movieCategoryDao(): MovieCategoryDao
 }

@@ -50,7 +50,7 @@ class SimilarMoviesRemoteMediator(
                 movieId = movieId,
                 language = lang,
                 page = page,
-            ).results.map { it.asEntity("similar") }
+            ).results.map { it.asEntity() }
 
             val endOfPaginationReached = serverResponse.isEmpty()
             val nextKey = if (endOfPaginationReached) null else page + 1

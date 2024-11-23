@@ -23,13 +23,32 @@ interface MovieDao {
     @Upsert
     suspend fun upsertMovie(entity: MovieEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAllMovies(entity: List<MovieEntity>)
 
-    @Query("SELECT * FROM movies WHERE category = :categoryId")
+    @Upsert
+    suspend fun upsertAllMovies(entity: List<MovieEntity>)
+
+    @Transaction
+    @Query(
+        """
+            SELECT movie.*
+            FROM movie_category mc
+            INNER JOIN movies movie ON mc.movie_id = movie.id
+            WHERE mc.category_id = :categoryId
+        """
+    )
     fun getMoviesByCategory(categoryId: String): Flow<List<MovieEntity>>
 
-    @Query("SELECT * FROM movies WHERE category = :categoryId")
+    @Transaction
+    @Query(
+        """
+            SELECT movie.*
+            FROM movie_category mc
+            INNER JOIN movies movie ON mc.movie_id = movie.id
+            WHERE mc.category_id = :categoryId
+        """
+    )
     fun getMoviesByCategoryPaging(categoryId: String): PagingSource<Int, MovieEntity>
 
     @Query("SELECT * FROM movies WHERE id IN (:ids)")

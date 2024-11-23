@@ -13,5 +13,5 @@ interface DetailsRepository {
 
     suspend fun saveFavoriteMovie(favorite: Favorite)
 
-    suspend fun syncMovieDetails(movieId: Int, category: String, language: String)
+    suspend fun syncMovieDetails(movieId: Int, language: String)
 }

@@ -125,7 +125,7 @@ internal fun NavGraphBuilder.navigationBuilder(navController: NavController) {
         movieDetailsData?.let { data ->
             DetailsScreen(
                 movie = data,
-                onSimilarMovieDetails = { openMovieDetails(data) },
+                onSimilarMovieDetails = { it?.let { movie -> openMovieDetails(movie) } },
                 onActorDetails = { actorId ->
                     navController.navigate(
                         ScreenState.ActorDetailsScreen.route,

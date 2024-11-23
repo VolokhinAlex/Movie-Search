@@ -31,9 +31,9 @@ class DetailsInteractorImpl(
         }
     }
 
-    override suspend fun syncMovieDetails(movieId: Int, category: String, language: String) {
+    override suspend fun syncMovieDetails(movieId: Int, language: String) {
         try {
-            detailsRepository.syncMovieDetails(movieId, category, language)
+            detailsRepository.syncMovieDetails(movieId, language)
         } catch (e: Exception) {
             println("DetailsInteractorImpl, syncMovieDetails, movieId=$movieId, error=$e")
         }

@@ -39,7 +39,7 @@ class DetailsRepositoryImpl(
         dataBase.favoritesDao().saveFavoriteMovie(favorite.asEntity())
     }
 
-    override suspend fun syncMovieDetails(movieId: Int, category: String, language: String) {
+    override suspend fun syncMovieDetails(movieId: Int, language: String) {
         val result = apiHolder.moviesApi.getMovieDetails(
             movieId = movieId,
             language = language,
@@ -54,6 +54,6 @@ class DetailsRepositoryImpl(
             dataBase.actorsDao().insertActors(it)
         }
 
-        dataBase.moviesDao().upsertMovie(result.asEntity(category))
+        dataBase.moviesDao().upsertMovie(result.asEntity())
     }
 }
