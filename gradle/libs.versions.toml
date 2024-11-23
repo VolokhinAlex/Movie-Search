@@ -12,6 +12,7 @@ androidx-room = "2.6.1"
 activity-compose = "1.9.3"
 compose-navigation = "2.5.3"
 compose-coil = "2.6.0"
+coreSplashscreen = "1.0.1"
 datastorePreferencesCore = "1.1.1"
 koin = "4.0.0"
 kotlinxCoroutinesCore = "1.9.0"
@@ -33,6 +34,7 @@ workRuntimeKtx = "2.9.1"
 
 [libraries]
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastorePreferencesCore" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferencesCore" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "androidx-room" }

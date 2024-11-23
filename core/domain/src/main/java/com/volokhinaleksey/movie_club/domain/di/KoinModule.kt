@@ -20,6 +20,8 @@ import com.volokhinaleksey.movie_club.domain.LocaleInteractor
 import com.volokhinaleksey.movie_club.domain.LocaleInteractorImpl
 import com.volokhinaleksey.movie_club.domain.SearchInteractor
 import com.volokhinaleksey.movie_club.domain.SearchInteractorImpl
+import com.volokhinaleksey.movie_club.domain.SyncUseCase
+import com.volokhinaleksey.movie_club.domain.SyncUseCaseImpl
 import org.koin.dsl.module
 
 val favoriteScreenDomainModule = module {
@@ -42,6 +44,7 @@ val homeScreenDomainModule = module {
     includes(homeScreenRepositoryModule)
     factory<HomeInteractor> { HomeInteractorImpl(get()) }
     factory<LocaleInteractor> { LocaleInteractorImpl() }
+    factory<SyncUseCase> { SyncUseCaseImpl(get(), get()) }
 }
 
 val categoryScreenDomainModule = module {

@@ -4,10 +4,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-internal val ErrorColor = Color(0xFFA20C0C)
-internal val PrimaryColor70 = Color(0xFF1B1C1E)
-internal val TransparentColor = Color(0x5E000000)
-
 internal val DarkErrorColor = Color(0xFFA20C0C)
 internal val DarkPrimaryColor80 = Color(0xFF111111)
 internal val DarkPrimaryColor70 = Color(0xFF1B1C1E)

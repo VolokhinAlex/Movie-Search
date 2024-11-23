@@ -3,18 +3,21 @@ package com.volokhinaleksey.movie_club.home.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.volokhinaleksey.movie_club.domain.HomeInteractor
-import com.volokhinaleksey.movie_club.domain.LocaleInteractor
+import com.volokhinaleksey.movie_club.domain.SyncUseCase
 import com.volokhinaleksey.movie_club.model.MovieCategory
 import com.volokhinaleksey.movie_club.model.state.MovieCategoryState
+import com.volokhinaleksey.movie_club.model.state.SyncState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     homeInteractor: HomeInteractor,
-    localeInteractor: LocaleInteractor
+    private val syncUseCase: SyncUseCase
 ) : ViewModel() {
 
     val popularMovies = homeInteractor.getMovies(categoryId = MovieCategory.Popular.id)
@@ -49,13 +52,12 @@ class HomeViewModel(
             initialValue = MovieCategoryState.Loading
         )
 
-    init {
+    private val _screenState = MutableStateFlow<SyncState>(SyncState.Loading)
+    val screenState get() = _screenState.asStateFlow()
+
+    fun syncMoviesByCategory() {
         viewModelScope.launch(Dispatchers.IO) {
-            MovieCategory.entries.forEach {
-                launch {
-                    homeInteractor.syncData(it, localeInteractor.getCurrentLanguage())
-                }
-            }
+            _screenState.value = syncUseCase.syncMoviesByCategories(MovieCategory.entries)
         }
     }
 }

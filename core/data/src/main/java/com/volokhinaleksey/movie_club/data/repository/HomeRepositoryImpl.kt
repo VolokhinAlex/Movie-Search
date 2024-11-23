@@ -27,7 +27,7 @@ class HomeRepositoryImpl(
         .getMoviesByIds(ids)
         .map { it.map(MovieEntity::asExternalModel) }
 
-    override suspend fun syncData(category: MovieCategory, lang: String) {
+    override suspend fun syncMoviesByCategory(category: MovieCategory, lang: String) {
         val movies = when (category) {
             MovieCategory.Upcoming -> {
                 val startReleaseDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))

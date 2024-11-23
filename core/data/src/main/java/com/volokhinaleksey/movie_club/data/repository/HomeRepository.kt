@@ -12,5 +12,5 @@ interface HomeRepository {
 
     fun getMovies(ids: List<Int>): Flow<List<Movie>>
 
-    suspend fun syncData(category: MovieCategory, lang: String)
+    suspend fun syncMoviesByCategory(category: MovieCategory, lang: String)
 }

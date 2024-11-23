@@ -23,7 +23,7 @@ interface MovieDao {
     @Upsert
     suspend fun upsertMovie(entity: MovieEntity)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllMovies(entity: List<MovieEntity>)
 
     @Query("SELECT * FROM movies WHERE category = :categoryId")

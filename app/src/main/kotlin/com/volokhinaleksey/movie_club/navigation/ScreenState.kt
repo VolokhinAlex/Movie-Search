@@ -16,13 +16,6 @@ import com.volokhinaleksey.movie_club.uikit.R
  */
 
 sealed class ScreenState(val route: String, @StringRes val name: Int, val icon: ImageVector?) {
-
-    data object SplashScreen : ScreenState(
-        route = "splash_screen",
-        name = R.string.splash,
-        icon = null
-    )
-
     data object HomeScreen : ScreenState(
         route = "home_screen",
         name = R.string.home,

@@ -13,11 +13,18 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.core.os.bundleOf
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -28,6 +35,8 @@ import com.volokhinaleksey.movie_club.actor.ui.ActorDetailsScreen
 import com.volokhinaleksey.movie_club.details.ui.DetailsScreen
 import com.volokhinaleksey.movie_club.favorites.ui.FavoriteScreen
 import com.volokhinaleksey.movie_club.home.ui.screen.HomeScreen
+import com.volokhinaleksey.movie_club.home.viewmodel.HomeViewModel
+import com.volokhinaleksey.movie_club.model.state.SyncState
 import com.volokhinaleksey.movie_club.model.ui.Movie
 import com.volokhinaleksey.movie_club.movie_category.ui.CategoryMoviesScreen
 import com.volokhinaleksey.movie_club.navigation.ScreenState
@@ -39,15 +48,42 @@ import com.volokhinaleksey.movie_club.utils.ARG_ACTOR_ID
 import com.volokhinaleksey.movie_club.utils.ARG_CATEGORY_NAME
 import com.volokhinaleksey.movie_club.utils.ARG_MOVIE
 import com.volokhinaleksey.movie_club.utils.parcelable
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
+    private val homeViewModel: HomeViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        homeViewModel.syncMoviesByCategory()
+
+        val splashScreen = installSplashScreen()
+
+        var syncState by mutableStateOf<SyncState>(SyncState.Loading)
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel
+                    .screenState
+                    .onEach { syncState = it }
+                    .collect()
+            }
+        }
+
+        splashScreen.setKeepOnScreenCondition {
+            syncState == SyncState.Loading
+        }
+
         setContent {
             MovieClubApp()
         }
     }
+
 }
 
 @Composable
@@ -57,7 +93,7 @@ internal fun MovieClubApp() {
         BottomNavigationBar(navController) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = ScreenState.SplashScreen.route,
+                startDestination = ScreenState.HomeScreen.route,
                 modifier = Modifier.padding(innerPadding),
                 builder = { navigationBuilder(navController) }
             )
@@ -72,12 +108,6 @@ internal fun NavGraphBuilder.navigationBuilder(navController: NavController) {
             ScreenState.DetailsScreen.route,
             bundleOf(ARG_MOVIE to it)
         )
-    }
-    composable(route = ScreenState.SplashScreen.route) {
-        SplashScreen {
-            navController.popBackStack()
-            navController.navigate(ScreenState.HomeScreen.route)
-        }
     }
     composable(route = ScreenState.HomeScreen.route) {
         HomeScreen(
@@ -144,9 +174,9 @@ internal fun BottomNavigationBar(
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     Scaffold(
         bottomBar = {
-            if (ScreenState.DetailsScreen.route != currentRoute && ScreenState.CategoryMoviesScreen
-                    .route != currentRoute && ScreenState.ActorDetailsScreen.route != currentRoute
-                && ScreenState.SplashScreen.route != currentRoute
+            if (ScreenState.DetailsScreen.route != currentRoute &&
+                ScreenState.CategoryMoviesScreen.route != currentRoute &&
+                ScreenState.ActorDetailsScreen.route != currentRoute
             ) {
                 NavigationBar(containerColor = MovieClubTheme.colors.secondaryColor) {
                     bottomNavItems.forEach { item ->

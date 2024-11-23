@@ -72,4 +72,6 @@ dependencies {
     implementation(libs.threetenabp)
 
     implementation(libs.google.material)
+
+    implementation(libs.androidx.core.splashscreen)
 }
