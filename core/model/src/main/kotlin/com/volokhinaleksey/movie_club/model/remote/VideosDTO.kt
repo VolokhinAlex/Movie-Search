@@ -1,14 +1,14 @@
 package com.volokhinaleksey.movie_club.model.remote
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * The class is needed to get a list of trailers
  * @param results - List of movie trailers
  */
 
-@Parcelize
+@Serializable
 data class VideosDTO(
-    val results: List<TrailerDTO>
-) : Parcelable
+    @SerialName("results") val results: List<TrailerDTO>
+)

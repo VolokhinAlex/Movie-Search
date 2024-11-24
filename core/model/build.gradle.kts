@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
     id("kotlin-parcelize")
 }
 
@@ -33,5 +34,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.squareup.retrofit.converter.gson)
+    implementation(libs.ktor.serialization.kotlinx.json)
 }

@@ -1,8 +1,7 @@
 package com.volokhinaleksey.movie_club.model.remote
 
-import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * The CastDTO class contains data about the Actor
@@ -16,18 +15,18 @@ import kotlinx.parcelize.Parcelize
  * @param profilePath Photo of the actor
  */
 
-@Parcelize
+@Serializable
 data class ActorDTO(
-    val biography: String?,
-    val birthday: String?,
-    val id: Long?,
-    @SerializedName("imdb_id") val imdbId: String?,
-    val name: String?,
-    @SerializedName("place_of_birth") val placeOfBirth: String?,
-    val popularity: Double?,
-    @SerializedName("profile_path") val profilePath: String?,
-    val character: String? = null,
-) : Parcelable
+    @SerialName("biography") val biography: String? = null,
+    @SerialName("birthday") val birthday: String? = null,
+    @SerialName("id") val id: Long? = null,
+    @SerialName("imdb_id") val imdbId: String? = null,
+    @SerialName("name") val name: String? = null,
+    @SerialName("place_of_birth") val placeOfBirth: String? = null,
+    @SerialName("popularity") val popularity: Double? = null,
+    @SerialName("profile_path") val profilePath: String? = null,
+    @SerialName("character") val character: String? = null,
+)
 
-@Parcelize
-data class ActorsDTO(val cast: List<ActorDTO>) : Parcelable
+@Serializable
+data class ActorsDTO(@SerialName("cast") val cast: List<ActorDTO>)

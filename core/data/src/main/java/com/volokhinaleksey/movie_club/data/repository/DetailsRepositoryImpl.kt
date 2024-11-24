@@ -46,6 +46,8 @@ class DetailsRepositoryImpl(
             extraRequests = "credits,videos"
         )
 
+        dataBase.moviesDao().upsertMovie(result.asEntity())
+
         result.videos?.results?.map { it.asEntity(movieId) }?.also {
             dataBase.trailersDao().insertTrailers(it)
         }
@@ -53,7 +55,5 @@ class DetailsRepositoryImpl(
         result.credits?.cast?.map { it.asEntity(movieId) }?.also {
             dataBase.actorsDao().insertActors(it)
         }
-
-        dataBase.moviesDao().upsertMovie(result.asEntity())
     }
 }

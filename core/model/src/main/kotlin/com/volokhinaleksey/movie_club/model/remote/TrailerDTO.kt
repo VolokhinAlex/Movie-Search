@@ -1,8 +1,8 @@
 package com.volokhinaleksey.movie_club.model.remote
 
-import android.os.Parcelable
 import com.volokhinaleksey.movie_club.model.ui.Trailer
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * The Trailer class contains data about the trailer of movie
@@ -12,13 +12,13 @@ import kotlinx.parcelize.Parcelize
  * @param id -   Trailer id
  */
 
-@Parcelize
+@Serializable
 data class TrailerDTO(
-    val name: String?,
-    val key: String?,
-    val type: String?,
-    val id: String?
-) : Parcelable
+    @SerialName("name") val name: String? = null,
+    @SerialName("key") val key: String? = null,
+    @SerialName("type") val type: String? = null,
+    @SerialName("id") val id: String? = null,
+)
 
 fun TrailerDTO.toTrailerUI(): Trailer {
     return Trailer(

@@ -1,14 +1,14 @@
 package com.volokhinaleksey.movie_club.model.remote
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * A class for easily getting a category movies
  * @param results - List of movies
  */
 
-@Parcelize
+@Serializable
 data class CategoryMoviesTMDB(
-    val results: List<MovieDataTMDB>
-) : Parcelable
+    @SerialName("results") val results: List<MovieDataTMDB>
+)

@@ -1,8 +1,7 @@
 package com.volokhinaleksey.movie_club.model.remote
 
-import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * The class for getting and saving data from TMDB in the Model.
@@ -27,22 +26,22 @@ import kotlinx.parcelize.Parcelize
  *
  */
 
-@Parcelize
+@Serializable
 data class MovieDataTMDB(
-    val adult: Boolean?,
-    @SerializedName("backdrop_path") val backdropPath: String?,
-    @SerializedName("poster_path") val posterPath: String?,
-    val budget: Int?,
-    val id: Int?,
-    @SerializedName("imdb_id") val imdbId: String?,
-    @SerializedName("genre_ids") val genres: List<Int>?,
-    @SerializedName("original_language") val originalLanguage: String?,
-    val overview: String?,
-    val title: String?,
-    @SerializedName("vote_count") val voteCount: Int?,
-    @SerializedName("vote_average") val voteAverage: Double?,
-    @SerializedName("release_date") val releaseDate: String?,
-    val runtime: Int?,
-    val credits: ActorsDTO?,
-    val videos: VideosDTO?
-) : Parcelable
+    @SerialName("adult") val adult: Boolean? = false,
+    @SerialName("backdrop_path") val backdropPath: String? = "",
+    @SerialName("poster_path") val posterPath: String? = "",
+    @SerialName("budget") val budget: Int? = 0,
+    @SerialName("id") val id: Int?,
+    @SerialName("imdb_id") val imdbId: String? = "",
+    @SerialName("genre_ids") val genres: List<Int>? = null,
+    @SerialName("original_language") val originalLanguage: String?,
+    @SerialName("overview") val overview: String?,
+    @SerialName("title") val title: String? = null,
+    @SerialName("vote_count") val voteCount: Int? = null,
+    @SerialName("vote_average") val voteAverage: Double? = null,
+    @SerialName("release_date") val releaseDate: String? = null,
+    @SerialName("runtime") val runtime: Int? = 0,
+    @SerialName("credits") val credits: ActorsDTO? = null,
+    @SerialName("videos") val videos: VideosDTO? = null
+)

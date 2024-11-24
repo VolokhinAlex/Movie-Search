@@ -1,56 +1,53 @@
 package com.volokhinaleksey.movie_club.moviesapi.di
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.volokhinaleksey.movie_club.movies_api.BuildConfig
+import com.volokhinaleksey.movie_club.moviesapi.ApiConfig
 import com.volokhinaleksey.movie_club.moviesapi.CoreApi
 import com.volokhinaleksey.movie_club.moviesapi.MovieTMBDCore
 import com.volokhinaleksey.movie_club.moviesapi.MovieTMDBAPI
+import com.volokhinaleksey.movie_club.moviesapi.MovieTMDBAPIImpl
 import com.volokhinaleksey.movie_club.utils.TMDB_API_BASE_URL
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.SIMPLE
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 val network = module {
-    /**
-     * Providing a dependency for ApiHolder
-     */
+    single<ApiConfig> {
+        ApiConfig(
+            baseUrl = TMDB_API_BASE_URL,
+            authToken = BuildConfig.MOVIE_API_KEY
+        )
+    }
+
+    single<HttpClient> {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                })
+            }
+
+            install(DefaultRequest) {
+                url(get<ApiConfig>().baseUrl)
+                url.parameters.append("api_key", BuildConfig.MOVIE_API_KEY)
+            }
+
+            install(Logging) {
+                logger = Logger.SIMPLE
+                level = LogLevel.ALL
+            }
+        }
+    }
+
+    single<MovieTMDBAPI> { MovieTMDBAPIImpl(get()) }
 
     single<CoreApi> { MovieTMBDCore(get()) }
-
-    /**
-     * Providing a dependency for the gson converter
-     */
-
-    single<Gson> {
-        GsonBuilder()
-            .setLenient()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create()
-    }
-
-    /**
-     * Providing a dependency for OkHttpClient with HttpLoggingInterceptor
-     */
-
-    single {
-        OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .build()
-    }
-
-    /**
-     * Providing a dependency to work with retrofit
-     */
-
-    single {
-        Retrofit.Builder()
-            .baseUrl(TMDB_API_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(get()))
-            .client(get())
-            .build()
-            .create(MovieTMDBAPI::class.java)
-    }
 }
