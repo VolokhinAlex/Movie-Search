@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -10,4 +12,13 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.multiplatform) apply false
     alias(libs.plugins.jetbrains.kotlin.serialization) apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.buildConfig)
+}
+
+buildConfig {
+    val properties = Properties().apply {
+        load(project.rootProject.file("apikey.properties").inputStream())
+    }
+    val apiKey = properties.getProperty("movie_tmdb_api_key", "")
+    buildConfigField("String", "MOVIE_API_KEY", "\"$apiKey\"")
 }

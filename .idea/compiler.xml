@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="21" />
+    <bytecodeTargetLevel target="21">
+      <module name="Movie-Search.androidApp" target="21" />
+      <module name="Movie-Search.core.data" target="21" />
+      <module name="Movie-Search.core.database" target="21" />
+      <module name="Movie-Search.core.datastore" target="21" />
+      <module name="Movie-Search.core.domain" target="21" />
+      <module name="Movie-Search.core.model" target="21" />
+      <module name="Movie-Search.core.movies-api" target="21" />
+      <module name="Movie-Search.core.uikit" target="21" />
+      <module name="Movie-Search.core.utils" target="21" />
+      <module name="Movie-Search.feature.actor" target="21" />
+      <module name="Movie-Search.feature.details" target="21" />
+      <module name="Movie-Search.feature.favorites" target="21" />
+      <module name="Movie-Search.feature.home" target="21" />
+      <module name="Movie-Search.feature.movie_category" target="21" />
+      <module name="Movie-Search.feature.search" target="21" />
+      <module name="Movie-Search.shared" target="21" />
+      <module name="MovieCub.androidApp" target="21" />
+      <module name="MovieCub.core.data" target="21" />
+      <module name="MovieCub.core.database" target="21" />
+      <module name="MovieCub.core.datastore" target="21" />
+      <module name="MovieCub.core.domain" target="21" />
+      <module name="MovieCub.core.model" target="21" />
+      <module name="MovieCub.core.movies-api" target="21" />
+      <module name="MovieCub.core.uikit" target="21" />
+      <module name="MovieCub.core.utils" target="21" />
+      <module name="MovieCub.feature.actor" target="21" />
+      <module name="MovieCub.feature.details" target="21" />
+      <module name="MovieCub.feature.favorites" target="21" />
+      <module name="MovieCub.feature.home" target="21" />
+      <module name="MovieCub.feature.movie_category" target="21" />
+      <module name="MovieCub.feature.search" target="21" />
+      <module name="MovieCub.shared" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

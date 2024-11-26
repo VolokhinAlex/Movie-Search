@@ -1,3 +1,5 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         google {
@@ -25,7 +27,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MovieClub"
+rootProject.name = "iosApp"
 
 include(":androidApp")
 include(":feature")

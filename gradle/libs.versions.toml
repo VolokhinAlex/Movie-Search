@@ -29,6 +29,7 @@ workRuntimeKtx = "2.9.1"
 compose-multiplatform = "1.7.0"
 jetbrainsKotlinJvm = "2.0.21"
 ktor-client = "2.3.6"
+buildConfig = "5.5.1"
 
 [libraries]
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
@@ -93,3 +94,4 @@ jetbrains-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", ve
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
+buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref="buildConfig" }
