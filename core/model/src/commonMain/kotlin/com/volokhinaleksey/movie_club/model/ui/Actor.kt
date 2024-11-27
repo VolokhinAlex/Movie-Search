@@ -1,5 +1,9 @@
 package com.volokhinaleksey.movie_club.model.ui
 
+import com.volokhinaleksey.movie_club.model.Parcelable
+import com.volokhinaleksey.movie_club.model.CommonParcelize
+
+@CommonParcelize
 data class Actor(
     val actorId: Long = 0,
     val movieId: Long = 0,
@@ -11,4 +15,4 @@ data class Actor(
     val popularity: Double = 0.0,
     val profilePath: String = "",
     val character: String = ""
-)
+): Parcelable

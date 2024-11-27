@@ -15,6 +15,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.serialization.kotlinx.json.json
+import iosApp.core.movies_api.BuildConfig
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
@@ -24,7 +25,7 @@ val network = module {
     single<ApiConfig> {
         ApiConfig(
             baseUrl = TMDB_API_BASE_URL,
-            authToken = "BuildConfig.MOVIE_API_KEY"
+            authToken = BuildConfig.MOVIE_API_KEY
         )
     }
 

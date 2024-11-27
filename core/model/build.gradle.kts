@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.multiplatform)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.android.library)
+    id("kotlin-parcelize")
 }
 
 kotlin {
@@ -28,6 +29,10 @@ kotlin {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
+            freeCompilerArgs.addAll(
+                "-P",
+                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.volokhinaleksey.movie_club.model.CommonParcelize"
+            )
         }
     }
 }

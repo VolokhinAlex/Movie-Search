@@ -1,5 +1,9 @@
 package com.volokhinaleksey.movie_club.model.ui
 
+import com.volokhinaleksey.movie_club.model.Parcelable
+import com.volokhinaleksey.movie_club.model.CommonParcelize
+
+@CommonParcelize
 data class Movie(
     val adult: Boolean = false,
     val backdropPath: String = "",
@@ -17,4 +21,4 @@ data class Movie(
     val videos: List<Trailer> = emptyList(),
     val favorite: Boolean = false,
     val category: String = ""
-)
+): Parcelable

@@ -121,8 +121,7 @@ internal fun NavGraphBuilder.navigationBuilder(navController: NavController) {
         )
     }
     composable(route = ScreenState.DetailsScreen.route) {
-//        val movieDetailsData = it.arguments?.parcelable<Movie>(ARG_MOVIE)
-        val movieDetailsData = Movie()
+        val movieDetailsData = it.arguments?.parcelable<Movie>(ARG_MOVIE)
         movieDetailsData?.let { data ->
             DetailsScreen(
                 movie = data,
