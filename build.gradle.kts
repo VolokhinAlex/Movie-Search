@@ -6,4 +6,9 @@ plugins {
     alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.gms) apply false
+    alias(libs.plugins.jetbrains.compose.multiplatform) apply false
+    alias(libs.plugins.jetbrains.kotlin.multiplatform) apply false
+    alias(libs.plugins.jetbrains.kotlin.serialization) apply false
+    alias(libs.plugins.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.buildConfig)
 }

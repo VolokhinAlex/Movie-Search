@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "399238624223",
+    "project_id": "movie-club-c10f8",
+    "storage_bucket": "movie-club-c10f8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399238624223:android:6d15efa38474dd00ba8a6a",
+        "android_client_info": {
+          "package_name": "com.volokhinaleksey.movie_club"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399238624223-sup2h3fi0kab6opjjdfuqcrp78evtp5g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMXemMpGdZkzfjkW8lJCbsteHMDIFfHwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399238624223-sup2h3fi0kab6opjjdfuqcrp78evtp5g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
